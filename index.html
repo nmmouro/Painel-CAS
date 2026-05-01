@@ -134,16 +134,25 @@ td.status-icon{
 
   /* ================= CORES DE STATUS ================= */
 tr.status-atendido   td.status-icon{color:#00ff9c;}
-tr.status-cancelado  td.status-icon{color:#ff4d4d;}
 tr.status-andamento  td.status-icon{color:#ffcc00;}
 tr.status-concluido  td.status-icon{color:#7CFC00;}
+tr.status-cancelado  td.status-icon{color:#ff4d4d;}
  
-tr.status-atendido{background:rgba(147,219,112,0.18)}
-tr.status-andamento{background:rgba(219,147,112,0.18)}
-tr.status-concluido{background:rgba(0,200,120,0.10)}
-  @keyframes piscarCancelado {0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
-  tr.status-cancelado{background: rgba(155,17,17,0.18);
-                      animation:piscarCancelado 5s infinite}
+tr.status-atendido td{
+  background:rgba(0, 255, 156, 0.12);
+}
+
+tr.status-andamento td{
+  background:rgba(255, 204, 0, 0.12);
+}
+
+tr.status-concluido td{
+  background:rgba(124, 252, 0, 0.10);
+}
+
+tr.status-cancelado td{
+  background:rgba(255, 77, 77, 0.15);
+}
 
 
 .small{
