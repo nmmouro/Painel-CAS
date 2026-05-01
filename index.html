@@ -142,6 +142,31 @@ td.status-icon{
   background:var(--table-alt);
 }
 
+  #filtros-status{
+  text-align:center;
+  margin-bottom:10px;
+}
+
+#filtros-status button{
+  margin:0 6px;
+  padding:6px 12px;
+  border:none;
+  border-radius:6px;
+  background:#1e2f5c;
+  color:#fff;
+  cursor:pointer;
+  font-weight:600;
+}
+
+#filtros-status button:hover{
+  background:#2c4078;
+}
+
+#filtros-status button.ativo{
+  background:#00eaff;
+  color:#000;
+}
+
 
 
   /* ================= CORES DE STATUS ================= */
@@ -198,6 +223,15 @@ tr.status-cancelado td{
 
   <section class="card">
     <h2>AGENDA DO DIA</h2>
+
+<div id="filtros-status">
+  <button onclick="setFiltro('todos')">TODOS</button>
+  <button onclick="setFiltro('andamento')">ANDAMENTO</button>
+  <button onclick="setFiltro('atendido')">ATENDIDO</button>
+  <button onclick="setFiltro('concluido')">CONCLUÍDO</button>
+  <button onclick="setFiltro('cancelado')">CANCELADO</button>
+</div>
+    
     <div id="agenda">Carregando...</div>
   </section>
 
@@ -214,6 +248,9 @@ tr.status-cancelado td{
 
 <script>
 /* ================= CONFIG ================= */
+
+let filtroAtual = "todos";
+  
 const SHEET_ID = "1Ch3AjQ0MDo4WuQWFDR3r8nZrHb4yQkSLOtT5_QgxT6E";
 const TABS = [
   { id:"painel", name:"PAINEL" },
@@ -369,6 +406,18 @@ atualizarStatusEmpregados(results[0]);
   }
 }
 
+function setFiltro(filtro){
+  filtroAtual = filtro;
+
+  document.querySelectorAll("#filtros-status button")
+    .forEach(b=>b.classList.remove("ativo"));
+
+  event.target.classList.add("ativo");
+
+  loadAll(); // recarrega aplicando filtro
+}
+  
+
 function atualizarStatusEmpregados(gvizPainel){
   const nomes = ["CACIO","CELSO","NEI"];
   const status = {
@@ -379,16 +428,14 @@ function atualizarStatusEmpregados(gvizPainel){
 
   const rows = gvizPainel?.table?.rows || [];
 
-  rows.forEach(r=>{
-    const cells = r.c || [];
+ rows.forEach(r=>{
+  const cells = r.c || [];
+  const status=String(cells.at(-1)?.f ?? cells.at(-1)?.v ?? "").toLowerCase();
 
-    cells.forEach(c=>{
-      const valor = String(c?.f ?? c?.v ?? "").toUpperCase();
-
-      nomes.forEach(nome=>{
-        if(valor.includes(nome)){
-          status[nome] = true;
-        }
+  // 🔥 FILTRO
+  if(id === "painel" && filtroAtual !== "todos"){
+    if(!status.includes(filtroAtual)) return;
+  }
       });
     });
   });
