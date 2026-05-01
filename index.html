@@ -11,10 +11,14 @@
 
 <style>
 :root{
-  --bg:#071029;
-  --card:#c7d6f2;  //#2a71e8; #071029
-  --muted:#ffffff; //#f7f9fa
-  --accent:#0240fa;  //#00eaff; #f7f9fa
+  --bg:#071029;        /* fundo geral */
+  --card:#0b1a3a;      /* cards */
+  --table:#0e224d;     /* fundo da tabela */
+  --table-alt:#0c1d40; /* zebra */
+  --header:#2c4078;    /* cabeçalho */
+  --border:#1e2f5c;    /* bordas suaves */
+  --text:#f7f9fa;
+  --muted:#9fb3ff;
 }
   
   #painel td:nth-child(3){
@@ -85,9 +89,6 @@ main{
 
 .card{
   background:var(--card);
-  border-radius:10px;
-  padding:12px;
-  overflow:auto;
 }
 
 .card h2{
@@ -99,7 +100,7 @@ main{
 
 table{
   width:100%;
-  border-collapse:collapse; /* 🔥 chave da correção */
+  border-collapse:collapse;
   font-size:16px;
 }
 
@@ -114,10 +115,11 @@ table{
 thead th{
   position:sticky;
   top:0;
-  background:#2c4078;   //#0435bf; Cabeça de colunas
-  color: #ffffff;
+  background:var(--header);
+  color:#fff;
   z-index:2;
-
+  border:1px solid var(--border);
+  padding:12px;
 }
 
 
@@ -128,6 +130,16 @@ td:last-child{
 
 td.status-icon{
   font-size:20px;
+}
+
+  tbody td{
+  background:var(--table);
+  border:1px solid var(--border);
+  padding:12px;
+}
+
+  tbody tr:nth-child(even) td{
+  background:var(--table-alt);
 }
 
 
