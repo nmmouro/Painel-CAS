@@ -378,10 +378,6 @@ function atualizarStatusEmpregados(gvizPainel){
   };
 
 
-  const statusValido = ["atendido","andamento","concluido","cancelado"];
-
-if(!statusValido.some(s => status.includes(s))) return;
-
   const rows = gvizPainel?.table?.rows || [];
 
  rows.forEach(r=>{
