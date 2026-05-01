@@ -302,17 +302,25 @@ function renderTable(id, g){
   headers.forEach(c=>h+=`<th>${escapeHtml(c)}</th>`);
   h+="</tr></thead><tbody>";
 
-  rows.forEach(r=>{
-    const cells=r.c||[];
-    const status=String(cells.at(-1)?.f ?? cells.at(-1)?.v ?? "").toLowerCase();
+ rows.forEach(r=>{
+  const cells = r.c || [];
 
-    let cls="";
-    if(status.includes("cancelado")) cls="status-cancelado";
-    else if(status.includes("concluido")) cls="status-concluido";
-    else if(status.includes("andamento")) cls="status-andamento";
-    else if(status.includes("atendido")) cls="status-atendido";
+  // 🔥 extrai valores da linha
+  const valores = cells.map(c => (c?.f ?? c?.v ?? "").toString().trim());
 
-    h+=`<tr class="${cls}">`;
+  // ❌ ignora linha totalmente vazia
+  if(valores.join("") === "") return;
+
+  // 🔥 pega status depois da validação
+  const status = (valores.at(-1) || "").toLowerCase();
+
+  let cls="";
+  if(status.includes("cancelado")) cls="status-cancelado";
+  else if(status.includes("concluido")) cls="status-concluido";
+  else if(status.includes("andamento")) cls="status-andamento";
+  else if(status.includes("atendido")) cls="status-atendido";
+
+  h+=`<tr class="${cls}">`;
 
     cells.forEach((c,i)=>{
       if(i === cells.length-1){
