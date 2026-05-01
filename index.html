@@ -377,19 +377,13 @@ function atualizarStatusEmpregados(gvizPainel){
     NEI:false
   };
 
-
   const rows = gvizPainel?.table?.rows || [];
 
- rows.forEach(r=>{
-  const cells = r.c || [];
+  rows.forEach(r=>{
+    const cells = r.c || [];
 
-  // 🔥 pega valores reais da linha
-  const valores = cells.map(c => (c?.f ?? c?.v ?? "").toString().trim());
-
-  // ❌ ignora linha totalmente vazia
-  if(valores.join("") === "") return;
-
-  const status = (valores.at(-1) || "").toLowerCase();
+    cells.forEach(c=>{
+      const valor = String(c?.f ?? c?.v ?? "").toUpperCase();
 
       nomes.forEach(nome=>{
         if(valor.includes(nome)){
