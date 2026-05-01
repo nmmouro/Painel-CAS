@@ -12,11 +12,16 @@
 <style>
 :root{
   --bg:#071029;
-  --card:#2a71e8;
+  --card:#071029;  //#2a71e8;
   --muted:#f7f9fa;
-  --accent:#00eaff;
-  --x:#c9d8f2;
+  --accent:#f7f9fa;  //#00eaff;
 }
+  
+  #painel td:nth-child(3){
+  color: #ffae00;
+  font-weight: 900;
+}
+
 
 html,body{
   height:100%;
@@ -30,19 +35,21 @@ header{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  padding:12px 100px;
+  padding:12px 34px;
   background:#020617;
+  border-radius:10px;
+   border: 1px solid #ffffff; /* BORDAS BRANCAS NO TÍTULO */
 }
 
-header img{height:66px}
-header .title{font-size:24px;font-weight:700;color:var(--accent)}
-header .clock{font-size:20px;color:var(--muted)}
+header img{height:70px;}
+header .title{font-size:30px;font-weight:700;color:var(--accent);}
+header .clock{font-size:26px;font-weight:700;color:var(--muted);}
 
 main{
   padding:12px;
   display:grid;
   grid-template-rows:1fr 1fr 1fr;
-  gap:12px;
+  gap:10px;
   height:calc(100vh - 92px);
 }
 
@@ -54,79 +61,81 @@ main{
 }
 
 .card h2{
-  margin:1 1 8px;
+  margin:0 0 8px;
   color:var(--accent);
-  font-size:20px;
+  font-size:26px;
   text-align:center;
 }
 
 table{
   width:100%;
   border-collapse:separate;
-  border-spacing:10;
- /* table-layout:fixed;*/
-  font-size:16px
+  font-size:16px;
+  border-spacing: 0;
 }
 
-th, td{
-  box-sizing:border-box;
-  padding:12px 16px;
-  white-space:nowrap;
-  overflow:hidden;
-  text-overflow:ellipsis;
+th,td{
+  padding:12px 10px;
+  border-radius:10px;
   font-weight:700;
+  text-align:center;
+  white-space:nowrap;
 }
 
- thead th{
+thead th{
   position:sticky;
   top:0;
-  z-index:1000;
-  background:#0435bf;
+  background:#2c4078;   //#0435bf;
+  color: #ffffff;
+  z-index:2;
+
+  /* BORDAS BRANCAS */
+  border: 1px solid #ffffff;
+
+  /* arredondamento visual */
   padding: 10px;
+  text-align: center;
 }
 
-thead th:first-child{border-top-left-radius:12px}
-thead th:last-child{border-top-right-radius:12px}
 
-/* larguras */
-.w-data{width:150px; text-align:center;}
-.w-hora{width:100px; text-align:center;}
-.w-veiculo{width:150px; text-align:center;}
-.w-empregado{width:300px; text-align:center;}
-.w-passageiro{width:300px; text-align:center;}
-.w-periodo{width:100px;text-align:center;}
-.w-setor{width:120px; text-align:center;}
-.w-motivo{width:350px; text-align:center;}
-.w-itinerario{width:300px; text-align:center;}
-.w-status{width:200px; text-align:center;}
-.w-auto{width:auto; text-align:center;}
-
+th:last-child,
+td:last-child{
+  width:50px;
 }
-    /* ícone atendido */
-  td.status-icon{
-  text-align:center;
+
+td.status-icon{
   font-size:20px;
-  font-weight:bold;
 }
 
 
-/* status */
-td.status-icon{text-align:center}
-tr.status-atendido{background:rgba(147,219,112,.18)}
-tr.status-andamento{background:rgba(219,147,112,.18)}
-tr.status-concluido{background:rgba(0,200,120,.06)}
-tr.status-cancelado{background:rgba(255,0,0,.12)}
+
+  /* ================= CORES DE STATUS ================= */
+tr.status-atendido   td.status-icon{color:#00ff9c;}
+tr.status-cancelado  td.status-icon{color:#ff4d4d;}
+tr.status-andamento  td.status-icon{color:#ffcc00;}
+tr.status-concluido  td.status-icon{color:#7CFC00;}
+ 
+tr.status-atendido{background:rgba(147,219,112,0.18)}
+tr.status-andamento{background:rgba(219,147,112,0.18)}
+tr.status-concluido{background:rgba(0,200,120,0.10)}
+  @keyframes piscarCancelado {0%{opacity:1}50%{opacity:.3}100%{opacity:1}}
+  tr.status-cancelado{background: rgba(155,17,17,0.18);
+                      animation:piscarCancelado 5s infinite}
+
 
 .small{
+  text-align:center;
   font-size:12px;
   color:var(--muted);
-  text-align:center;
-  margin-top:6px;
 }
 </style>
 </head>
 
 <body>
+
+  <audio id="beep" preload="auto">
+  <source src="alerta.mp3" type="audio/mpeg">
+</audio>
 
 <header>
   <img src="logo.png" onerror="this.style.display='none'">
@@ -137,130 +146,179 @@ tr.status-cancelado{background:rgba(255,0,0,.12)}
 <main>
   <section class="card">
     <h2>PAINEL</h2>
-    <div id="painel"></div>
+    <div id="painel">Carregando...</div>
   </section>
 
   <section class="card">
     <h2>AGENDA DO DIA</h2>
-    <div id="agenda"></div>
+    <div id="agenda">Carregando...</div>
   </section>
 
   <section class="card">
     <h2>AGENDA SERVIÇO SOCIAL</h2>
-    <div id="social"></div>
+    <div id="social">Carregando...</div>
   </section>
 </main>
 
-<div class="small">Atualização automática a cada 60s • Google Sheets</div>
+<div class="small">Atualização automática a cada 30s • Google Sheets</div>
+
+
+
 
 <script>
 /* ================= CONFIG ================= */
 const SHEET_ID = "1Ch3AjQ0MDo4WuQWFDR3r8nZrHb4yQkSLOtT5_QgxT6E";
-const TAB_PAINEL = "PAINEL";
-const TAB_AGENDA = "AGENDA DO DIA";
-const TAB_SS = "AGENDA SERVIÇO SOCIAL";
+const TABS = [
+  { id:"painel", name:"PAINEL" },
+  { id:"agenda", name:"AGENDA DO DIA" },
+  { id:"social", name:"AGENDA SERVIÇO SOCIAL" }
+];
 
-/* regras específicas por tabela */
-const tableColumnRules = {
-  painel: [
-    { match:/data/i, cls:"w-data" },
-    { match:/hora/i, cls:"w-hora" },
-    { match:/ve[ií]culo/i, cls:"w-veiculo" },
-    { match:/empregado/i, cls:"w-empregado" },
-    { match:/itinerario/i, cls:"w-itinerario" },
-    { match:/status/i, cls:"w-status" }
-  ],
-  agenda: [
-    { match:/data/i, cls:"w-data" },
-    { match:/hora/i, cls:"w-hora" },
-    { match:/passageiro/i, cls:"w-passageiro" },
-    { match:/setor/i, cls:"w-setor" },
-    { match:/itinerario/i, cls:"w-itinerario" },
-    { match:/status/i, cls:"w-status" }
-  ],
-  social: [
-    { match:/data/i, cls:"w-data" },
-    { match:/per[ií]odo/i, cls:"w-periodo" },
-    { match:/passageiro/i, cls:"w-passageiro" },
-    { match:/motivo/i, cls:"w-motivo" },
-    { match:/itinerario/i, cls:"w-itinerario" },
-    { match:/status/i, cls:"w-status" }
-  ]
+/* ================= HEADERS ================= */
+const TABLE_HEADERS = {
+  painel: ["Data","Hora","Veículo","Empregado","Passageiro/Motivo","Itinerário","Status"],
+  agenda: ["Data","Hora","Passageiro","Setor","Motivo","Itinerário","Status"],
+  social: ["Data","Período","Passageiro","Motivo","Itinerário","Status"]
 };
 
-function resolveColumnClass(tableId, header){
-  const rules = tableColumnRules[tableId] || [];
-  const rule = rules.find(r => r.match.test(header));
-  return rule ? rule.cls : "w-auto";
+/* ================= ÁUDIO ================= */
+let audioUnlocked = false;
+let lastDataHash = null;
+let firstLoad = true;
+
+function playBeep(){
+  const a = document.getElementById("beep");
+  if(!a || !audioUnlocked) return;
+  a.currentTime = 0;
+  a.play().catch(()=>{});
 }
 
-/* ================= CLOCK ================= */
+/* 🔓 desbloqueio por clique */
+document.addEventListener("click", () => {
+  const a = document.getElementById("beep");
+  if(!a || audioUnlocked) return;
+
+  a.volume = 0.6;
+  a.play().then(()=>{
+    a.pause();
+    a.currentTime = 0;
+    audioUnlocked = true;
+    console.log("🔊 áudio liberado");
+  }).catch(()=>{});
+},{ once:true });
+
+/* ================= RELÓGIO ================= */
 function updateClock(){
-  const n=new Date();
-  clock.innerText =
-    n.toLocaleDateString("pt-BR")+" — "+n.toLocaleTimeString("pt-BR");
+  const n = new Date();
+  document.getElementById("clock").innerText =
+    n.toLocaleDateString("pt-BR")+" — "+
+    n.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
 }
-setInterval(updateClock,1000); updateClock();
+setInterval(updateClock,1000);
+updateClock();
 
 /* ================= HELPERS ================= */
-const parseGvizText=t=>JSON.parse(t.substring(t.indexOf("{"),t.lastIndexOf("}")+1));
-const escapeHtml=s=>String(s??"").replace(/[&<>]/g,m=>({ "&":"&amp;","<":"&lt;",">":"&gt;" }[m]));
-const formatCell=c=>{
-  if(!c) return "";
-  if(typeof c==="object") return c.f ?? formatCell(c.v);
-  return String(c);
-};
+const parseGviz = t =>
+  JSON.parse(t.substring(t.indexOf("{"), t.lastIndexOf("}") + 1));
+
+const escapeHtml = s =>
+  String(s ?? "").replace(/[&<>]/g,m=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;"
+  }[m]));
+
+const formatCell = c =>
+  c == null ? "" : (typeof c === "object" ? (c.f ?? c.v ?? "") : String(c));
+
+/* 🔐 hash apenas com valores reais */
+function generateCleanHash(results){
+  return JSON.stringify(
+    results.map(r =>
+      r.table.rows.map(row =>
+        (row.c || []).map(c => c?.f ?? c?.v ?? "")
+      )
+    )
+  );
+}
 
 /* ================= RENDER ================= */
-function renderTable(containerId,g){
-  const el=document.getElementById(containerId);
-  const cols=g?.table?.cols?.map(c=>c.label||"")||[];
-  const rows=g?.table?.rows||[];
+function renderTable(id, g){
+  const el = document.getElementById(id);
+  if(!g?.table?.rows){
+    el.innerHTML = "<div style='text-align:center;opacity:.7'>Sem dados</div>";
+    return;
+  }
 
-  const colClasses=cols.map(h=>resolveColumnClass(containerId,h));
+  const headers = TABLE_HEADERS[id] || [];
+  const rows = g.table.rows;
 
-  let html="<table><thead><tr>";
-  cols.forEach((h,i)=>html+=`<th class="${colClasses[i]}">${escapeHtml(h)}</th>`);
-  html+="</tr></thead><tbody>";
+  let h="<table><thead><tr>";
+  headers.forEach(c=>h+=`<th>${escapeHtml(c)}</th>`);
+  h+="</tr></thead><tbody>";
 
   rows.forEach(r=>{
     const cells=r.c||[];
-    const status=String(cells.at(-1)?.f??cells.at(-1)?.v??"").toLowerCase();
-    let rowCls="";
-    if(status.includes("cancelado")) rowCls="status-cancelado";
-    else if(status.includes("concluido")) rowCls="status-concluido";
-    else if(status.includes("andamento")) rowCls="status-andamento";
-    else if(status.includes("atendido")) rowCls="status-atendido";
+    const status=String(cells.at(-1)?.f ?? cells.at(-1)?.v ?? "").toLowerCase();
 
-    html+=`<tr class="${rowCls}">`;
-    cols.forEach((_,i)=>html+=`<td class="${colClasses[i]}">${escapeHtml(formatCell(cells[i]))}</td>`);
-    html+="</tr>";
+    let cls="";
+    if(status.includes("cancelado")) cls="status-cancelado";
+    else if(status.includes("concluido")) cls="status-concluido";
+    else if(status.includes("andamento")) cls="status-andamento";
+    else if(status.includes("atendido")) cls="status-atendido";
+
+    h+=`<tr class="${cls}">`;
+
+    cells.forEach((c,i)=>{
+      if(i === cells.length-1){
+        let icon="";
+        if(status.includes("concluido")||status.includes("atendido")) icon="✔";
+        if(status.includes("cancelado")) icon="✖";
+        else if(status.includes("andamento")) icon="⏳";
+        h+=`<td class="status-icon">${icon}</td>`;
+      }else{
+        h+=`<td>${escapeHtml(formatCell(c))}</td>`;
+      }
+    });
+
+    h+="</tr>";
   });
 
-  el.innerHTML=html+"</tbody></table>";
+  h+="</tbody></table>";
+  el.innerHTML=h;
+}
+
+/* ================= FETCH ================= */
+async function fetchSheet(tab){
+  const url =
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq`+
+    `?sheet=${encodeURIComponent(tab)}&tqx=out:json&nocache=${Date.now()}`;
+
+  const r = await fetch(url,{cache:"no-store"});
+  return parseGviz(await r.text());
 }
 
 /* ================= LOAD ================= */
-async function fetchSheet(tab){
-  const url=`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(tab)}&tqx=out:json&nocache=${Date.now()}`;
-  const r=await fetch(url,{cache:"no-store"});
-  return parseGvizText(await r.text());
-}
-
 async function loadAll(){
-  const [p,a,s]=await Promise.all([
-    fetchSheet(TAB_PAINEL),
-    fetchSheet(TAB_AGENDA),
-    fetchSheet(TAB_SS)
-  ]);
-  renderTable("painel",p);
-  renderTable("agenda",a);
-  renderTable("social",s);
+  try{
+    const results = await Promise.all(TABS.map(t=>fetchSheet(t.name)));
+
+    const currentHash = generateCleanHash(results);
+
+    if(!firstLoad && lastDataHash && currentHash !== lastDataHash){
+      playBeep(); // 🔊 SOM SÓ SE DADOS MUDAREM
+    }
+
+    firstLoad = false;
+    lastDataHash = currentHash;
+
+    renderTable("painel", results[0]);
+    renderTable("agenda", results[1]);
+    renderTable("social", results[2]);
+
+  }catch(e){
+    console.error(e);
+  }
 }
 
 loadAll();
-setInterval(loadAll,60000);
+setInterval(loadAll, 10000);
 </script>
-
-</body>
-</html>
