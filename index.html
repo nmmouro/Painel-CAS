@@ -382,15 +382,17 @@ function atualizarStatusEmpregados(gvizPainel){
   rows.forEach(r=>{
   const cells = r.c || [];
 
-  // 🔥 IGNORAR LINHA TOTALMENTE VAZIA
-  const linhaVazia = cells.every(c => {
-    const val = c?.v ?? c?.f ?? "";
-    return String(val).trim() === "";
+  // 🔥 VERIFICA SE TEM ALGUM VALOR REAL NA LINHA
+  const temConteudo = cells.some(c => {
+    if(!c) return false;
+    const val = c.f ?? c.v ?? "";
+    return String(val).trim() !== "";
   });
 
-  if(linhaVazia) return;
+  // ❌ ignora linha vazia
+  if(!temConteudo) return;
 
-  const status = String(cells.at(-1)?.v || "").toLowerCase();
+  const status = String(cells.at(-1)?.f ?? cells.at(-1)?.v ?? "").toLowerCase();
 
       nomes.forEach(nome=>{
         if(valor.includes(nome)){
