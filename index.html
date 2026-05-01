@@ -384,24 +384,16 @@ if(!statusValido.some(s => status.includes(s))) return;
 
   const rows = gvizPainel?.table?.rows || [];
 
-  rows.forEach(r=>{
+ rows.forEach(r=>{
   const cells = r.c || [];
 
-  // 🔥 verifica se existe algum conteúdo real
-  const temConteudo = cells.some(c=>{
-    if(!c) return false;
-    const val = c.f ?? c.v ?? "";
-    return String(val).trim() !== "";
-  });
-
-  // 🔥 pega status
-  const status = String(cells.at(-1)?.f ?? cells.at(-1)?.v ?? "").toLowerCase();
+  // 🔥 pega valores reais da linha
+  const valores = cells.map(c => (c?.f ?? c?.v ?? "").toString().trim());
 
   // ❌ ignora linha totalmente vazia
-  if(!temConteudo) return;
+  if(valores.join("") === "") return;
 
-  // ❌ ignora linha sem status (principal causa da linha fantasma)
-  if(!status) return;
+  const status = (valores.at(-1) || "").toLowerCase();
 
       nomes.forEach(nome=>{
         if(valor.includes(nome)){
