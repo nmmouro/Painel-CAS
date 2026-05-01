@@ -325,10 +325,52 @@ async function loadAll(){
     renderTable("agenda", results[1]);
     renderTable("social", results[2]);
 
+// ✅ NOVO
+atualizarStatusEmpregados(results[0]);
+
   }catch(e){
     console.error(e);
   }
 }
+
+function atualizarStatusEmpregados(gvizPainel){
+  const nomes = ["CACIO","CELSO","NEI"];
+  const status = {
+    CACIO:false,
+    CELSO:false,
+    NEI:false
+  };
+
+  const rows = gvizPainel?.table?.rows || [];
+
+  rows.forEach(r=>{
+    const cells = r.c || [];
+
+    cells.forEach(c=>{
+      const valor = String(c?.f ?? c?.v ?? "").toUpperCase();
+
+      nomes.forEach(nome=>{
+        if(valor.includes(nome)){
+          status[nome] = true;
+        }
+      });
+    });
+  });
+
+  const el = document.getElementById("status-empregados");
+
+  let html = "";
+  nomes.forEach(nome=>{
+    if(status[nome]){
+      html += `<span class="ocupado">${nome} (OCUPADO)</span>`;
+    }else{
+      html += `<span class="livre">${nome} (LIVRE)</span>`;
+    }
+  });
+
+  el.innerHTML = html;
+}
+  
 
 loadAll();
 setInterval(loadAll, 10000);
