@@ -380,10 +380,17 @@ function atualizarStatusEmpregados(gvizPainel){
   const rows = gvizPainel?.table?.rows || [];
 
   rows.forEach(r=>{
-    const cells = r.c || [];
+  const cells = r.c || [];
 
-    cells.forEach(c=>{
-      const valor = String(c?.f ?? c?.v ?? "").toUpperCase();
+  // 🔥 IGNORAR LINHA TOTALMENTE VAZIA
+  const linhaVazia = cells.every(c => {
+    const val = c?.v ?? c?.f ?? "";
+    return String(val).trim() === "";
+  });
+
+  if(linhaVazia) return;
+
+  const status = String(cells.at(-1)?.v || "").toLowerCase();
 
       nomes.forEach(nome=>{
         if(valor.includes(nome)){
