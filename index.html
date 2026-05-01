@@ -5,267 +5,409 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Painel - Frota (GViz)</title>
 
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" />
+
 <style>
 :root{
-  --bg:#071029;
-  --card:#0b1a3a;
-  --table:#0e224d;
-  --table-alt:#0c1d40;
-  --header:#2c4078;
-  --border:#1e2f5c;
+  --bg:#071029;        /* fundo geral */
+  --card:#0b1a3a;      /* cards */
+  --table:#0e224d;     /* fundo da tabela */
+  --table-alt:#0c1d40; /* zebra */
+  --header:#2c4078;    /* cabeçalho */
+  --border:#1e2f5c;    /* bordas suaves */
   --text:#f7f9fa;
   --muted:#9fb3ff;
 }
+  
+  #painel td:nth-child(3){
+  color: #ffae00;
+  font-weight: 900;
+}
+
 
 html,body{
   height:100%;
   margin:0;
   background:var(--bg);
-  color:#fff;
+  color:#ffffff;
   font-family:Inter,Arial;
 }
-
-/* HEADER */
-header{
-  display:grid;
-  grid-template-columns:auto 1fr auto;
-  align-items:center;
-  padding:12px 34px;
-  background:#020617;
-  border-radius:10px;
-  border:1px solid #fff;
+  
+.title{
+  font-size:30px;
+  font-weight:700;
+  color:var(--accent);
+  line-height:1.2;
 }
-header > div{ text-align:center; }
-
-.title{ font-size:30px; font-weight:700; }
 
 #status-empregados span{
   display:inline-block;
   margin:0 12px;
   padding:4px 10px;
   border-radius:6px;
+  font-size:14px;
 }
 
-.ocupado{ background:rgba(255,77,77,.15); color:#ff4d4d; }
-.livre{ background:rgba(0,255,156,.15); color:#00ff9c; }
+.ocupado{
+  background:rgba(255,77,77,0.15);
+  color:#ff4d4d;
+}
 
-/* CARDS */
+.livre{
+  background:rgba(0,255,156,0.15);
+  color:#00ff9c;
+}
+  
+header{
+  display:grid;
+  grid-template-columns: auto 1fr auto;
+  align-items:center;
+  padding:12px 34px;
+  background:#020617;
+  border-radius:10px;
+  border:1px solid #ffffff;
+}
+header > div{
+  text-align:center;
+}
+  
+  
+
+header img{height:70px;}
+header .title{font-size:30px;font-weight:700;color:var(--accent);}
+header .clock{font-size:26px;font-weight:700;color:var(--muted);}
+
 main{
   padding:12px;
   display:grid;
   grid-template-rows:1fr 1fr 1fr;
   gap:10px;
+  height:calc(100vh - 92px);
 }
 
-.card{ background:var(--card); }
+.card{
+  background:var(--card);
+}
 
 .card h2{
+  margin:0 0 8px;
+  color:var(--accent);
+  font-size:26px;
   text-align:center;
 }
 
-/* FILTRO */
-#filtros-status{
-  text-align:center;
-  margin-bottom:10px;
-}
-
-#filtros-status button{
-  margin:0 5px;
-  padding:6px 12px;
-  border:none;
-  border-radius:6px;
-  background:#1e2f5c;
-  color:#fff;
-  cursor:pointer;
-}
-
-#filtros-status button.ativo{
-  background:#00eaff;
-  color:#000;
-}
-
-/* TABELA */
 table{
   width:100%;
   border-collapse:collapse;
+  font-size:16px;
 }
 
-th,td{
-  padding:12px;
+  th, td{
+  padding:12px 12px; /* mesmo valor horizontal */
+  font-weight:700;
   text-align:center;
-  border:1px solid var(--border);
+  white-space:nowrap;
+  border:1px solid #ffffff; /* igual ao cabeçalho */
 }
 
 thead th{
+  position:sticky;
+  top:0;
   background:var(--header);
+  color:#fff;
+  z-index:2;
+  border:1px solid var(--border);
+  padding:12px;
 }
 
-tbody td{ background:var(--table); }
 
-tbody tr:nth-child(even) td{
+th:last-child,
+td:last-child{
+  width:50px;
+}
+
+td.status-icon{
+  font-size:20px;
+}
+
+  tbody td{
+  background:var(--table);
+  border:1px solid var(--border);
+  padding:12px;
+}
+
+  tbody tr:nth-child(even) td{
   background:var(--table-alt);
 }
 
-/* STATUS */
-tr.status-atendido td{ background:rgba(0,255,156,.12); }
-tr.status-andamento td{ background:rgba(255,204,0,.12); }
-tr.status-concluido td{ background:rgba(124,252,0,.10); }
-tr.status-cancelado td{ background:rgba(255,77,77,.15); }
 
+
+  /* ================= CORES DE STATUS ================= */
+tr.status-atendido   td.status-icon{color:#00ff9c;}
+tr.status-andamento  td.status-icon{color:#ffcc00;}
+tr.status-concluido  td.status-icon{color:#7CFC00;}
+tr.status-cancelado  td.status-icon{color:#ff4d4d;}
+ 
+tr.status-atendido td{
+  background:rgba(0, 255, 156, 0.12);
+}
+
+tr.status-andamento td{
+  background:rgba(255, 204, 0, 0.12);
+}
+
+tr.status-concluido td{
+  background:rgba(124, 252, 0, 0.10);
+}
+
+tr.status-cancelado td{
+  background:rgba(255, 77, 77, 0.15);
+}
+
+
+.small{
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+}
 </style>
 </head>
 
 <body>
 
+  <audio id="beep" preload="auto">
+  <source src="alerta.mp3" type="audio/mpeg">
+</audio>
+
 <header>
-  <div></div>
+  <img src="logo.png" onerror="this.style.display='none'">
   <div>
     <div class="title">MOVIMENTAÇÃO DIÁRIA</div>
-    <div id="status-empregados"></div>
+    <div id="status-empregados" style="font-size:16px;margin-top:4px;"></div>
   </div>
-  <div id="clock"></div>
+  <div class="clock" id="clock"></div>
 </header>
 
 <main>
   <section class="card">
     <h2>PAINEL</h2>
-
-    <!-- FILTROS -->
-    <div id="filtros-status">
-      <button onclick="setFiltro('todos', this)" class="ativo">TODOS</button>
-      <button onclick="setFiltro('andamento', this)">ANDAMENTO</button>
-      <button onclick="setFiltro('atendido', this)">ATENDIDO</button>
-      <button onclick="setFiltro('concluido', this)">CONCLUÍDO</button>
-      <button onclick="setFiltro('cancelado', this)">CANCELADO</button>
-    </div>
-
     <div id="painel">Carregando...</div>
   </section>
 
   <section class="card">
     <h2>AGENDA DO DIA</h2>
-    <div id="agenda"></div>
+    <div id="agenda">Carregando...</div>
   </section>
 
   <section class="card">
     <h2>AGENDA SERVIÇO SOCIAL</h2>
-    <div id="social"></div>
+    <div id="social">Carregando...</div>
   </section>
 </main>
 
-<script>
-const SHEET_ID = "1Ch3AjQ0MDo4WuQWFDR3r8nZrHb4yQkSLOtT5_QgxT6E";
+<div class="small">Atualização automática a cada 30s • Google Sheets</div>
 
+
+
+
+<script>
+/* ================= CONFIG ================= */
+const SHEET_ID = "1Ch3AjQ0MDo4WuQWFDR3r8nZrHb4yQkSLOtT5_QgxT6E";
 const TABS = [
   { id:"painel", name:"PAINEL" },
   { id:"agenda", name:"AGENDA DO DIA" },
   { id:"social", name:"AGENDA SERVIÇO SOCIAL" }
 ];
 
+/* ================= HEADERS ================= */
 const TABLE_HEADERS = {
-  painel:["Data","Hora","Veículo","Empregado","Motivo","Itinerário","Status"],
-  agenda:["Data","Hora","Passageiro","Setor","Motivo","Itinerário","Status"],
-  social:["Data","Período","Passageiro","Motivo","Itinerário","Status"]
+  painel: ["Data","Hora","Veículo","Empregado","Passageiro/Motivo","Itinerário","Status"],
+  agenda: ["Data","Hora","Passageiro","Setor","Motivo","Itinerário","Status"],
+  social: ["Data","Período","Passageiro","Motivo","Itinerário","Status"]
 };
 
-let filtroAtual = "todos";
+/* ================= ÁUDIO ================= */
+let audioUnlocked = false;
+let lastDataHash = null;
+let firstLoad = true;
 
-/* RELÓGIO */
-setInterval(()=>{
+function playBeep(){
+  const a = document.getElementById("beep");
+  if(!a || !audioUnlocked) return;
+  a.currentTime = 0;
+  a.play().catch(()=>{});
+}
+
+/* 🔓 desbloqueio por clique */
+document.addEventListener("click", () => {
+  const a = document.getElementById("beep");
+  if(!a || audioUnlocked) return;
+
+  a.volume = 0.6;
+  a.play().then(()=>{
+    a.pause();
+    a.currentTime = 0;
+    audioUnlocked = true;
+    console.log("🔊 áudio liberado");
+  }).catch(()=>{});
+},{ once:true });
+
+/* ================= RELÓGIO ================= */
+function updateClock(){
+  const n = new Date();
   document.getElementById("clock").innerText =
-    new Date().toLocaleTimeString("pt-BR");
-},1000);
-
-/* FILTRO */
-function setFiltro(f, el){
-  filtroAtual = f;
-  document.querySelectorAll("#filtros-status button")
-    .forEach(b=>b.classList.remove("ativo"));
-  el.classList.add("ativo");
-  loadAll();
+    n.toLocaleDateString("pt-BR")+" — "+
+    n.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
 }
+setInterval(updateClock,1000);
+updateClock();
 
-/* FETCH */
-async function fetchSheet(tab){
-  const r = await fetch(
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${tab}&tqx=out:json`
+/* ================= HELPERS ================= */
+const parseGviz = t =>
+  JSON.parse(t.substring(t.indexOf("{"), t.lastIndexOf("}") + 1));
+
+const escapeHtml = s =>
+  String(s ?? "").replace(/[&<>]/g,m=>({
+    "&":"&amp;","<":"&lt;",">":"&gt;"
+  }[m]));
+
+const formatCell = c =>
+  c == null ? "" : (typeof c === "object" ? (c.f ?? c.v ?? "") : String(c));
+
+/* 🔐 hash apenas com valores reais */
+function generateCleanHash(results){
+  return JSON.stringify(
+    results.map(r =>
+      r.table.rows.map(row =>
+        (row.c || []).map(c => c?.f ?? c?.v ?? "")
+      )
+    )
   );
-  const t = await r.text();
-  return JSON.parse(t.substring(t.indexOf("{"), t.lastIndexOf("}")+1));
 }
 
-/* RENDER */
-function renderTable(id,g){
-  const rows = g.table.rows;
-  let html="<table><thead><tr>";
+/* ================= RENDER ================= */
+function renderTable(id, g){
+  const el = document.getElementById(id);
+  if(!g?.table?.rows){
+    el.innerHTML = "<div style='text-align:center;opacity:.7'>Sem dados</div>";
+    return;
+  }
 
-  TABLE_HEADERS[id].forEach(h=>html+=`<th>${h}</th>`);
-  html+="</tr></thead><tbody>";
+  const headers = TABLE_HEADERS[id] || [];
+  const rows = g.table.rows;
+
+  let h="<table><thead><tr>";
+  headers.forEach(c=>h+=`<th>${escapeHtml(c)}</th>`);
+  h+="</tr></thead><tbody>";
 
   rows.forEach(r=>{
     const cells=r.c||[];
-    const status=String(cells.at(-1)?.v||"").toLowerCase();
+    const status=String(cells.at(-1)?.f ?? cells.at(-1)?.v ?? "").toLowerCase();
 
-    if(id==="painel" && filtroAtual!=="todos"){
-      if(!status.includes(filtroAtual)) return;
-    }
+    let cls="";
+    if(status.includes("cancelado")) cls="status-cancelado";
+    else if(status.includes("concluido")) cls="status-concluido";
+    else if(status.includes("andamento")) cls="status-andamento";
+    else if(status.includes("atendido")) cls="status-atendido";
 
-    html+=`<tr class="status-${status}">`;
+    h+=`<tr class="${cls}">`;
 
     cells.forEach((c,i)=>{
-      if(i===cells.length-1){
-        let icon="⏳";
-        if(status.includes("concluido")) icon="✔";
+      if(i === cells.length-1){
+        let icon="";
+        if(status.includes("concluido")||status.includes("atendido")) icon="✔";
         if(status.includes("cancelado")) icon="✖";
-        html+=`<td>${icon}</td>`;
+        else if(status.includes("andamento")) icon="⏳";
+        h+=`<td class="status-icon">${icon}</td>`;
       }else{
-        html+=`<td>${c?.v||""}</td>`;
+        h+=`<td>${escapeHtml(formatCell(c))}</td>`;
       }
     });
 
-    html+="</tr>";
+    h+="</tr>";
   });
 
-  html+="</tbody></table>";
-  document.getElementById(id).innerHTML=html;
+  h+="</tbody></table>";
+  el.innerHTML=h;
 }
 
-/* EMPREGADOS */
-function atualizarStatusEmpregados(g){
-  const nomes=["CACIO","CELSO","NEI"];
-  const usados={};
+/* ================= FETCH ================= */
+async function fetchSheet(tab){
+  const url =
+    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq`+
+    `?sheet=${encodeURIComponent(tab)}&tqx=out:json&nocache=${Date.now()}`;
 
-  nomes.forEach(n=>usados[n]=false);
+  const r = await fetch(url,{cache:"no-store"});
+  return parseGviz(await r.text());
+}
 
-  g.table.rows.forEach(r=>{
-    r.c.forEach(c=>{
-      const v=String(c?.v||"").toUpperCase();
-      nomes.forEach(n=>{
-        if(v.includes(n)) usados[n]=true;
+/* ================= LOAD ================= */
+async function loadAll(){
+  try{
+    const results = await Promise.all(TABS.map(t=>fetchSheet(t.name)));
+
+    const currentHash = generateCleanHash(results);
+
+    if(!firstLoad && lastDataHash && currentHash !== lastDataHash){
+      playBeep(); // 🔊 SOM SÓ SE DADOS MUDAREM
+    }
+
+    firstLoad = false;
+    lastDataHash = currentHash;
+
+    renderTable("painel", results[0]);
+    renderTable("agenda", results[1]);
+    renderTable("social", results[2]);
+
+// ✅ NOVO
+atualizarStatusEmpregados(results[0]);
+
+  }catch(e){
+    console.error(e);
+  }
+}
+
+function atualizarStatusEmpregados(gvizPainel){
+  const nomes = ["CACIO","CELSO","NEI"];
+  const status = {
+    CACIO:false,
+    CELSO:false,
+    NEI:false
+  };
+
+  const rows = gvizPainel?.table?.rows || [];
+
+  rows.forEach(r=>{
+    const cells = r.c || [];
+
+    cells.forEach(c=>{
+      const valor = String(c?.f ?? c?.v ?? "").toUpperCase();
+
+      nomes.forEach(nome=>{
+        if(valor.includes(nome)){
+          status[nome] = true;
+        }
       });
     });
   });
 
-  document.getElementById("status-empregados").innerHTML =
-    nomes.map(n=>`<span class="${usados[n]?'ocupado':'livre'}">
-      ${n} (${usados[n]?'OCUPADO':'LIVRE'})
-    </span>`).join("");
+  const el = document.getElementById("status-empregados");
+
+  let html = "";
+  nomes.forEach(nome=>{
+    if(status[nome]){
+      html += `<span class="ocupado">${nome} (OCUPADO)</span>`;
+    }else{
+      html += `<span class="livre">${nome} (LIVRE)</span>`;
+    }
+  });
+
+  el.innerHTML = html;
 }
-
-/* LOAD */
-async function loadAll(){
-  const results = await Promise.all(TABS.map(t=>fetchSheet(t.name)));
-
-  renderTable("painel",results[0]);
-  renderTable("agenda",results[1]);
-  renderTable("social",results[2]);
-
-  atualizarStatusEmpregados(results[0]);
-}
+  
 
 loadAll();
-setInterval(loadAll,10000);
+setInterval(loadAll, 10000);
 </script>
-
-</body>
-</html>
