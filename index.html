@@ -31,31 +31,42 @@ html,body{
   font-family:Inter,Arial;
 }
   
+.title{
+  font-size:30px;
+  font-weight:700;
+  color:var(--accent);
+  line-height:1.2;
+}
+
 #status-empregados{
-  text-align:center;          /* centraliza tudo */
-  margin-top:6px;
+  margin-top:4px;
+  font-size:16px;
   letter-spacing:1px;
 }
 
 #status-empregados span{
   display:inline-block;
-  margin:0 25px;              /* aumenta o espaço entre os nomes */
+  margin:0 20px;
   font-weight:700;
-  font-size:18px;             /* opcional: deixa mais visível */
 }
 
 .ocupado{ color:#ff4d4d; }
 .livre{ color:#00ff9c; }
   
 header{
-  display:flex;
-  justify-content:space-between;
+  display:grid;
+  grid-template-columns: auto 1fr auto;
   align-items:center;
   padding:12px 34px;
   background:#020617;
   border-radius:10px;
-   border: 1px solid #ffffff; /* BORDAS BRANCAS NO TÍTULO */
+  border:1px solid #ffffff;
 }
+header > div{
+  text-align:center;
+}
+  
+  
 
 header img{height:70px;}
 header .title{font-size:30px;font-weight:700;color:var(--accent);}
