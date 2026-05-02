@@ -72,7 +72,14 @@ header{
 header > div{
   text-align:center;
 }
-  
+
+  /* colunas 1 e 2 com mesma largura */
+table th:nth-child(1),
+table td:nth-child(1),
+table th:nth-child(2),
+table td:nth-child(2){
+  width: 110px;
+}
   
 
 header img{height:70px;}
