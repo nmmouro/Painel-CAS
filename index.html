@@ -297,7 +297,7 @@ document.addEventListener("click", () => {
   const a = document.getElementById("beep");
   if(!a || audioUnlocked) return;
 
-  a.volume = 0.6;
+  a.volume = 0.8;
   a.play().then(()=>{
     a.pause();
     a.currentTime = 0;
