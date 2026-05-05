@@ -350,13 +350,16 @@ const TABLE_HEADERS = {
 };
 
 /* ================= ÁUDIO ================= */
+/* ================= ÁUDIO ================= */
 let audioUnlocked = false;
 let lastDataHash = null;
 let firstLoad = true;
 
-  /* 🔊 estado salvo */
 let soundEnabled = localStorage.getItem("sound") !== "off";
 
+const audio = document.getElementById("beep");
+
+/* 🔊 botão */
 function updateSoundButton(){
   const btn = document.getElementById("toggle-audio");
   if(!btn) return;
@@ -370,39 +373,44 @@ function updateSoundButton(){
   }
 }
 
-  function toggleAudio(){
+function toggleAudio(){
   soundEnabled = !soundEnabled;
   localStorage.setItem("sound", soundEnabled ? "on" : "off");
   updateSoundButton();
 }
 
-  document.addEventListener("pointerdown", unlockAudio, { once:true });
-document.addEventListener("keydown", unlockAudio, { once:true });
+/* 🔓 desbloqueio REAL do áudio */
+async function unlockAudio(){
+  if(audioUnlocked) return;
 
-function unlockAudio(){
-  const a = document.getElementById("beep");
-  if(!a) return;
+  try{
+    await audio.play();   // tenta tocar
+    audio.pause();        // pausa imediatamente
+    audio.currentTime = 0;
 
-  a.volume = 0;
-
-  a.play().then(()=>{
-    a.pause();
-    a.currentTime = 0;
-    a.volume = 0.6;
     audioUnlocked = true;
-    console.log("🔊 áudio liberado automaticamente");
-  }).catch(err=>{
-    console.log("⚠️ Autoplay bloqueado:", err);
-  });
-}
-  function playBeep(){
-  const a = document.getElementById("beep");
-  if(!a || !audioUnlocked || !soundEnabled) return;
-
-  a.currentTime = 0;
-  a.play().catch(()=>{});
+    console.log("🔊 Áudio desbloqueado");
+  }catch(err){
+    console.warn("⚠️ Autoplay bloqueado:", err);
+  }
 }
 
+/* 🔓 eventos mais confiáveis */
+["click","touchstart","keydown"].forEach(evt=>{
+  document.addEventListener(evt, unlockAudio, { once:true });
+});
+
+/* 🔊 tocar som */
+function playBeep(){
+  if(!audioUnlocked || !soundEnabled) return;
+
+  try{
+    audio.currentTime = 0;
+    audio.play().catch(()=>{});
+  }catch(e){
+    console.warn("Erro ao tocar áudio:", e);
+  }
+}
 /* ================= RELÓGIO ================= */
 function updateClock(){
   const n = new Date();
