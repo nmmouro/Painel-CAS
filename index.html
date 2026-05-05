@@ -563,6 +563,11 @@ function atualizarStatusEmpregados(gvizPainel){
 
   el.innerHTML = html;
 }
+
+  setTimeout(() => {
+  console.log("🔊 teste manual");
+  playBeep();
+}, 5000);
   
 loadAll();
 updateSoundButton();
