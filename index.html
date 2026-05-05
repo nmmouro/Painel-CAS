@@ -351,12 +351,9 @@ const TABLE_HEADERS = {
 
 /* ================= ÁUDIO ================= */
 let audioUnlocked = false;
-let lastDataHash = null;
-let firstLoad = true;
-
-  /* 🔊 estado salvo */
 let soundEnabled = localStorage.getItem("sound") !== "off";
 
+/* ================= BOTÃO ================= */
 function updateSoundButton(){
   const btn = document.getElementById("toggle-audio");
   if(!btn) return;
@@ -370,37 +367,88 @@ function updateSoundButton(){
   }
 }
 
-  function toggleAudio(){
+function toggleAudio(){
   soundEnabled = !soundEnabled;
   localStorage.setItem("sound", soundEnabled ? "on" : "off");
   updateSoundButton();
 }
 
-  document.addEventListener("pointerdown", unlockAudio, { once:true });
-document.addEventListener("keydown", unlockAudio, { once:true });
-
-function unlockAudio(){
+/* ================= LIBERAÇÃO DE ÁUDIO ================= */
+function unlockAudio(forceClick = false){
   const a = document.getElementById("beep");
   if(!a) return;
 
-  a.volume = 0.6;
+  a.volume = 0;
 
-  a.play().then(()=>{
-    a.pause();
-    a.currentTime = 0;
-    audioUnlocked = true;
-    console.log("🔊 áudio liberado");
-  }).catch(err=>{
-    console.log("Erro ao liberar áudio:", err);
-  });
+  const tentativa = a.play();
+
+  if(tentativa !== undefined){
+    tentativa.then(()=>{
+      a.pause();
+      a.currentTime = 0;
+      a.volume = 0.6;
+
+      audioUnlocked = true;
+
+      console.log("🔊 áudio liberado");
+
+      // esconde botão se foi clique manual
+      if(forceClick){
+        const btn = document.getElementById("btn-audio");
+        if(btn) btn.style.display = "none";
+      }
+
+    }).catch(err=>{
+      console.log("⚠️ bloqueado pelo navegador", err);
+    });
+  }
 }
-  function playBeep(){
+
+/* tenta automaticamente */
+window.addEventListener("load", () => {
+  unlockAudio(false);
+
+  // 🔥 fallback: tenta de novo depois de 3s
+  setTimeout(() => unlockAudio(false), 3000);
+});
+
+/* fallback por interação */
+document.addEventListener("pointerdown", () => unlockAudio(true), { once:true });
+document.addEventListener("keydown", () => unlockAudio(true), { once:true });
+
+/* ================= PLAY ================= */
+function playBeep(){
   const a = document.getElementById("beep");
-  if(!a || !audioUnlocked || !soundEnabled) return;
+
+  if(!a){
+    console.log("❌ áudio não encontrado");
+    return;
+  }
+
+  if(!audioUnlocked){
+    console.log("🔒 áudio bloqueado");
+    return;
+  }
+
+  if(!soundEnabled){
+    console.log("🔇 som desativado");
+    return;
+  }
 
   a.currentTime = 0;
-  a.play().catch(()=>{});
+
+  a.play().then(()=>{
+    console.log("🔊 tocou");
+  }).catch(err=>{
+    console.log("❌ erro ao tocar", err);
+  });
 }
+
+/* ================= TESTE AUTOMÁTICO ================= */
+setTimeout(() => {
+  console.log("🧪 teste de áudio...");
+  playBeep();
+}, 5000);
 
 /* ================= RELÓGIO ================= */
 function updateClock(){
