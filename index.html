@@ -351,9 +351,12 @@ const TABLE_HEADERS = {
 
 /* ================= ÁUDIO ================= */
 let audioUnlocked = false;
+let lastDataHash = null;
+let firstLoad = true;
+
+  /* 🔊 estado salvo */
 let soundEnabled = localStorage.getItem("sound") !== "off";
 
-/* ================= BOTÃO ================= */
 function updateSoundButton(){
   const btn = document.getElementById("toggle-audio");
   if(!btn) return;
@@ -367,88 +370,38 @@ function updateSoundButton(){
   }
 }
 
-function toggleAudio(){
+  function toggleAudio(){
   soundEnabled = !soundEnabled;
   localStorage.setItem("sound", soundEnabled ? "on" : "off");
   updateSoundButton();
 }
 
-/* ================= LIBERAÇÃO DE ÁUDIO ================= */
-function unlockAudio(forceClick = false){
+  document.addEventListener("pointerdown", unlockAudio, { once:true });
+document.addEventListener("keydown", unlockAudio, { once:true });
+
+function unlockAudio(){
   const a = document.getElementById("beep");
   if(!a) return;
 
   a.volume = 0;
 
-  const tentativa = a.play();
-
-  if(tentativa !== undefined){
-    tentativa.then(()=>{
-      a.pause();
-      a.currentTime = 0;
-      a.volume = 0.6;
-
-      audioUnlocked = true;
-
-      console.log("🔊 áudio liberado");
-
-      // esconde botão se foi clique manual
-      if(forceClick){
-        const btn = document.getElementById("btn-audio");
-        if(btn) btn.style.display = "none";
-      }
-
-    }).catch(err=>{
-      console.log("⚠️ bloqueado pelo navegador", err);
-    });
-  }
-}
-
-/* tenta automaticamente */
-window.addEventListener("load", () => {
-  unlockAudio(false);
-
-  // 🔥 fallback: tenta de novo depois de 3s
-  setTimeout(() => unlockAudio(false), 3000);
-});
-
-/* fallback por interação */
-document.addEventListener("pointerdown", () => unlockAudio(true), { once:true });
-document.addEventListener("keydown", () => unlockAudio(true), { once:true });
-
-/* ================= PLAY ================= */
-function playBeep(){
-  const a = document.getElementById("beep");
-
-  if(!a){
-    console.log("❌ áudio não encontrado");
-    return;
-  }
-
-  if(!audioUnlocked){
-    console.log("🔒 áudio bloqueado");
-    return;
-  }
-
-  if(!soundEnabled){
-    console.log("🔇 som desativado");
-    return;
-  }
-
-  a.currentTime = 0;
-
   a.play().then(()=>{
-    console.log("🔊 tocou");
+    a.pause();
+    a.currentTime = 0;
+    a.volume = 0.6;
+    audioUnlocked = true;
+    console.log("🔊 áudio liberado automaticamente");
   }).catch(err=>{
-    console.log("❌ erro ao tocar", err);
+    console.log("⚠️ Autoplay bloqueado:", err);
   });
 }
+  function playBeep(){
+  const a = document.getElementById("beep");
+  if(!a || !audioUnlocked || !soundEnabled) return;
 
-/* ================= TESTE AUTOMÁTICO ================= */
-setTimeout(() => {
-  console.log("🧪 teste de áudio...");
-  playBeep();
-}, 5000);
+  a.currentTime = 0;
+  a.play().catch(()=>{});
+}
 
 /* ================= RELÓGIO ================= */
 function updateClock(){
