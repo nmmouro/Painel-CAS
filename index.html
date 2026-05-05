@@ -195,6 +195,32 @@ td.status-icon{
   color:#ff4d4d;
 }
 
+
+.table-container{
+  width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+}
+
+/* deixa a tabela expandir naturalmente */
+.table-container table{
+  min-width:1200px; /* ajuste conforme necessário */
+}
+
+/* scrollbar mais bonita */
+.table-container::-webkit-scrollbar{
+  height:8px;
+}
+
+.table-container::-webkit-scrollbar-thumb{
+  background:#2c4078;
+  border-radius:4px;
+}
+
+
+  
+  
+
 /* ================= PAINEL ================= */
 
 #painel table th:nth-child(1),
@@ -350,7 +376,6 @@ const TABLE_HEADERS = {
 };
 
 /* ================= ÁUDIO ================= */
-/* ================= ÁUDIO ================= */
 let audioUnlocked = false;
 let lastDataHash = null;
 let firstLoad = true;
@@ -455,7 +480,7 @@ function renderTable(id, g){
   const headers = TABLE_HEADERS[id] || [];
   const rows = g.table.rows;
 
-  let h="<table><thead><tr>";
+  let h="<div class='table-container'><table><thead><tr>";
   headers.forEach(c=>h+=`<th>${escapeHtml(c)}</th>`);
   h+="</tr></thead><tbody>";
 
@@ -571,6 +596,8 @@ function atualizarStatusEmpregados(gvizPainel){
 
   el.innerHTML = html;
 }
+
+  h+="</tbody></table></div>";
 
 loadAll();
 updateSoundButton();
