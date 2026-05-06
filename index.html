@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="pt-BR">
+
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -9,281 +10,32 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 
+
 <style>
+
+/* ===== VARIÁVEIS ===== */
 :root{
-  --bg:#071029;        /* fundo geral */
-  --card:#0b1a3a;      /* cards */
-  --table:#0e224d;     /* fundo da tabela */
-  --table-alt:#0c1d40; /* zebra */
-  --header:#2c4078;    /* cabeçalho */
-  --border:#1e2f5c;    /* bordas suaves */
+  --bg:#071029;
+  --card:#0b1a3a;
+  --table:#0e224d;
+  --table-alt:#0c1d40;
+  --header:#2c4078;
+  --border:#1e2f5c;
   --text:#f7f9fa;
   --muted:#9fb3ff;
 }
 
-  /* ========== HTML ========== */
-  
+/* ===== BASE ===== */
 html,body{
   height:100%;
   margin:0;
   background:var(--bg);
-  color:#ffffff;
+  color:#fff;
   font-family:Inter,Arial;
 }
-  
-.title{
-  font-size:30px;
-  font-weight:700;
-  color:var(--accent);
-  line-height:1.2;
-}
 
-#status-empregados span{
-  display:inline-block;
-  margin:0 12px;
-  padding:4px 10px;
-  border-radius:6px;
-  font-size:16px;
-}
-
-.ocupado{
-  background:rgba(255,77,77,0.15);
-  color:#ff4d4d;
-}
-
-.livre{
-  background:rgba(0,255,156,0.15);
-  color:#00ff9c;
-}
-  
-/* ========== HEADER ========== */
-  
-header{
-  display:grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: auto auto;
-  align-items:center;
-  padding:12px;
-  background:#020617;
-  border-radius:10px;
-  border:1px solid #ffffff;
-  height:90px;
-}
-
-
-
-  
-/* 🔹 LOGO */
-.logo{
-  grid-row: 1 / span 2; /* ocupa as duas linhas */
-  height:70px;
-}
-
-/* 🔹 CENTRO (título + status) */
-.center{
-  grid-column:2;
-  grid-row:1 / span 2;
-  text-align:center;
-}
-
-.center .title{
-  font-size:30px;
-  font-weight:700;
-}
-
-#status-empregados{
-  margin-top:4px;
-  font-size:16px;
-}
-
-/* 🔹 LADO DIREITO */
-.right{
-  grid-column:3;
-  grid-row:1 / span 2;
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-  justify-content:center;
-  gap:6px;
-}
-  
-
-main{
-  padding:12px;
-  display:grid;
-  grid-template-rows:1fr 1fr 1fr;
-  gap:10px;
-  height:calc(100vh - 92px);
-}
-
-.card{
-  background:var(--card);
-}
-
-.card h2{
-  margin:0 0 8px;
-  color:var(--accent);
-  font-size:26px;
-  text-align:center;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  font-size:16px;
-  table-layout: fixed; /* 🔥 ESSENCIAL */
-}
-
-  th, td{
-  padding:12px 12px; /* mesmo valor horizontal */
-  font-weight:700;
-  text-align:center;
-  white-space:nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border:1px solid #ffffff; /* igual ao cabeçalho */
-}
-
-thead th{
-  position:sticky;
-  top:0;
-  background:var(--header);
-  color:#fff;
-  z-index:2;
-  border:1px solid var(--border);
-  padding:12px;
-}
-
-
-th:last-child,
-td:last-child{
-  width:50px;
-}
-
-td.status-icon{
-  width: 50px;
-}
-
-  tbody td{
-  background:var(--table);
-  border:1px solid var(--border);
-  padding:12px;
-}
-
-  tbody tr:nth-child(even) td{
-  background:var(--table-alt);
-}
-
- /* relógio */
-.clock{
-  font-size:26px;
-  font-weight:700;
-  color:var(--muted);
-}
-
-/* botão som */
-#toggle-audio{
-  background:#0b1a3a;
-  color:#fff;
-  border:1px solid #fff;
-  padding:6px 12px;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:700;
-}
-
-#toggle-audio.off{
-  background:#3a0b0b;
-  color:#ff4d4d;
-}
-
-/* ================= PAINEL ================= */
-
-#painel table th:nth-child(1),
-#painel table td:nth-child(1){
-  width: 100px;
-}
-#painel table th:nth-child(2),
-#painel table td:nth-child(2){
-  width: 50px;
-}
-#painel table th:nth-child(3),
-#painel table td:nth-child(3){
-  width: 130px;
-}
-#painel table th:nth-child(4),
-#painel table td:nth-child(4){
-  width: 190px;
-}
-
-#painel table th:nth-child(7),
-#painel table td:nth-child(7){
-  width: 70px;
-}
-
- /* ================= AGAENDA DO DIA ================= */
-
-#agenda table th:nth-child(1),
-#agenda table td:nth-child(1){
-  width: 100px;
-}  
-#agenda table th:nth-child(2),
-#agenda table td:nth-child(2){
-  width: 50px;
-}
-#agenda table th:nth-child(4),
-#agenda table td:nth-child(4){
-  width: 100px;
-}
-
-#agenda table th:nth-child(7),
-#agenda table td:nth-child(7){
-  width: 70px;
-}
-
- /* ================= AGAENDA S SOCIAL ================= */
-
-#social table th:nth-child(1),
-#social table td:nth-child(1){
-    width: 100px;
-}
-#social table th:nth-child(2),
-#social table td:nth-child(2){
-  width: 100px;
-}
-
-#social table th:nth-child(3),
-#social table td:nth-child(3){
-  width: 200px;
-}
-
-#social table th:nth-child(6),
-#social table td:nth-child(6){
-  width: 70px;
-}
-
-
-.table-container{
-  width:100%;
-  overflow-x:auto;
-  overflow-y:hidden;
-}
-
-.table-container table{
-  min-width:1400px; /* ajuste conforme necessário */
-}
-
-.table-container::-webkit-scrollbar{
-  height:8px;
-}
-
-.table-container::-webkit-scrollbar-thumb{
-  background:#2c4078;
-  border-radius:4px;
-}
-
-
-  .container{
+/* ===== CONTAINER GLOBAL ===== */
+.container{
   width:100%;
   max-width:1400px;
   margin:0 auto;
@@ -291,177 +43,136 @@ td.status-icon{
 }
 
 
-  
-
-
- /* ================= CORES DE STATUS ================= */
-
-tr.status-atendido   td.status-icon{color:#00ff9c;}
-tr.status-andamento  td.status-icon{color:#ffcc00;}
-tr.status-concluido  td.status-icon{color:#7CFC00;}
-tr.status-cancelado  td.status-icon{color:#ff4d4d;}
- 
-tr.status-atendido td{
-  background:rgba(0, 255, 156, 0.12);
+header{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  padding:12px;
+  background:#020617;
+  border-radius:10px;
+  border:1px solid #fff;
+  height:90px;
 }
 
-tr.status-andamento td{
-  background:rgba(255, 204, 0, 0.12);
+.logo{ height:70px; }
+
+.center{text-align:center;}
+
+.title{
+  font-size:30px;
+  font-weight:700;
 }
 
-tr.status-concluido td{
-  background:rgba(124, 252, 0, 0.10);
+.right{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
 }
 
-tr.status-cancelado td{
-  background:rgba(255, 77, 77, 0.15);
+
+main{
+  padding:12px 0;
+  display:grid;
+  gap:10px;
 }
 
-.small{
+.card{
+  background:var(--card);
+}
+
+.card h2{
   text-align:center;
-  font-size:12px;
-  color:var(--muted);
 }
+
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  table-layout:fixed;
+}
+
+th, td{
+  padding:12px;
+  text-align:center;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.table-container{
+  overflow-x:auto;
+}
+
+.table-container table{
+  min-width:1400px;
+}
+
+
 </style>
 </head>
 
 <body>
 
-  <audio id="beep" preload="auto">
+<audio id="beep" preload="auto">
   <source src="./alerta.mp3" type="audio/mpeg">
 </audio>
 
-
-
 <div class="container">
 
-  <header>
-    <img src="logo.png" class="logo" onerror="this.style.display='none'">
 
-    <div class="center">
-      <div class="title">MOVIMENTAÇÃO DIÁRIA</div>
-      <div id="status-empregados"></div>
-    </div>
+<header>
 
-    <div class="right">
-      <div class="clock" id="clock"></div>
-      <button id="toggle-audio" onclick="toggleAudio()">🔊 SOM: ON</button>
-    </div>
-  </header>
+  <img src="logo.png" class="logo" onerror="this.style.display='none'">
 
-  <main>
-    <section class="card">
-      <h2>PAINEL</h2>
-      <div id="painel">Carregando...</div>
-    </section>
+  <div class="center">
+    <div class="title">MOVIMENTAÇÃO DIÁRIA</div>
+    <div id="status-empregados"></div>
+  </div>
 
-    <section class="card">
-      <h2>AGENDA DO DIA</h2>
-      <div id="agenda">Carregando...</div>
-    </section>
+  <div class="right">
+    <div class="clock" id="clock"></div>
+    <button id="toggle-audio" onclick="toggleAudio()">🔊 SOM: ON</button>
+  </div>
 
-    <section class="card">
-      <h2>AGENDA SERVIÇO SOCIAL</h2>
-      <div id="social">Carregando...</div>
-    </section>
-  </main>
+</header>
+
+
+<main>
+
+  <section class="card">
+    <h2>PAINEL</h2>
+    <div id="painel">Carregando...</div>
+  </section>
+
+  <section class="card">
+    <h2>AGENDA DO DIA</h2>
+    <div id="agenda">Carregando...</div>
+  </section>
+
+  <section class="card">
+    <h2>AGENDA SERVIÇO SOCIAL</h2>
+    <div id="social">Carregando...</div>
+  </section>
+
+</main>
 
 </div>
 
 <div class="small">Atualização automática a cada 30s • Google Sheets</div>
 
-</body>
 
 <script>
-  
-/* ================= CONFIG ================= */
+
+
 const SHEET_ID = "1Ch3AjQ0MDo4WuQWFDR3r8nZrHb4yQkSLOtT5_QgxT6E";
+
 const TABS = [
   { id:"painel", name:"PAINEL" },
   { id:"agenda", name:"AGENDA DO DIA" },
   { id:"social", name:"AGENDA SERVIÇO SOCIAL" }
 ];
 
-/* ================= HEADERS ================= */
-const TABLE_HEADERS = {
-  painel: ["Data","Hora","Veículo","Empregado","Passageiro/Motivo","Itinerário","Status"],
-  agenda: ["Data","Hora","Passageiro","Setor","Motivo","Itinerário","Status"],
-  social: ["Data","Período","Passageiro","Motivo","Itinerário","Status"]
-};
 
-/* ================= ÁUDIO ================= */
-/* ================= ÁUDIO ================= */
-let audioUnlocked = false;
-let lastDataHash = null;
-let firstLoad = true;
-
-let soundEnabled = localStorage.getItem("sound") !== "off";
-
-const audio = document.getElementById("beep");
-
-/* 🔊 botão */
-function updateSoundButton(){
-  const btn = document.getElementById("toggle-audio");
-  if(!btn) return;
-
-  if(soundEnabled){
-    btn.innerText = "🔊 SOM: ON";
-    btn.classList.remove("off");
-  }else{
-    btn.innerText = "🔇 SOM: OFF";
-    btn.classList.add("off");
-  }
-}
-
-function toggleAudio(){
-  soundEnabled = !soundEnabled;
-  localStorage.setItem("sound", soundEnabled ? "on" : "off");
-  updateSoundButton();
-}
-
-/* 🔓 desbloqueio REAL do áudio */
-async function unlockAudio(){
-  if(audioUnlocked) return;
-
-  try{
-    await audio.play();   // tenta tocar
-    audio.pause();        // pausa imediatamente
-    audio.currentTime = 0;
-
-    audioUnlocked = true;
-    console.log("🔊 Áudio desbloqueado");
-  }catch(err){
-    console.warn("⚠️ Autoplay bloqueado:", err);
-  }
-}
-
-/* 🔓 eventos mais confiáveis */
-["click","touchstart","keydown"].forEach(evt=>{
-  document.addEventListener(evt, unlockAudio, { once:true });
-});
-
-/* 🔊 tocar som */
-function playBeep(){
-  if(!audioUnlocked || !soundEnabled) return;
-
-  try{
-    audio.currentTime = 0;
-    audio.play().catch(()=>{});
-  }catch(e){
-    console.warn("Erro ao tocar áudio:", e);
-  }
-}
-/* ================= RELÓGIO ================= */
-function updateClock(){
-  const n = new Date();
-  document.getElementById("clock").innerText =
-    n.toLocaleDateString("pt-BR")+" — "+
-    n.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"});
-}
-setInterval(updateClock,1000);
-updateClock();
-
-/* ================= HELPERS ================= */
 const parseGviz = t =>
   JSON.parse(t.substring(t.indexOf("{"), t.lastIndexOf("}") + 1));
 
@@ -470,150 +181,46 @@ const escapeHtml = s =>
     "&":"&amp;","<":"&lt;",">":"&gt;"
   }[m]));
 
-const formatCell = c =>
-  c == null ? "" : (typeof c === "object" ? (c.f ?? c.v ?? "") : String(c));
 
-/* 🔐 hash apenas com valores reais */
-function generateCleanHash(results){
-  return JSON.stringify(
-    results.map(r =>
-      r.table.rows.map(row =>
-        (row.c || []).map(c => c?.f ?? c?.v ?? "")
-      )
-    )
-  );
-}
-
-/* ================= RENDER ================= */
 function renderTable(id, g){
   const el = document.getElementById(id);
-  if(!g?.table?.rows){
-    el.innerHTML = "<div style='text-align:center;opacity:.7'>Sem dados</div>";
-    return;
-  }
 
-  const headers = TABLE_HEADERS[id] || [];
-  const rows = g.table.rows;
+  let h="<div class='table-container'><table>";
 
-  // 🔥 AQUI começa a alteração (container com scroll)
-  let h="<div class='table-container'><table><thead><tr>";
-
-  headers.forEach(c=>h+=`<th>${escapeHtml(c)}</th>`);
-  h+="</tr></thead><tbody>";
-
-  rows.forEach(r=>{
-    const cells = r.c || [];
-
-    const valores = cells.map(c => (c?.f ?? c?.v ?? "").toString().trim());
-
-    if(valores.join("") === "") return;
-
-    const status = (valores.at(-1) || "").toLowerCase();
-
-    let cls="";
-    if(status.includes("cancelado")) cls="status-cancelado";
-    else if(status.includes("concluido")) cls="status-concluido";
-    else if(status.includes("andamento")) cls="status-andamento";
-    else if(status.includes("atendido")) cls="status-atendido";
-
-    h+=`<tr class="${cls}">`;
-
-    cells.forEach((c,i)=>{
-      if(i === cells.length-1){
-        let icon="";
-        if(status.includes("concluido")||status.includes("atendido")) icon="✔";
-        if(status.includes("cancelado")) icon="✖";
-        else if(status.includes("andamento")) icon="⏳";
-        h+=`<td class="status-icon">${icon}</td>`;
-      }else{
-        h+=`<td>${escapeHtml(formatCell(c))}</td>`;
-      }
+  g.table.rows.forEach(r=>{
+    h+="<tr>";
+    (r.c||[]).forEach(c=>{
+      h+=`<td>${escapeHtml(c?.f ?? c?.v ?? "")}</td>`;
     });
-
     h+="</tr>";
   });
 
-  // 🔥 fechamento do container
-  h+="</tbody></table></div>";
+  h+="</table></div>";
 
-  el.innerHTML=h;
+  el.innerHTML = h;
 }
 
-/* ================= FETCH ================= */
-async function fetchSheet(tab){
-  const url =
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq`+
-    `?sheet=${encodeURIComponent(tab)}&tqx=out:json&nocache=${Date.now()}`;
 
-  const r = await fetch(url,{cache:"no-store"});
+async function fetchSheet(tab){
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${tab}&tqx=out:json`;
+  const r = await fetch(url);
   return parseGviz(await r.text());
 }
 
-/* ================= LOAD ================= */
+
 async function loadAll(){
-  try{
-    const results = await Promise.all(TABS.map(t=>fetchSheet(t.name)));
+  const results = await Promise.all(TABS.map(t=>fetchSheet(t.name)));
 
-    const currentHash = generateCleanHash(results);
-
-    if(!firstLoad && lastDataHash && currentHash !== lastDataHash){
-      playBeep(); // 🔊 SOM SÓ SE DADOS MUDAREM
-    }
-
-    firstLoad = false;
-    lastDataHash = currentHash;
-
-    renderTable("painel", results[0]);
-    renderTable("agenda", results[1]);
-    renderTable("social", results[2]);
-
-// ✅ NOVO
-atualizarStatusEmpregados(results[0]);
-
-  }catch(e){
-    console.error(e);
-  }
+  renderTable("painel", results[0]);
+  renderTable("agenda", results[1]);
+  renderTable("social", results[2]);
 }
 
-function atualizarStatusEmpregados(gvizPainel){
-  const nomes = ["CACIO","CELSO","NEI"];
-  const status = {
-    CACIO:false,
-    CELSO:false,
-    NEI:false
-  };
-
-  const rows = gvizPainel?.table?.rows || [];
-
-  rows.forEach(r=>{
-    const cells = r.c || [];
-
-    cells.forEach(c=>{
-      const valor = String(c?.f ?? c?.v ?? "").toUpperCase();
-
-      nomes.forEach(nome=>{
-        if(valor.includes(nome)){
-          status[nome] = true;
-        }
-      });
-    });
-  });
-
-  const el = document.getElementById("status-empregados");
-
-  let html = "";
-  nomes.forEach(nome=>{
-    if(status[nome]){
-      html += `<span class="ocupado">${nome} (OCUPADO)</span>`;
-    }else{
-      html += `<span class="livre">${nome} (LIVRE)</span>`;
-    }
-  });
-
-  el.innerHTML = html;
-}
 
 loadAll();
-updateSoundButton();
-setInterval(loadAll, 10000);
+setInterval(loadAll,10000);
+
+
 </script>
+</body>
+</html>
