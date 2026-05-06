@@ -63,19 +63,14 @@ header{
   grid-template-columns: auto 1fr auto;
   grid-template-rows: auto auto;
   align-items:center;
-  padding:12px 34px;
+  padding:12px;
   background:#020617;
   border-radius:10px;
   border:1px solid #ffffff;
   height:90px;
 }
 
-header, main{
-  max-width: 100%;
-  margin: 0 auto;
-  padding-left:12px;
-  padding-right:12px;
-}
+
 
   
 /* 🔹 LOGO */
@@ -288,6 +283,13 @@ td.status-icon{
 }
 
 
+  .container{
+  width:100%;
+  max-width:1200px;
+  margin:0 auto;
+}
+
+
   
 
 
@@ -328,39 +330,46 @@ tr.status-cancelado td{
   <source src="./alerta.mp3" type="audio/mpeg">
 </audio>
 
-<header>
-  <img src="logo.png" class="logo" onerror="this.style.display='none'">
 
-  <div class="center">
-    <div class="title">MOVIMENTAÇÃO DIÁRIA</div>
-    <div id="status-empregados"></div>
-  </div>
 
-  <div class="right">
-    <div class="clock" id="clock"></div>
-    <button id="toggle-audio" onclick="toggleAudio()">🔊 SOM: ON</button>
-  </div>
-</header>
-  
-<main>
-  <section class="card">
-    <h2>PAINEL</h2>
-    <div id="painel">Carregando...</div>
-  </section>
+<div class="container">
 
-  <section class="card">
-    <h2>AGENDA DO DIA</h2>
-    <div id="agenda">Carregando...</div>
-  </section>
+  <header>
+    <img src="logo.png" class="logo" onerror="this.style.display='none'">
 
-  <section class="card">
-    <h2>AGENDA SERVIÇO SOCIAL</h2>
-    <div id="social">Carregando...</div>
-  </section>
-</main>
+    <div class="center">
+      <div class="title">MOVIMENTAÇÃO DIÁRIA</div>
+      <div id="status-empregados"></div>
+    </div>
+
+    <div class="right">
+      <div class="clock" id="clock"></div>
+      <button id="toggle-audio" onclick="toggleAudio()">🔊 SOM: ON</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>PAINEL</h2>
+      <div id="painel">Carregando...</div>
+    </section>
+
+    <section class="card">
+      <h2>AGENDA DO DIA</h2>
+      <div id="agenda">Carregando...</div>
+    </section>
+
+    <section class="card">
+      <h2>AGENDA SERVIÇO SOCIAL</h2>
+      <div id="social">Carregando...</div>
+    </section>
+  </main>
+
+</div>
 
 <div class="small">Atualização automática a cada 30s • Google Sheets</div>
 
+</body>
 
 <script>
   
