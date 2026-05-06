@@ -261,6 +261,29 @@ td.status-icon{
 }
 
 
+.table-container{
+  width:100%;
+  overflow-x:auto;
+  overflow-y:hidden;
+}
+
+.table-container table{
+  min-width:1200px; /* ajuste conforme necessário */
+}
+
+.table-container::-webkit-scrollbar{
+  height:8px;
+}
+
+.table-container::-webkit-scrollbar-thumb{
+  background:#2c4078;
+  border-radius:4px;
+}
+
+
+  
+
+
  /* ================= CORES DE STATUS ================= */
 
 tr.status-atendido   td.status-icon{color:#00ff9c;}
@@ -455,29 +478,28 @@ function renderTable(id, g){
   const headers = TABLE_HEADERS[id] || [];
   const rows = g.table.rows;
 
-  let h="<table><thead><tr>";
+  // 🔥 AQUI começa a alteração (container com scroll)
+  let h="<div class='table-container'><table><thead><tr>";
+
   headers.forEach(c=>h+=`<th>${escapeHtml(c)}</th>`);
   h+="</tr></thead><tbody>";
 
- rows.forEach(r=>{
-  const cells = r.c || [];
+  rows.forEach(r=>{
+    const cells = r.c || [];
 
-  // 🔥 extrai valores da linha
-  const valores = cells.map(c => (c?.f ?? c?.v ?? "").toString().trim());
+    const valores = cells.map(c => (c?.f ?? c?.v ?? "").toString().trim());
 
-  // ❌ ignora linha totalmente vazia
-  if(valores.join("") === "") return;
+    if(valores.join("") === "") return;
 
-  // 🔥 pega status depois da validação
-  const status = (valores.at(-1) || "").toLowerCase();
+    const status = (valores.at(-1) || "").toLowerCase();
 
-  let cls="";
-  if(status.includes("cancelado")) cls="status-cancelado";
-  else if(status.includes("concluido")) cls="status-concluido";
-  else if(status.includes("andamento")) cls="status-andamento";
-  else if(status.includes("atendido")) cls="status-atendido";
+    let cls="";
+    if(status.includes("cancelado")) cls="status-cancelado";
+    else if(status.includes("concluido")) cls="status-concluido";
+    else if(status.includes("andamento")) cls="status-andamento";
+    else if(status.includes("atendido")) cls="status-atendido";
 
-  h+=`<tr class="${cls}">`;
+    h+=`<tr class="${cls}">`;
 
     cells.forEach((c,i)=>{
       if(i === cells.length-1){
@@ -494,7 +516,9 @@ function renderTable(id, g){
     h+="</tr>";
   });
 
-  h+="</tbody></table>";
+  // 🔥 fechamento do container
+  h+="</tbody></table></div>";
+
   el.innerHTML=h;
 }
 
