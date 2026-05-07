@@ -62,7 +62,7 @@ html,body{
 }
 
   
-/* ========== HEADER ========== */
+/* ========== HEADER (layout do seu cabeçalho) ========== */
   
 header{
   display:grid;
@@ -138,6 +138,8 @@ table{
   table-layout: fixed; /* 🔥 ESSENCIAL */
 }
 
+/* === define o comportamento visual de todas as células da tabela === */
+  
   th, td{
   padding:12px 12px; /* mesmo valor horizontal */
   font-weight:700;
@@ -148,6 +150,8 @@ table{
   border:2px solid #ffffff; /* igual ao cabeçalho */
 }
 
+/* === Esse bloco controla o comportamento e aparência do cabeçalho da tabela === */
+  
 thead th{
   position:sticky;
   top:0;
@@ -170,7 +174,7 @@ td.status-icon{
 
   tbody td{
   background:var(--table);
-  border:1px solid var(--border);
+  border:2px solid var(--border);
   padding:12px;
 }
 
