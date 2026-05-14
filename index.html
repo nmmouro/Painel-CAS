@@ -114,14 +114,28 @@ header{
 }
 
 /* 🔹 LADO DIREITO */
+/* área direita */
 .right{
   grid-column:3;
   grid-row:1 / span 2;
+
   display:flex;
   flex-direction:column;
   align-items:flex-end;
   justify-content:center;
-  gap:6px;
+  gap:8px;
+}
+
+/* linha dos botões */
+.buttons-row{
+  display:flex;
+  gap:8px;
+}
+
+/* largura automática */
+#toggle-audio,
+#toggle-fullscreen{
+  width:auto;
 }
  
 /* === Esse bloco controla toda a área principal do seu painel: Painel,Agenda e Agenda Social) === */
@@ -351,14 +365,23 @@ tr.status-cancelado td{
   </div>
 
   <div class="right">
-    <div class="clock" id="clock"></div>
-    <button id="toggle-audio" onclick="toggleAudio()">🔊 SOM: ON</button>
+
+  <div class="clock" id="clock"></div>
+
+  <div class="buttons-row">
+
+    <button id="toggle-audio" onclick="toggleAudio()">
+      🔊 SOM: ON
+    </button>
 
     <button id="toggle-fullscreen" onclick="toggleFullscreen()">
-  ⛶ TELA CHEIA
-</button>
+      ⛶ TELA CHEIA
+    </button>
+
   </div>
 
+</div>
+  
 </header>
   
 <main>
