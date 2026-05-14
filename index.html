@@ -222,6 +222,23 @@ td.status-icon{
   color:#ff4d4d;
 }
 
+/* botão tela cheia */
+#toggle-fullscreen{
+  background:#0b1a3a;
+  color:#fff;
+  border:1px solid #fff;
+  padding:6px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  font-weight:700;
+  width:160px;
+}
+
+#toggle-fullscreen:hover{
+  opacity:.9;
+}
+  
+
 /* ================= PAINEL ================= */
 
 #painel table th:nth-child(1),
@@ -336,6 +353,10 @@ tr.status-cancelado td{
   <div class="right">
     <div class="clock" id="clock"></div>
     <button id="toggle-audio" onclick="toggleAudio()">🔊 SOM: ON</button>
+
+    <button id="toggle-fullscreen" onclick="toggleFullscreen()">
+  ⛶ TELA CHEIA
+</button>
   </div>
 
 </header>
@@ -441,6 +462,39 @@ function playBeep(){
     console.warn("Erro ao tocar áudio:", e);
   }
 }
+
+/* ================= TELA CHEIA ================= */
+
+async function toggleFullscreen(){
+
+  if(!document.fullscreenElement){
+
+    await document.documentElement.requestFullscreen();
+
+    document.getElementById("toggle-fullscreen").innerText =
+      "🡼 SAIR DA TELA CHEIA";
+
+  }else{
+
+    await document.exitFullscreen();
+
+    document.getElementById("toggle-fullscreen").innerText =
+      "⛶ TELA CHEIA";
+  }
+}
+
+/* atualiza botão se usuário apertar ESC */
+document.addEventListener("fullscreenchange", ()=>{
+
+  const btn = document.getElementById("toggle-fullscreen");
+
+  if(document.fullscreenElement){
+    btn.innerText = "🡼 SAIR DA TELA CHEIA";
+  }else{
+    btn.innerText = "⛶ TELA CHEIA";
+  }
+});
+  
 /* ================= RELÓGIO ================= */
 function updateClock(){
   const n = new Date();
