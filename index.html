@@ -32,12 +32,62 @@
 html,body{
   height:100%;
   margin:0;
+  padding:0;
   background:var(--bg);
-  /*color:#ffffff;*/
   color:var(--text);
-  font-family:Inter,Arial;
+  font-family:Inter,Arial,sans-serif;
+  overflow:hidden;
 }
-  
+  .ocupado{
+  background:rgba(255,77,77,0.15);
+  color:#ff4d4d;
+}
+
+  .livre{
+  background:rgba(0,255,156,0.15);
+  color:#00ff9c;
+}
+
+/* ================= HEADER ================= */
+
+header{
+  display:grid;
+  grid-template-columns:
+    180px
+    1fr
+    260px;
+
+  align-items:center;
+  gap:16px;
+  padding:12px 20px;
+  background:#020617;
+  border-radius:10px;
+  border:1px solid #ffffff;
+}
+
+/* 🔹 ESQUERDA */
+.header-left{
+  display:flex;
+  align-items:center;
+  justify-content:flex-start;
+}
+
+.logo{
+  height:65px;
+  max-width:100%;
+  object-fit:contain;
+}
+
+/* 🔹 CENTRO */
+.header-center{
+  display:flex;
+  flex-direction:column;
+
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
 .title{
   font-size:30px;
   font-weight:700;
@@ -46,73 +96,24 @@ html,body{
 }
 
 #status-empregados{
-  display:inline-block;
-  margin:0 6px;
-  padding:6px 12px;
-  border-radius:8px;
-  margin-top:8px;
-  font-size:16px;
-  font-weight:700;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:30px; /* espaço entre empregados */
+  margin-top:10px;
 }
-  
 
 #status-empregados span{
   display:inline-block;
-  margin:0 12px;
-  padding:4px 10px;
-  border-radius:6px;
-  font-size:16px;
-}
-
-.ocupado{
-  background:rgba(255,77,77,0.15);
-  color:#ff4d4d;
-}
-
-.livre{
-  background:rgba(0,255,156,0.15);
-  color:#00ff9c;
-}
-
-  
-/* ========== HEADER (layout do seu cabeçalho) ========== */
-  
-header{
-  display:grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-rows: auto auto;
-  align-items:center;
-  padding:12px 34px;
-  background:#020617;
+  padding:6px 14px;
   border-radius:10px;
-  border:1px solid #ffffff;
-  height:90px;
-}
-  
-/* 🔹 LOGO */
-.logo{
-  grid-row: 1 / span 2; /* ocupa as duas linhas */
-  height:70px;
-}
-
-/* 🔹 CENTRO (título + status) */
-.center{
-  grid-column:2;
-  grid-row:1 / span 2;
-  text-align:center;
-}
-
-.center .title{
-  font-size:30px;
+  font-size:16px;
   font-weight:700;
 }
 
-/* 🔹 LADO DIREITO */
-/* área direita */
-.right{
-  grid-column:3;
-  grid-row:1 / span 2;
-
+/* 🔹 DIREITA */
+.header-right{
   display:flex;
   flex-direction:column;
   align-items:flex-end;
@@ -120,32 +121,172 @@ header{
   gap:8px;
 }
 
-/* linha dos botões */
+.clock{
+  font-size:24px;
+  font-weight:700;
+  color:var(--muted);
+}
+
 .buttons-row{
   display:flex;
   gap:8px;
 }
 
-/* largura automática */
 #toggle-audio,
 #toggle-fullscreen{
-  width:auto;
-}
- 
-/* === Esse bloco controla toda a área principal do seu painel: Painel,Agenda e Agenda Social) === */
 
-  main{
+  border:none;
+
+  border-radius:10px;
+
+  padding:8px 14px;
+
+  cursor:pointer;
+
+  font-weight:700;
+
+  background:#ffffff;  /*#1e3a8a */
+
+  color:#000000;
+
+  transition:.2s;
+}
+
+  #toggle-audio:hover,
+#toggle-fullscreen:hover{
+
+  transform:scale(1.03);
+
+  opacity:.9;
+}
+  
+
+/* ================= MOBILE SMARTPHONE ================= */
+ 
+@media (max-width: 768px){
+
+ header{
+ display:grid;
+ grid-template-columns:auto auto auto;
+ text-align:center;
+ padding:10px;
+ gap:8px;
+ }
+
+ .header-left,
+ .header-center,
+ .header-right{
+ display:flex;
+ justify-content:center;
+ align-items:center;
+ }
+
+ .header-right{
+ gap:4px;
+ }
+
+ .logo{
+ height:30px;
+ }
+
+ .title{
+ font-size:12px;
+ line-height:1.2;
+ }
+
+ .clock{
+ font-size:10px;
+ }
+
+ .buttons-row{
+ display:flex;
+ flex-wrap:wrap;
+ justify-content:center;
+ gap:6px;
+ }
+
+ #toggle-audio,
+ #toggle-fullscreen{
+ font-size:6px;
+ padding:4px 6px;
+ border-radius:2px;
+ }
+
+ #status-empregados{
+ gap:8px;
+ margin-top:6px;
+ }
+
+ #status-empregados span{
+ font-size:6px;
+ padding:4px 8px;
+ border-radius:6px;
+ }
+
+ main{
+ padding:8px;
+ gap:8px;
+ height:calc(100vh - 120px);
+ overflow:auto;
+ }
+
+ .card{
+ width:100%;
+ font-size:10px;
+ overflow-x:auto;
+ overflow-y:hidden;
+ -webkit-overflow-scrolling:touch;
+ }
+
+ .card h2{
+ font-size:4px;
+ padding:4px 0;
+ }
+
+ table{
+ width:max-content;
+ min-width:100%;
+ font-size:10px;
+ table-layout:fixed;
+ }
+
+ thead th,
+ tbody td{
+ padding:6px;
+ white-space:nowrap;
+ }
+
+ td.status-icon{
+ font-size:14px;
+ width:10px;
+ }
+
+ .small{
+ font-size:9px;
+ padding:6px;
+ }
+  
+}
+  
+main{
   padding:12px;
   display:grid;
-  grid-template-rows:auto auto auto;
-  gap:10px;
-  height:calc(100vh - 92px);
+  gap:12px;
+  height:calc(100vh - 120px);
+  width:100%;
+  box-sizing:border-box;
+  overflow:auto;
+  text-align:center;
+  grid-template-columns:1fr;
 }
+  
 
 .card{
+  width:100%;
   background:var(--card);
   border-radius:16px;
   border:2px solid rgba(255,255,255,.08);
+  box-shadow:0 4px 20px rgba(0,0,0,.35);
   
 }
 
@@ -154,26 +295,25 @@ header{
   color:var(--accent);
   font-size:26px;
   text-align:center;
+  box-shadow:0 4px 20px rgba(0,0,0,.35);
 }
 
-table{
+ .small{
+  text-align:center;
+  font-size:10px;
+  color:#6b7280;
+}
+
+  table{
   width:100%;
   border-collapse:collapse;
-  font-size:14px;
-  table-layout: fixed; /* 🔥 ESSENCIAL */
+  table-layout:fixed;
 }
 
-/* === define o comportamento visual de todas as células da tabela === */
-  
-  th, td{
-  padding:12px 12px; /* mesmo valor horizontal */
-  font-weight:700;
-  text-align:center;
-  white-space:nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  border:2px solid #ffffff; /* igual ao cabeçalho */
+section.card{
+  overflow-x:auto;
 }
+
 
 /* === Esse bloco controla o comportamento e aparência do cabeçalho da tabela === */
   
@@ -187,14 +327,33 @@ thead th{
   padding:12px;
 }
 
+  /* ================= RESIZER ================= */
 
-th:last-child,
-td:last-child{
-  width: 50px;
+th{
+  position:relative;
 }
 
+.resizer{
+  position:absolute;
+  top:0;
+  right:-4px;
+  width:10px;
+  height:100%;
+  cursor:col-resize;
+  z-index:100;
+  background:transparent;
+}
+
+.resizer:hover{
+  background:rgba(255,255,255,.25);
+}
+  
+/* ======================================== */
+  
 td.status-icon{
-  width: 50px;
+  width:50px;
+  font-size:20px;
+  text-align:center;
 }
 
   tbody td{
@@ -207,110 +366,8 @@ td.status-icon{
   background:var(--table-alt);
 }
 
- /* relógio */
-.clock{
-  font-size:26px;
-  font-weight:700;
-  color:var(--muted);
-}
 
-/* botão som */
-#toggle-audio{
-  background:#2563eb;
-  color:#fff;
-  border:1px solid #fff;
-  padding:6px 12px;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:700;
-}
 
-#toggle-audio.off{
-  background:#3a0b0b;
-  color:#ff4d4d;
-}
-
-/* botão tela cheia */
-#toggle-fullscreen{
-  background:#2563eb;
-  color:#fff;
-  border:1px solid #fff;
-  padding:6px 12px;
-  border-radius:6px;
-  cursor:pointer;
-  font-weight:700;
-  width:160px;
-}
-
-#toggle-fullscreen:hover{
-  opacity:.9;
-}
-  
-
-/* ================= PAINEL ================= */
-
-#painel table th:nth-child(1),
-#painel table td:nth-child(1){
-  width: 100px;
-}
-#painel table th:nth-child(2),
-#painel table td:nth-child(2){
-  width: 50px;
-}
-#painel table th:nth-child(3),
-#painel table td:nth-child(3){
-  width: 130px;
-}
-#painel table th:nth-child(4),
-#painel table td:nth-child(4){
-  width: 130px;
-}
-
-#painel table th:nth-child(7),
-#painel table td:nth-child(7){
-  width: 65px;
-}
-
- /* ================= AGAENDA DO DIA ================= */
-
-#agenda table th:nth-child(1),
-#agenda table td:nth-child(1){
-  width: 100px;
-}  
-#agenda table th:nth-child(2),
-#agenda table td:nth-child(2){
-  width: 50px;
-}
-#agenda table th:nth-child(4),
-#agenda table td:nth-child(4){
-  width: 100px;
-}
-
-#agenda table th:nth-child(7),
-#agenda table td:nth-child(7){
-  width: 65px;
-}
-
- /* ================= AGAENDA S SOCIAL ================= */
-
-#social table th:nth-child(1),
-#social table td:nth-child(1){
-    width: 100px;
-}
-#social table th:nth-child(2),
-#social table td:nth-child(2){
-  width: 100px;
-}
-
-#social table th:nth-child(3),
-#social table td:nth-child(3){
-  width: 200px;
-}
-
-#social table th:nth-child(6),
-#social table td:nth-child(6){
-  width: 65px;
-}
 
 
  /* ================= CORES DE STATUS ================= */
@@ -336,12 +393,11 @@ tr.status-cancelado td{
   background:rgba(255, 77, 77, 0.15);
 }
 
-.small{
-  text-align:center;
-  font-size:12px;
-  color:var(--muted);
-}
+
+
 </style>
+
+  
 </head>
 
 <body>
@@ -351,31 +407,46 @@ tr.status-cancelado td{
 </audio>
 
 <header>
-  <img src="logo.png" class="logo" onerror="this.style.display='none'">
 
-  <div class="center">
-    <div class="title">MOVIMENTAÇÃO DIÁRIA</div>
+  <!-- 🔹 ESQUERDA = LOGO -->
+  <div class="header-left">
+    <img src="logo.png"
+         class="logo"
+         onerror="this.style.display='none'">
+  </div>
+
+  <!-- 🔹 CENTRO = TÍTULO + STATUS -->
+  <div class="header-center">
+
+    <div class="title">
+      MOVIMENTAÇÃO DIÁRIA
+    </div>
+
     <div id="status-empregados"></div>
-  </div>
-
-  <div class="right">
-
-  <div class="clock" id="clock"></div>
-
-  <div class="buttons-row">
-
-    <button id="toggle-audio" onclick="toggleAudio()">
-      🔊 SOM: ON
-    </button>
-
-    <button id="toggle-fullscreen" onclick="toggleFullscreen()">
-      ⛶ TELA CHEIA
-    </button>
 
   </div>
 
-</div>
-  
+  <!-- 🔹 DIREITA = RELÓGIO + BOTÕES -->
+  <div class="header-right">
+
+    <div class="clock" id="clock"></div>
+
+    <div class="buttons-row">
+
+      <button id="toggle-audio"
+              onclick="toggleAudio()">
+        🔊 SOM: ON
+      </button>
+
+      <button id="toggle-fullscreen"
+              onclick="toggleFullscreen()">
+        ⛶ TELA CHEIA
+      </button>
+
+    </div>
+
+  </div>
+
 </header>
   
 <main>
@@ -395,7 +466,7 @@ tr.status-cancelado td{
     <div id="social">Carregando...</div>
   </section>
 
-</main>
+  </main>
 
 <div class="small">Atualização automática a cada 30s • Google Sheets</div>
 
@@ -408,14 +479,51 @@ const TABS = [
   { id:"painel", name:"PAINEL" },
   { id:"agenda", name:"AGENDA DO DIA" },
   { id:"social", name:"AGENDA SERVIÇO SOCIAL" }
+  
 ];
 
 /* ================= HEADERS ================= */
 const TABLE_HEADERS = {
-  painel: ["Data","Hora","Veículo","Empregado","Passageiro/Motivo","Itinerário","Status"],
+  painel: ["Data","Hora","Veículo","Empregado","Passageiro/ Setor/ Motivo","Itinerário","Status"],
   agenda: ["Data","Hora","Passageiro","Setor","Motivo","Itinerário","Status"],
   social: ["Data","Período","Passageiro","Motivo","Itinerário","Status"]
+  
 };
+
+/* ================= COLUMN WIDTHS ================= */
+
+const COLUMN_WIDTHS = {
+
+  painel:[
+    "70px",   // Data
+    "50px",   // Hora
+    "120px",  // Veículo
+    "120px",  // Empregado
+    "220px",  // Passageiro
+    "220px",  // Itinerário
+    "50px"    // Status
+  ],
+
+  agenda:[
+    "70px",
+    "50px",
+    "180px",
+    "120px",
+    "220px",
+    "220px",
+    "50px"
+  ],
+
+  social:[
+    "70px",
+    "90px",
+    "180px",
+    "220px",
+    "220px",
+    "50px"
+  ]
+};
+  
 
 /* ================= ÁUDIO ================= */
 
@@ -489,7 +597,7 @@ async function toggleFullscreen(){
     await document.documentElement.requestFullscreen();
 
     document.getElementById("toggle-fullscreen").innerText =
-      "🡼 SAIR DA TELA CHEIA";
+      "🡼TELA CHEIA";
 
   }else{
 
@@ -556,9 +664,27 @@ function renderTable(id, g){
   const headers = TABLE_HEADERS[id] || [];
   const rows = g.table.rows;
 
-  let h="<table><thead><tr>";
-  headers.forEach(c=>h+=`<th>${escapeHtml(c)}</th>`);
-  h+="</tr></thead><tbody>";
+  
+
+ let h = "<table><thead><tr>";
+
+headers.forEach((c,i)=>{
+
+  const width =
+    COLUMN_WIDTHS[id]?.[i] || "auto";
+
+  h += `
+    <th style="width:${width}">
+      ${escapeHtml(c)}
+    </th>
+  `;
+});
+
+  
+
+h += "</tr></thead><tbody>";
+
+  
 
  rows.forEach(r=>{
   const cells = r.c || [];
@@ -581,7 +707,9 @@ function renderTable(id, g){
   h+=`<tr class="${cls}">`;
 
     cells.forEach((c,i)=>{
-      if(i === cells.length-1){
+
+        if(i === cells.length-1){
+              
         let icon="";
         if(status.includes("concluido")||status.includes("atendido")) icon="✔";
         if(status.includes("cancelado")) icon="✖";
@@ -600,6 +728,7 @@ function renderTable(id, g){
 }
 
 /* ================= FETCH ================= */
+  
 async function fetchSheet(tab){
   const url =
     `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq`+
@@ -610,6 +739,7 @@ async function fetchSheet(tab){
 }
 
 /* ================= LOAD ================= */
+  
 async function loadAll(){
   try{
     const results = await Promise.all(TABS.map(t=>fetchSheet(t.name)));
@@ -620,19 +750,25 @@ async function loadAll(){
       playBeep(); // 🔊 SOM SÓ SE DADOS MUDAREM
     }
 
-    firstLoad = false;
+firstLoad = false;
     lastDataHash = currentHash;
 
     renderTable("painel", results[0]);
     renderTable("agenda", results[1]);
     renderTable("social", results[2]);
+    
+    enableColumnResize();
 
-// ✅ NOVO
-atualizarStatusEmpregados(results[0]);
+    atualizarStatusEmpregados(results[0]);
 
-  }catch(e){
-    console.error(e);
   }
+
+ catch(e){
+
+  console.error("Erro geral:", e);
+
+  alert("Falha ao carregar dados da planilha.");
+}
 }
 
 function atualizarStatusEmpregados(gvizPainel){
@@ -673,7 +809,78 @@ function atualizarStatusEmpregados(gvizPainel){
   el.innerHTML = html;
 }
 
+/* ================= RESIZE COLUNAS ================= */
+
+function enableColumnResize(){
+
+  document.querySelectorAll("th").forEach(th=>{
+
+    // evita duplicar resizer
+    if(th.querySelector(".resizer")) return;
+
+    const resizer = document.createElement("div");
+    resizer.classList.add("resizer");
+
+    th.appendChild(resizer);
+
+    let startX = 0;
+    let startWidth = 0;
+
+    resizer.addEventListener("mousedown", initResize);
+
+    function initResize(e){
+
+      startX = e.clientX;
+      startWidth = th.offsetWidth;
+
+      document.addEventListener("mousemove", resizeColumn);
+      document.addEventListener("mouseup", stopResize);
+    }
+
+    function resizeColumn(e){
+
+      const newWidth =
+        startWidth + (e.clientX - startX);
+
+      th.style.width = newWidth + "px";
+
+      // pega índice da coluna
+      const index =
+        [...th.parentElement.children].indexOf(th);
+
+      // aplica largura nas células
+      const table = th.closest("table");
+
+     table.querySelectorAll("tbody tr").forEach(row=>{
+
+     if(row.children[index]){
+
+     row.children[index].style.width =
+      newWidth + "px";
+  }
+});
+    }
+
+    function stopResize(){
+
+      document.removeEventListener(
+        "mousemove",
+        resizeColumn
+      );
+
+      document.removeEventListener(
+        "mouseup",
+        stopResize
+      );
+    }
+
+  });
+
+}
+  
+
 loadAll();
+
 updateSoundButton();
 setInterval(loadAll, 30000);
 </script>
