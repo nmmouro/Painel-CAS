@@ -612,8 +612,16 @@ function renderTable(headers, rows){
 
         ${rows.map(row => {
 
-          const values =
-            (row.c || []).map(getCell);
+const values =
+  (row.c || []).map(getCell);
+
+    if(
+    values.every(v =>
+    String(v).trim() === ""
+    )
+  ){
+    return "";
+  }
 
           
 const status =
