@@ -20,14 +20,13 @@
   --table-alt:#0c1d40;
   --header:#2c4078;
   --border:#1e2f5c;
-
   --text:#ffffff;
   --muted:#9fb3ff;
-
   --green:#00ff9c;
   --yellow:#ffcc00;
   --red:#ff4d4d;
   --lime:#7CFC00;
+  --blue:#6284fc;
 }
 
 /* ================= RESET ================= */
@@ -56,7 +55,7 @@ body{
   display:grid;
 
   grid-template-columns:
-    180px 1fr 250px;
+    180px 1fr 260px;
 
   gap:16px;
 
@@ -103,27 +102,6 @@ body{
 
 /* STATUS */
 
-#status-empregados{
-
-  display:flex;
-  flex-wrap:wrap;
-
-  justify-content:center;
-
-  gap:20px;
-
-  margin-top:10px;
-}
-
-.badge{
-
-  padding:6px 10px;
-
-  border-radius:10px;
-  
-  font-size:16px;
-  font-weight:700;
-}
 
 .ocupado{
   background:rgba(255,77,77,.15);
@@ -131,8 +109,28 @@ body{
 }
 
 .livre{
-  background:rgba(0,255,156,.15);
-  color:var(--green);
+  color:#00ff9c;
+  font-weight:700;
+}
+
+.ocupado{
+  color:#ff4d4d;
+  font-weight:700;
+}
+
+.manutencao{
+  color:#4da6ff;
+  font-weight:700;
+}
+
+.viagem{
+  color:#d66bff;
+  font-weight:700;
+}
+
+  .andamento{
+  background:rgba(255,77,77,.15);
+  color:var(--red);
 }
 
 /* RIGHT */
@@ -197,9 +195,9 @@ button.off{
 main{
 
   display:grid;
-  gap:14px;
+  gap:12px;
 
-  padding:12px;
+  padding:6px;
 
   height:calc(100vh - 120px);
 
@@ -227,9 +225,18 @@ main{
 
   text-align:center;
 
-  padding:12px;
+  padding:10px;
 
-  font-size:22px;
+  font-size:20px;
+}
+  
+  .dual-cards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+
+    max-height:260px;
+  overflow-y:auto;
 }
 
 /* ================= TABLE ================= */
@@ -248,17 +255,17 @@ thead th{
 
   background:var(--header);
 
-  padding:12px;
+  padding:10px;
 
   border:
     1px solid var(--border);
 
-  font-size:15px;
+  font-size:16px;
 }
 
 tbody td{
 
-  padding:12px;
+  padding:10px;
 
   border:
     1px solid var(--border);
@@ -266,32 +273,55 @@ tbody td{
   background:var(--table);
 
   text-align:center;
+  font-size:16px;
 }
 
 tbody tr:nth-child(even) td{
   background:var(--table-alt);
 }
 
-/* STATUS ROWS */
+/* PAINEL, AGENDA E SERVIÇO SOCIAL */
 
-.status-atendido td{
-  background:rgba(0,255,156,.10);
+.painel .status-andamento td,
+.agenda .status-andamento td,
+.social .status-andamento td{
+  background:#FFD700;
+  color:#000;
 }
 
-.status-andamento td{
-  background:rgba(255,204,0,.10);
+.painel .status-cancelado td,
+.agenda .status-cancelado td,
+.social .status-cancelado td{
+  background:#DC143C;
+  color:#FFF;
 }
 
-.status-cancelado td{
-  background:rgba(255,77,77,.12);
+.painel .status-concluido td,
+.agenda .status-concluido td,
+.social .status-concluido td{
+  background:#32CD32;
+  color:#FFF;
 }
 
-.status-concluido td{
-  background:rgba(124,252,0,.10);
+.painel .status-atendido td,
+.agenda .status-atendido td,
+.social .status-atendido td{
+  background:#00C853;
+  color:#FFF;
 }
 
-.status-manutencao td{
-  background:rgba(255,140,0,.10);
+.painel .status-manutencao td,
+.agenda .status-manutencao td,
+.social .status-manutencao td{
+  background:#1E88E5;
+  color:#FFF;
+}
+
+.painel .status-viagem td,
+.agenda .status-viagem td,
+.social .status-viagem td{
+  background:#8E24AA;
+  color:#FFF;
 }
 
   /* ================= STATUS ICON ================= */
@@ -331,22 +361,9 @@ tbody tr:nth-child(even) td{
 
   .title{
     font-size:12px;
- }
-
-  #status-empregados{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:4px;
-    margin-top:6px;
-  }
-  
-  #status-empregados .badge{
-    font-size:8px;
-    padding:3px 6px;
-    border-radius:6px;
   }
 
+ 
   #clock{
     font-size:8px;
   }
@@ -356,7 +373,7 @@ tbody tr:nth-child(even) td{
   }
 
   .actions button{
-    font-size:4px;
+    font-size:6px;
     padding:4px 6px;
     border-radius:2px;
   }
@@ -378,6 +395,17 @@ tbody tr:nth-child(even) td{
 
   font-size:12px;
    }
+
+  .dual-cards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+}
+
+  .card-resumo{
+  max-height:260px;
+  overflow-y:auto;
+}
   
 }
 
@@ -407,15 +435,13 @@ tbody tr:nth-child(even) td{
 
   <div class="center">
 
-    <div class="title">
-      MOVIMENTAÇÃO DIÁRIA
-    </div>
-
-    <div id="status-empregados"></div>
-
+  <div class="title">
+    MOVIMENTAÇÃO DIÁRIA
   </div>
 
-  <div class="right">
+</div>
+
+<div class="right">
 
     <div id="clock"></div>
 
@@ -444,20 +470,46 @@ tbody tr:nth-child(even) td{
 /* ================= CONFIG ================= */
 
 const SHEET_ID =
-  "1Ch3AjQ0MDo4WuQWFDR3r8nZrHb4yQkSLOtT5_QgxT6E";
+  "14T7zF0likp8YGeycOYBcOs9INY9gvMzpt7SMfghE8P4";
 
 const TABS = [
 
   {
+    id:"veiculos",
+    title:"VEÍCULOS",
+    sheet:"VEÍCULOS",
+
+    headers:[
+      "TRAIL TXN1I89",
+      "CRETA TXJ6F18",
+      "CRETA TXJ6F19",
+      "CRETA TXJ6F20"
+    ]
+  },
+
+  {
+  id:"motoristas",
+  title:"MOTORISTAS",
+  sheet:"MOTORISTAS",
+
+  headers:[
+    "Motorista",
+    "Status",
+    "Condição",
+    
+  ]
+},
+
+  {
     id:"painel",
     title:"PAINEL",
-    sheet:"PAINEL",
+    sheet:"LANÇAMENTOS",
 
     headers:[
       "Data",
       "Hora",
-      "Veículo",
       "Empregado",
+      "Veículo",      
       "Passageiro/ Setor/ Motivo",
       "Itinerário",
       "Status"
@@ -494,8 +546,9 @@ const TABS = [
       "Status"
     ]
   }
-];
 
+];
+  
 /* ================= STATUS CONFIG ================= */
 
 const STATUS = {
@@ -521,8 +574,13 @@ const STATUS = {
   },
 
   manutenção:{
-    icon:'<span style="color:#ff9800">🔧</span>',
+    icon:'<span style="color:#ff0000">🔧</span>',
     class:"status-manutencao"
+  },
+
+   viagem:{
+    icon:'<span style="color:#ff9800">✈️</span>',
+    class:"status-viagem"
   }
 
 };
@@ -543,15 +601,59 @@ const parseGviz = txt =>
 const getCell = c =>
   c?.f ?? c?.v ?? "";
 
+
+  
+function formatarData(valor){
+
+  if(!valor) return "";
+
+  if(valor instanceof Date){
+    return valor.toLocaleDateString("pt-BR");
+  }
+
+  const texto = String(valor);
+
+  const match =
+    texto.match(/\d{1,2}\/\d{1,2}\/\d{4}/);
+
+  if(match){
+    return match[0];
+  }
+
+  return texto;
+}
+  
+  
+
 /* 🔹 identifica chave do status */
 function getStatusKey(status=""){
 
-  status = status.toLowerCase();
+  status = status
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"");
 
-  return Object.keys(STATUS)
-    .find(key => status.includes(key));
+  if(status.includes("manutencao"))
+    return "manutenção";
+
+  if(status.includes("viagem"))
+    return "viagem";
+
+  if(status.includes("andamento"))
+    return "andamento";
+
+  if(status.includes("atendido"))
+    return "atendido";
+
+  if(status.includes("concluido"))
+    return "concluido";
+
+  if(status.includes("cancelado"))
+    return "cancelado";
+
+  return null;
 }
-
+  
 /* 🔹 retorna classe CSS */
 function getStatusClass(status){
 
@@ -575,19 +677,75 @@ function getStatusIcon(status){
 
 async function fetchSheet(sheet){
 
-  const url =
+  try{
 
-    `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
+     let query = "";
 
-    `?sheet=${encodeURIComponent(sheet)}` +
+    // Somente para a aba PAINEL
+    if(sheet === "LANÇAMENTOS"){
+      
+  query =
+  `select B,C,D,E,F,G,X `;
+    }
 
-    `&tqx=out:json`;
+if(sheet === "AGENDA DO DIA"){
 
-  const res = await fetch(url);
-
-  return parseGviz(await res.text());
+  query =
+    "select B,C,D,E,F,G,H";
 }
 
+
+    if(sheet === "AGENDA SERVIÇO SOCIAL"){
+
+  query =
+    "select B,C,D,F,G,H";
+}
+
+    if(sheet === "VEÍCULOS"){
+
+  query =
+    "select B,V,M,N";
+}
+
+     if(sheet === "MOTORISTAS"){
+
+  query =
+    "select A,B,C";
+}
+    
+
+    const url =
+  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
+  `?sheet=${encodeURIComponent(sheet)}` +
+  `&tq=${encodeURIComponent(query)}` +
+  `&tqx=out:json`;
+
+    const res = await fetch(url);
+
+    if(!res.ok){
+      throw new Error(
+        `HTTP ${res.status}`
+      );
+    }
+
+    return parseGviz(
+      await res.text()
+    );
+
+  }catch(err){
+
+    console.error(
+      `Erro na aba ${sheet}:`,
+      err
+    );
+
+    return {
+      table:{
+        rows:[]
+      }
+    };
+  }
+}
 /* ================= TABLE ================= */
 
 function renderTable(headers, rows){
@@ -612,16 +770,8 @@ function renderTable(headers, rows){
 
         ${rows.map(row => {
 
-const values =
-  (row.c || []).map(getCell);
-
-    if(
-    values.every(v =>
-    String(v).trim() === ""
-    )
-  ){
-    return "";
-  }
+          const values =
+            (row.c || []).map(getCell);
 
           
 const status =
@@ -662,63 +812,182 @@ return `
   `;
 }
 
-/* ================= STATUS EMPREGADOS ================= */
+/* ================= GESTÃO DA TABLE ================= */
 
-function renderEmpregados(rows){
+function getDisponibilidade(nome, painelRows, tipo){
 
-  const nomes = [
-    "CACIO",
-    "CELSO",
-    "NEI"
-  ];
+  const procurado =
+    String(nome || "").trim().toUpperCase();
 
-  const usados = {};
+  for(const row of painelRows){
 
-  nomes.forEach(n => usados[n] = false);
+    const valores =
+      (row.c || []).map(getCell);
 
-  rows.forEach(r=>{
+    const veiculo =
+      String(valores[3] || "").trim().toUpperCase();
 
-    const cells =
-      (r.c || []).map(getCell);
+    const motorista =
+      String(valores[2] || "").trim().toUpperCase();
 
     const status =
-      String(cells.at(-1) || "")
-      .toLowerCase();
+      String(valores[6] || "").trim().toUpperCase();
 
-    if(!status.includes("andamento"))
-      return;
+    const encontrado =
+      tipo === "veiculo"
+        ? veiculo === procurado
+        : motorista === procurado;
 
-    const text =
-      JSON.stringify(r).toUpperCase();
+    if(!encontrado){
+      continue;
+    }
 
-    nomes.forEach(nome=>{
+    // MANUTENÇÃO
+    if(
+      status.includes("MANUTENÇÃO") ||
+      status.includes("MANUTENCAO")
+    ){
 
-      if(text.includes(nome)){
-        usados[nome] = true;
+      if(tipo === "veiculo"){
+        return '<span class="manutencao">🔵 MANUTENÇÃO</span>';
       }
-    });
-  });
 
-  document.getElementById(
-    "status-empregados"
-  ).innerHTML = nomes.map(nome => `
+      return '<span class="livre">🟢 LIVRE</span>';
+    }
 
-    <span class="
-      badge
-      ${usados[nome]
-        ? "ocupado"
-        : "livre"}
-    ">
+    // VIAGEM
+    if(status.includes("VIAGEM")){
+      return '<span class="viagem">🟣 VIAGEM</span>';
+    }
 
-      ${nome}
-      (${usados[nome]
-        ? "OCUPADO"
-        : "LIVRE"})
+    // OCUPADO
+    return '<span class="ocupado">🔴 OCUPADO</span>';
+  }
 
-    </span>
+  return '<span class="livre">🟢 LIVRE</span>';
+}  
 
-  `).join("");
+/* ================= VEÍCULOS ================= */
+  
+function renderVeiculos(rows, painelRows){
+
+  return `
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Placa</th>
+          <th>Status</th>
+          <th>Odômetro</th>
+          <th>Combustível</th>
+        </tr>
+      </thead>
+
+      <tbody>
+
+        ${rows.map(row => {
+
+          const v =
+            (row.c || []).map(getCell);
+
+          return `
+
+            <tr>
+
+              <td>
+                <strong>${v[0] || ""}</strong>
+              </td>
+
+              <td>
+                ${getDisponibilidade(
+    v[0],
+    painelRows,
+    "veiculo"
+)}
+              </td>
+
+              <td>
+                ${v[2] || ""} km
+              </td>
+
+              <td>
+                ⛽ ${v[3] || ""}
+              </td>
+
+            </tr>
+
+          `;
+
+        }).join("")}
+
+      </tbody>
+
+    </table>
+
+  `;
+
 }
+
+/* ================= MOTORISTAS ================= */
+
+function renderMotoristas(rows, painelRows, linhaFlutuante){
+
+  return `
+
+    <table>
+
+      <thead>
+        <tr>
+          <th>Motorista</th>
+          <th>Status</th>
+          <th>Condição</th>
+          
+        </tr>
+      </thead>
+
+      <tbody>
+
+        ${rows.map(row => {
+
+          const v =
+            (row.c || []).map(getCell);
+
+          return `
+
+            <tr>
+
+              <td>
+                <strong>${v[0] || ""}</strong>
+              </td>
+
+              <td>
+                ${getDisponibilidade(
+    v[0],
+    painelRows,
+    "motorista"
+)}
+              </td>
+
+              <td>
+                ${v[2] || ""}
+              </td>
+
+            </tr>
+
+          `;
+
+        }).join("")}
+
+        ${linhaFlutuante}
+
+      </tbody>
+
+    </table>
+
+  `;
+}
+  
 
 /* ================= LOAD ================= */
 
@@ -753,36 +1022,233 @@ async function loadAll(){
     firstLoad = false;
     lastHash = hash;
 
-    app.innerHTML = "";
+app.innerHTML = "";
 
-    results.forEach((data,index)=>{
+/* VEÍCULOS + MOTORISTAS */
 
-      const tab = TABS[index];
+    
+   
 
-      const rows =
-        data.table.rows || [];
+const painelIndex =
+  TABS.findIndex(t => t.id === "painel");
 
-      const section =
-        document.createElement("section");
+const hoje =
+  new Date().toLocaleDateString("pt-BR");
 
-      section.className = "card";
+const painelRows =
+  (results[painelIndex].table.rows || [])
+    .filter(row => {
 
-      section.innerHTML = `
+      const v =
+        (row.c || []).map(getCell);
 
-        <h2>${tab.title}</h2>
+      const status =
+        String(v[6] || "")
+          .toUpperCase()
+          .trim();
 
-        ${renderTable(
-          tab.headers,
-          rows
-        )}
+      return (
+        status.includes("EM ANDAMENTO") ||
+        status.includes("VIAGEM") ||
+        status.includes("MANUTENÇÃO") ||
+        status.includes("MANUTENCAO")
+      );
+    });
 
-      `;
 
-      app.appendChild(section);
+ 
 
-      if(index === 0){
-        renderEmpregados(rows);
-      }
+const agendaIndex =
+  TABS.findIndex(t => t.id === "agenda");
+
+const agendaRows =
+  (results[agendaIndex].table.rows || [])
+    .filter(row => {
+
+      const v =
+        (row.c || []).map(getCell);
+
+      const data =
+        String(v[0] || "").trim();
+
+      return data === hoje;
+    });
+    
+
+const socialIndex =
+  TABS.findIndex(t => t.id === "social");
+
+const socialRows =
+  (results[socialIndex].table.rows || [])
+    .filter(row => {
+
+      const v =
+        (row.c || []).map(getCell);
+
+      const data =
+        String(v[0] || "").trim();
+
+      return data === hoje;
+    });
+
+    
+    
+
+const veiculosIndex =
+  TABS.findIndex(t => t.id === "veiculos");
+
+const motoristasIndex =
+  TABS.findIndex(t => t.id === "motoristas");
+    
+
+const motoristasRows =
+  results[motoristasIndex].table.rows || [];
+
+const motoristaFlutuante =
+  painelRows.find(row => {
+
+    const v =
+      (row.c || []).map(getCell);
+
+    const nome =
+      String(v[2] || "").trim();
+
+    return !motoristasRows.some(r => {
+
+      const m =
+        (r.c || []).map(getCell);
+
+      return (
+        String(m[0] || "").trim() === nome
+      );
+    });
+
+  });
+
+let linhaFlutuante = "";
+
+if(motoristaFlutuante){
+
+  const v =
+    (motoristaFlutuante.c || []).map(getCell);
+
+  const nome =
+    String(v[2] || "").trim();
+
+  const status =
+    String(v[6] || "").toUpperCase();
+
+  let textoStatus =
+    "🔴 OCUPADO";
+
+  if(status.includes("VIAGEM")){
+    textoStatus = "✈️ VIAGEM";
+  }
+
+  if(
+    status.includes("MANUTENÇÃO") ||
+    status.includes("MANUTENCAO")
+  ){
+    textoStatus = "🔧 MANUTENÇÃO";
+  }
+
+  linhaFlutuante = `
+    <tr>
+      <td><strong>${nome}</strong></td>
+      <td>${textoStatus}</td>
+      <td>USUÁRIO CADASTRADO</td>
+    </tr>
+  `;
+}
+    
+
+
+  const dual = document.createElement("div");
+dual.className = "dual-cards";
+
+[veiculosIndex,motoristasIndex].forEach(index=>{
+
+  const tab = TABS[index];
+  
+  const rows = results[index].table.rows || [];
+
+  const section =
+    document.createElement("section");
+
+  section.className =
+    tab.id === "veiculos" ||
+    tab.id === "motoristas"
+    ? "card card-resumo"
+    : "card";
+
+ section.innerHTML = `
+  <h2>${tab.title}</h2>
+
+  ${
+    tab.id === "veiculos"
+      ? renderVeiculos(rows, painelRows)
+      : renderMotoristas(
+    rows,
+    painelRows,
+    linhaFlutuante
+  )
+  }
+`;
+
+  dual.appendChild(section);
+
+});
+
+app.appendChild(dual);
+
+/* DEMAIS TABELAS */
+
+results.forEach((data,index)=>{
+
+  const tab = TABS[index];
+
+  if(
+    tab.id === "veiculos" ||
+    tab.id === "motoristas"
+  ) return;
+  
+
+let rows;
+
+if(tab.id === "painel"){
+  rows = painelRows;
+}
+else if(tab.id === "agenda"){
+  rows = agendaRows;
+}
+else if(tab.id === "social"){
+  rows = socialRows;
+}
+else{
+  rows = data.table.rows || [];
+}
+
+  
+
+  const section =
+  document.createElement("section");
+
+section.className = `card ${tab.id}`;
+
+  
+
+  section.innerHTML = `
+
+    <h2>${tab.title}</h2>
+
+    ${renderTable(tab.headers, rows)}
+
+  `;
+
+  app.appendChild(section);
+
+
+ 
     });
 
   }catch(err){
