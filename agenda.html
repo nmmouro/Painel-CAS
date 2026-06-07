@@ -1,0 +1,713 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="utf-8">
+
+<title>Agenda Completa</title>
+
+<style>
+
+body{
+  background:#071029;
+  color:white;
+  font-family:Arial;
+  padding:20px;
+}
+
+h1{
+  text-align:center;
+  margin-bottom:20px;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+th{
+  background:#2c4078;
+  padding:12px;
+}
+
+td{
+  padding:10px;
+  text-align:center;
+  border:1px solid #1e2f5c;
+}
+
+tr:nth-child(even){
+  background:#0c1d40;
+}
+
+tr:nth-child(odd){
+  background:#0e224d;
+}
+
+
+
+.formulario{
+
+display:grid;
+grid-template-columns:
+repeat(4,1fr);
+font-size:12px;
+gap:10px;
+margin-bottom:20px;
+
+}
+
+.formulario input,
+.formulario select{
+
+  width:100%;
+  height:55px;
+
+  padding:10px;
+
+  font-size:20px;
+
+  border:none;
+  border-radius:10px;
+
+  box-sizing:border-box;
+}
+
+.formulario button{
+
+  background:#00c853;
+  color:white;
+
+  height:55px;
+  font-size:20px;
+  font-weight:bold;
+
+  border:none;
+  border-radius:10px;
+
+  cursor:pointer;
+
+  transition:0.2s;
+
+}
+
+.formulario button:hover{
+
+  transform:scale(1.03);
+
+}
+
+  #campoHora,
+#campoPeriodo{
+  width:100%;
+}
+
+#campoHora input,
+#campoPeriodo select{
+  width:100%;
+  height:55px;
+  box-sizing:border-box;
+}
+
+
+
+
+  
+
+</style>
+
+</head>
+
+<body>
+
+<h1>📅 AGENDA DOS MOTORISTAS / VEÍCULOS</h1>
+
+
+<div style="
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:10px;
+  padding:10px;
+">
+
+  <label>📅 Data:</label>
+
+  <input
+  type="date"
+  id="filtroData"
+  onchange="carregarAgenda();
+    carregarServicoSocial()"
+    style="
+      padding:20px;
+      border-radius:10px;
+      border:none;
+      font-size:20px;
+      font-weight:bold;
+      height:20px;
+    "
+  >
+
+</div>
+
+
+
+
+<div class="formulario">
+
+<select id="tipoAgenda" onchange="atualizarFormulario()">
+ 
+  <option value="AGENDA DO DIA">📅 Agenda do Dia</option>
+  <option value="AGENDA SERVIÇO SOCIAL">🏥 Agenda Serviço Social</option>
+</select>
+
+  
+
+<input type="date" id="novaData">
+
+<div id="campoHora">
+  <input type="time" id="novaHora">
+</div>
+
+<div id="campoPeriodo" style="display:none">
+  <select id="novoPeriodo">
+    <option value="">Selecione o período</option>
+    <option value="MANHÃ">MANHÃ</option>
+    <option value="TARDE">TARDE</option>
+  </select>
+</div>
+
+<input
+type="text"
+id="novoPassageiro"
+placeholder="Passageiro"
+
+>
+
+<input
+type="text"
+id="novoSetor"
+placeholder="Setor"
+
+>
+
+<input
+type="text"
+id="novoMotivo"
+placeholder="Motivo"
+
+>
+
+<input
+type="text"
+id="novoItinerario"
+placeholder="Itinerário"
+
+>
+
+
+
+
+
+  
+
+<button onclick="salvarAgenda()">
+➕ Salvar
+</button>
+
+</div>
+
+
+
+
+     <h2 style="margin-top:40px;text-align:center;">
+🏥 AGENDA DO DIA
+</h2>
+
+ 
+
+<div id="tabela"></div>
+
+   <h3 style="margin-top:40px;text-align:center;">
+🏥 AGENDA SERVIÇO SOCIAL
+</h3>
+
+<div id="tabelaServicoSocial"></div>
+  
+
+<script>
+
+  
+
+  const SHEET_ID =
+"14T7zF0likp8YGeycOYBcOs9INY9gvMzpt7SMfghE8P4";
+
+
+  const parseGviz = txt =>
+
+JSON.parse(
+  txt.substring(
+    txt.indexOf("{"),
+    txt.lastIndexOf("}") + 1
+  )
+);
+
+const getCell = c =>
+  c?.f ?? c?.v ?? "";
+
+
+
+function atualizarFormulario(){
+
+  const tipo =
+  document.getElementById("tipoAgenda").value;
+
+  document.getElementById("campoHora").style.display =
+    tipo === "AGENDA DO DIA"
+      ? "block"
+      : "none";
+
+  document.getElementById("campoPeriodo").style.display =
+    tipo === "AGENDA SERVIÇO SOCIAL"
+      ? "block"
+      : "none";
+
+}
+
+  
+
+
+  async function carregarAgenda(){
+
+const query =
+"select B,C,D,E,F,G,H";
+
+const url =
+
+`https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
+
+`?sheet=${encodeURIComponent("AGENDA DO DIA")}` +
+
+`&tq=${encodeURIComponent(query)}` +
+
+`&tqx=out:json`;
+
+const res =
+  await fetch(url);
+
+const json =
+  parseGviz(await res.text());
+
+const rows =
+  json.table.rows || [];
+
+
+let agendaFiltrada = [];
+
+const dataSelecionada =
+  document.getElementById("filtroData")?.value;
+
+if(dataSelecionada){
+
+  const dataBR =
+    dateToBR(dataSelecionada);
+
+  
+
+  agendaFiltrada =
+    rows.filter(row=>{
+
+      const v =
+        (row.c || []).map(getCell);
+
+      return String(v[0] || "").trim() === dataBR;
+
+    });
+
+}else{
+
+  const hoje = new Date();
+
+  hoje.setHours(0,0,0,0);
+
+  agendaFiltrada =
+    rows.filter(row=>{
+
+      const v =
+        (row.c || []).map(getCell);
+
+      const dataTexto =
+        String(v[0] || "");
+
+      let dataAgenda;
+
+      // formato DD/MM/YYYY
+      if(dataTexto.includes("/")){
+
+        const partes =
+          dataTexto.split("/");
+
+        dataAgenda =
+          new Date(
+            partes[2],
+            partes[1]-1,
+            partes[0]
+          );
+
+      }
+
+      // formato YYYY-MM-DD
+      else if(dataTexto.includes("-")){
+
+        dataAgenda =
+          new Date(dataTexto);
+
+      }
+
+      return dataAgenda >= hoje;
+
+    });
+
+
+}
+
+
+function dateToBR(dataISO){
+
+  if(!dataISO) return "";
+
+  const [ano,mes,dia] =
+    dataISO.split("-");
+
+  return `${dia}/${mes}/${ano}`;
+}
+    
+
+
+  agendaFiltrada.sort((a,b)=>{
+
+  const va =
+    (a.c || []).map(getCell);
+
+  const vb =
+    (b.c || []).map(getCell);
+
+  function criarDataHora(data,hora){
+
+    let d;
+
+    if(String(data).includes("/")){
+
+      const p =
+        String(data).split("/");
+
+      d = new Date(
+        p[2],
+        p[1]-1,
+        p[0]
+      );
+
+    }else{
+
+      d = new Date(data);
+
+    }
+
+    const h =
+      String(hora || "00:00")
+        .split(":");
+
+    d.setHours(
+      Number(h[0]),
+      Number(h[1]),
+      0,
+      0
+    );
+
+    return d;
+
+  }
+
+  return (
+    criarDataHora(va[0],va[1]) -
+    criarDataHora(vb[0],vb[1])
+  );
+
+});
+
+
+
+  let html =
+
+`
+<table>
+
+<thead>
+
+<tr>
+
+<th>Data</th>
+<th>Hora</th>
+<th>Passageiro</th>
+<th>Setor</th>
+<th>Motivo</th>
+<th>Itinerário</th>
+<th>Status</th>
+
+</tr>
+
+</thead>
+
+<tbody>
+`;
+
+
+  agendaFiltrada.forEach(row=>{
+
+const v =
+  (row.c || []).map(getCell);
+
+html += `
+
+<tr>
+
+<td>${v[0]}</td>
+<td>${v[1]}</td>
+<td>${v[2]}</td>
+<td>${v[3]}</td>
+<td>${v[4]}</td>
+<td>${v[5]}</td>
+<td>${v[6]}</td>
+
+</tr>
+
+`;
+
+});
+
+
+  html += `
+</tbody>
+</table>
+`;
+
+document.getElementById(
+"tabela"
+).innerHTML = html;
+
+}
+
+
+
+async function carregarServicoSocial(){
+
+  const query =
+  "select B,C,D,F,G,H";
+
+  const url =
+  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
+  `?sheet=${encodeURIComponent("AGENDA SERVIÇO SOCIAL")}` +
+  `&tq=${encodeURIComponent(query)}` +
+  `&tqx=out:json`;
+
+  const res =
+  await fetch(url);
+
+  const json =
+  parseGviz(await res.text());
+
+  const rows =
+  json.table.rows || [];
+
+  const dataSelecionada =
+  document.getElementById("filtroData")?.value;
+
+  let agendaFiltrada = [];
+
+  if(dataSelecionada){
+
+    const [ano,mes,dia] =
+    dataSelecionada.split("-");
+
+    const dataBR =
+    `${dia}/${mes}/${ano}`;
+
+    agendaFiltrada =
+    rows.filter(row=>{
+
+      const v =
+      (row.c || []).map(getCell);
+
+      return String(v[0] || "").trim() === dataBR;
+
+    });
+
+  }else{
+
+    agendaFiltrada = rows;
+
+  }
+
+  // Ordenar pelo período
+  agendaFiltrada.sort((a,b)=>{
+
+    const va =
+    (a.c || []).map(getCell);
+
+    const vb =
+    (b.c || []).map(getCell);
+
+    return String(va[1] || "")
+      .localeCompare(String(vb[1] || ""));
+  });
+
+  let html = `
+  <table>
+
+    <thead>
+      <tr>
+        <th>Data</th>
+        <th>Período</th>
+        <th>Passageiro</th>
+        <th>Motivo</th>
+        <th>Itinerário</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+
+    <tbody>
+  `;
+
+  agendaFiltrada.forEach(row=>{
+
+    const v =
+    (row.c || []).map(getCell);
+
+    html += `
+    <tr>
+
+      <td>${v[0] || ""}</td>
+      <td>${v[1] || ""}</td>
+      <td>${v[2] || ""}</td>
+      <td>${v[3] || ""}</td>
+      <td>${v[4] || ""}</td>
+      <td>${v[5] || ""}</td>
+
+    </tr>
+    `;
+  });
+
+  html += `
+    </tbody>
+  </table>
+  `;
+
+  document.getElementById(
+    "tabelaServicoSocial"
+  ).innerHTML = html;
+
+}
+
+  
+
+
+  const hoje = new Date();
+
+document.getElementById("filtroData").value =
+  hoje.toISOString().split("T")[0];
+
+
+
+const WEBAPP =
+"https://script.google.com/macros/s/AKfycbzxrVkwIFJyCQlY70adSNe_5_UVYZUHMZ5G-25bLY-TiaHDlcRi1Lv-T-nPKYBO3Vz9iQ/exec";
+
+async function salvarAgenda(){
+
+
+const tipoAgenda =
+document.getElementById("tipoAgenda").value;
+
+const horaOuPeriodo =
+tipoAgenda === "AGENDA SERVIÇO SOCIAL"
+  ? document.getElementById("novoPeriodo").value
+  : document.getElementById("novaHora").value;
+
+
+
+  
+
+  const payload = {
+
+  agenda: tipoAgenda,
+
+  data: document.getElementById("novaData").value,
+
+  hora: horaOuPeriodo,
+
+  passageiro: document.getElementById("novoPassageiro").value,
+
+  setor: document.getElementById("novoSetor").value,
+
+  motivo: document.getElementById("novoMotivo").value,
+
+  itinerario: document.getElementById("novoItinerario").value
+
+};
+
+ const formData = new FormData();
+
+formData.append("agenda", payload.agenda);
+  
+formData.append("data", payload.data);
+formData.append("hora", payload.hora);
+formData.append("passageiro", payload.passageiro);
+formData.append("setor", payload.setor);
+formData.append("motivo", payload.motivo);
+formData.append("itinerario", payload.itinerario);
+
+const res = await fetch(WEBAPP,{
+  method:"POST",
+  body:formData
+});
+
+
+  const json = await res.json();
+
+  if(json.success){
+
+    document.getElementById("novaData").value = "";
+    document.getElementById("novaHora").value = "";
+    document.getElementById("novoPassageiro").value = "";
+    document.getElementById("novoSetor").value = "";
+    document.getElementById("novoMotivo").value = "";
+    document.getElementById("novoItinerario").value = "";
+
+    alert("Agendamento incluído!");
+
+    carregarAgenda();
+     carregarServicoSocial();
+  }else{
+
+    alert("Erro ao gravar.");
+   
+  }
+
+}
+  
+
+carregarAgenda();
+carregarServicoSocial();
+atualizarFormulario();
+
+  setInterval(async () => {
+
+  await carregarAgenda();
+  await carregarServicoSocial();
+
+}, 30000);
+
+</script>
+
+</body>
+</html>
