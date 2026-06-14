@@ -2,114 +2,79 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<title>Painel Transporte</title>
+<title>Painel Frota</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
-body { font-family: Arial; background: #f4f6f9; margin:0; }
-
-header {
-  position:fixed; top:0; width:100%;
-  background:#1e293b; color:#fff;
-  height:60px; display:flex; align-items:center;
-  justify-content:center;
-}
-
-.sidebar {
-  width:220px; position:fixed; top:60px; bottom:0;
-  background:#111827; color:#fff;
-}
-
-.sidebar button { width:100%; padding:10px; background:none; color:#fff; border:none; cursor:pointer; }
-.sidebar button:hover { background:#374151; }
-
-.content {
-  margin-left:220px;
-  margin-top:70px;
-  padding:20px;
-}
-
-table {
-  width:100%; border-collapse:collapse;
-  background:white;
-}
-
-th, td { border:1px solid #ddd; padding:8px; }
-th { background:#3b82f6; color:white; }
-
-.btn { padding:5px 10px; cursor:pointer; border:none; }
-.btn-add { background:#10b981; color:#fff; }
-
-/* MODAL */
-.modal {
-  display:none;
-  position:fixed;
-  top:0; left:0; right:0; bottom:0;
-  background:rgba(0,0,0,0.6);
-  align-items:center;
-  justify-content:center;
-}
-
-.modal-content {
-  background:white;
-  padding:20px;
-  border-radius:8px;
-  width:400px;
-}
-
-.modal input, .modal select {
-  width:100%;
-  margin-bottom:10px;
-  padding:6px;
-}
-</style>
+<link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
 
-<header>Painel Transporte</header>
-
+<!-- SIDEBAR -->
 <aside class="sidebar">
-  <input type="date" id="filtroData">
-  <select id="filtroPlanilha">
-    <option value="all">Todas</option>
-    <option value="Planilha1">Planilha 1</option>
-    <option value="Planilha2">Planilha 2</option>
-  </select>
-  <button onclick="filtrar()">Pesquisar</button>
+  <h2>🚚 Frota</h2>
 
-  <button onclick="loadPage('Planilha1')">Planilha 1</button>
-  <button onclick="loadPage('Planilha2')">Planilha 2</button>
+  <button onclick="App.load('Planilha1')">Agenda Dia</button>
+  <button onclick="App.load('Planilha2')">Serviço Social</button>
+
+  <hr>
+
+  <input type="date" id="fData">
+  <select id="fTipo">
+    <option value="all">Todas</option>
+    <option value="Planilha1">Dia</option>
+    <option value="Planilha2">Social</option>
+  </select>
+
+  <button onclick="App.filtrar()">🔍 Filtrar</button>
+
 </aside>
 
-<main class="content">
-  <h2 id="titulo"></h2>
-  <button class="btn btn-add" onclick="abrirForm()">➕ Novo</button>
+<!-- MAIN -->
+<main class="main">
 
-  <table>
-    <thead id="thead"></thead>
-    <tbody id="tbody"></tbody>
-  </table>
+  <!-- TOPBAR -->
+  <div class="topbar">
+    <h2 id="titulo"></h2>
+
+    <div>
+      <button class="btn primary" onclick="UI.openForm()">➕ Novo</button>
+    </div>
+  </div>
+
+  <!-- TABLE -->
+  <div class="card">
+    <table>
+      <thead id="thead"></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+  </div>
+
 </main>
 
-<!-- MODAL FORM -->
-<div class="modal" id="modal">
-  <div class="modal-content">
+<!-- MODAL -->
+<div class="modal hidden" id="modal">
+  <div class="modal-box">
+
     <h3 id="formTitle"></h3>
 
-    <input type="date" id="data">
-    <input type="time" id="hora">
-    <input placeholder="Passageiro" id="passageiro">
-    <input placeholder="Setor" id="setor">
-    <input placeholder="Motivo" id="motivo">
-    <input placeholder="Itinerário" id="itinerario">
-    <input placeholder="Status" id="status">
+    <div id="formFields"></div>
 
-    <button onclick="salvar()">Salvar</button>
-    <button onclick="fecharForm()">Cancelar</button>
+    <div class="actions">
+      <button class="btn primary" onclick="UI.save()">Salvar</button>
+      <button class="btn" onclick="UI.closeForm()">Cancelar</button>
+    </div>
+
   </div>
 </div>
 
-<script src="app.js"></script>
+<!-- TOAST -->
+<div id="toast"></div>
+
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/app.js"></script>
+
 </body>
 </html>
