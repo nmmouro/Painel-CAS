@@ -43,7 +43,7 @@ body{
   color:var(--text);
 
   font-family:Inter,Arial,sans-serif;
-  zoom: 0.75; /* aumenta para TV */
+  zoom: 1; /* aumenta para TV */
 
   height:100vh;
   overflow:hidden;
@@ -61,9 +61,9 @@ body.tv-mode{
 @media (min-width: 1600px){
 
   body.tv-mode{
-    transform: scale(0.75);
-    width: calc(100% / 0.75);
-    height: calc(100% / 0.75);
+    transform: scale(1);
+    width: calc(100% / 1);
+    height: calc(100% / 1);
   }
 
 }
@@ -72,9 +72,9 @@ body.tv-mode{
 @media (min-width: 1200px) and (max-width:1599px){
 
   body.tv-mode{
-    transform: scale(0.75);
-    width: calc(100% / 0.75);
-    height: calc(100% / 0.75);
+    transform: scale(1);
+    width: calc(100% / 1);
+    height: calc(100% / 1);
   }
 
 }
