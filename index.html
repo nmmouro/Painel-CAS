@@ -749,6 +749,7 @@ if(sheet === "AGENDA DO DIA"){
     const url =
   `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
   `?sheet=${encodeURIComponent(sheet)}` +
+      `&headers=1` +
   `&tq=${encodeURIComponent(query)}` +
   `&tqx=out:json`;
 
