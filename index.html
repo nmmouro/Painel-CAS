@@ -995,11 +995,21 @@ function renderMotoristas(rows, painelRows, linhaFlutuante){
               </td>
 
               <td>
-                ${getDisponibilidade(
-    v[0],
-    painelRows,
-    "motorista"
-)}
+                <td>
+  ${
+    String(v[2] || "")
+      .toUpperCase()
+      .includes("EM ATIVIDADE")
+
+      ? getDisponibilidade(
+          v[0],
+          painelRows,
+          "motorista"
+        )
+
+      : ""
+  }
+</td>
               </td>
 
               <td>
