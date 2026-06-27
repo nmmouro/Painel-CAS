@@ -84,7 +84,7 @@ body.tv-mode{
 }
 
 .logo{
-  height:65px;
+  height:60px;
   object-fit:contain;
 }
 
@@ -97,7 +97,7 @@ body.tv-mode{
 }
 
 .title{
-  font-size:30px;
+  font-size:28px;
   font-weight:700;
   letter-spacing:1px;
 }
@@ -182,7 +182,7 @@ main{
   display:grid;
   gap:12px;
   padding:6px;
-  height:calc(100vh - 120px);
+  height:calc(100vh - 100px);
   overflow:auto;
 }
 
@@ -366,9 +366,7 @@ thead th,
 
 <body>
 
-<audio id="beep" preload="auto">
-  <source src="./alerta.mp3" type="audio/mpeg">
-</audio>
+<audio id="beep" preload="auto"><source src="./alerta.mp3" type="audio/mpeg"></audio>
 
 <!-- ================= HEADER ================= -->
 
@@ -376,19 +374,13 @@ thead th,
 
   <div class="left">
 
-    <img
-      src="logo.png"
-      class="logo"
-      onerror="this.style.display='none'"
-    >
+    <img src="logo.png" class="logo" onerror="this.style.display='none'">
 
-  </div>
+</div>
 
-  <div class="center">
-
-  <div class="title">
-    MOVIMENTAÇÃO DIÁRIA
-  </div>
+ <div class="center">
+ 
+    <div class="title"> MOVIMENTAÇÃO DIÁRIA </div>
 
 </div>
 
@@ -396,19 +388,15 @@ thead th,
 
     <div id="clock"></div>
 
-    <div class="actions">
+<div class="actions">
 
-      <button id="toggle-audio">
-        🔊 SOM ON
-      </button>
+    <button id="toggle-audio"> 🔊 SOM ON </button>
 
-      <button id="toggle-fullscreen">
-        ⛶ TELA CHEIA
-      </button>
+    <button id="toggle-fullscreen"> ⛶ TELA CHEIA </button>
 
-    </div>
+</div>
 
-  </div>
+</div>
 
 </header>
 
