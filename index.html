@@ -10,8 +10,6 @@
 
 <style>
 
-/* ================= ROOT ================= */
-
 :root{
 
   --bg:#071029;
@@ -29,19 +27,15 @@
   --blue:#6284fc;
 }
 
-/* ================= RESET ================= */
 
 body{
 
   background:var(--bg);
   color:var(--text);
-
   font-family:Inter,Arial,sans-serif;
-  zoom: 1; /* aumenta para TV */
-
   height:100vh;
   overflow:hidden;
-
+  zoom: 1; /* aumenta para TV */
 }
 
 
@@ -50,7 +44,6 @@ body{
 body.tv-mode{
   transform-origin: top left;
 }
-
 /* TV FULL HD (1920x1080 ou superior) */
 @media (min-width: 1600px){
 
@@ -59,9 +52,7 @@ body.tv-mode{
     width: calc(100% / 1);
     height: calc(100% / 1);
   }
-
 }
-
 /* TV HD / notebooks grandes */
 @media (min-width: 1200px) and (max-width:1599px){
 
@@ -70,33 +61,23 @@ body.tv-mode{
     width: calc(100% / 1);
     height: calc(100% / 1);
   }
-
 }
-
 
 /* ================= HEADER ================= */
 
 .topbar{
-
   display:grid;
-
   grid-template-columns:
-    180px 1fr 260px;
-
+  180px 1fr 260px;
   gap:16px;
-
   align-items:center;
-
   padding:14px 20px;
-
   background:#020617;
-
   border-bottom:
-    1px solid rgba(255,255,255,.1);
+  1px solid rgba(255,255,255,.1);
 }
 
 /* LEFT */
-
 .left{
   display:flex;
   align-items:center;
@@ -108,27 +89,20 @@ body.tv-mode{
 }
 
 /* CENTER */
-
 .center{
-
   display:flex;
   flex-direction:column;
-
   align-items:center;
   justify-content:center;
 }
 
 .title{
-
   font-size:30px;
   font-weight:700;
-
   letter-spacing:1px;
 }
 
 /* STATUS */
-
-
 .ocupado{
   background:rgba(255,77,77,.15);
   color:var(--red);
@@ -153,8 +127,8 @@ body.tv-mode{
   color:#d66bff;
   font-weight:700;
 }
-
-  .andamento{
+  
+.andamento{
   background:rgba(255,77,77,.15);
   color:var(--red);
 }
@@ -162,40 +136,29 @@ body.tv-mode{
 /* RIGHT */
 
 .right{
-
   display:flex;
   flex-direction:column;
-
   align-items:flex-end;
-
   gap:10px;
 }
 
 #clock{
-
   font-size:24px;
   font-weight:700;
-
   color:var(--muted);
 }
 
 .actions{
-
   display:flex;
   gap:10px;
 }
 
 button{
-
   border:none;
   border-radius:10px;
-
   padding:8px 14px;
-
   cursor:pointer;
-
   font-weight:700;
-
   transition:.2s;
 }
 
@@ -206,53 +169,38 @@ button:hover{
 /* ================= BUTTON STATES ================= */
 
 button.off{
-
   background:#ff4d4d;
-
   color:#ffffff;
-
   box-shadow:
-    0 0 10px rgba(255,77,77,.5);
+  0 0 10px rgba(255,77,77,.5);
 }
 
 
 /* ================= MAIN ================= */
 
 main{
-
   display:grid;
   gap:12px;
-
   padding:6px;
-
   height:calc(100vh - 120px);
-
   overflow:auto;
 }
 
 /* CARD */
 
 .card{
-
   background:var(--card);
-
   border-radius:16px;
-
   overflow:auto;
-
   border:
-    1px solid rgba(255,255,255,.08);
-
+  1px solid rgba(255,255,255,.08);
   box-shadow:
-    0 4px 20px rgba(0,0,0,.35);
+  0 4px 20px rgba(0,0,0,.35);
 }
 
 .card h2{
-
   text-align:center;
-
   padding:10px;
-
   font-size:20px;
 }
   
@@ -260,44 +208,32 @@ main{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:12px;
-
-    max-height:260px;
+  max-height:260px;
   overflow-y:auto;
 }
 
 /* ================= TABLE ================= */
 
 table{
-
   width:100%;
-
   border-collapse:collapse;
 }
 
 thead th{
-
   position:sticky;
   top:0;
-
   background:var(--header);
-
   padding:10px;
-
   border:
-    1px solid var(--border);
-
+  1px solid var(--border);
   font-size:16px;
 }
 
 tbody td{
-
   padding:10px;
-
   border:
-    1px solid var(--border);
-
+  1px solid var(--border);
   background:var(--table);
-
   text-align:center;
   font-size:16px;
 }
@@ -353,11 +289,8 @@ tbody tr:nth-child(even) td{
   /* ================= STATUS ICON ================= */
 
 .status-icon{
-
   font-size:24px;
-
   font-weight:700;
-
   text-align:center;
 }
 
@@ -366,73 +299,66 @@ tbody tr:nth-child(even) td{
 
 @media(max-width:768px){
 
-  .topbar{
-
-    grid-template-columns:auto auto auto;
-
-    text-align:center;
+.topbar{
+   grid-template-columns:auto auto auto;
+   text-align:center;
   }
 
-  .left,
-  .center,
-  .right{
-
-    justify-content:center;
-    align-items:center;
+.left,
+.center,
+.right{
+   justify-content:center;
+   align-items:center;
   }
 
-  .right{
-    align-items:center;
+.right{
+   align-items:center;
   }
 
-  .title{
-    font-size:12px;
+.title{
+  font-size:12px;
   }
 
  
-  #clock{
-    font-size:8px;
+#clock{
+  font-size:8px;
   }
 
-  .logo{
-    height:20px;
+.logo{
+  height:20px;
   }
 
-  .actions button{
-    font-size:6px;
-    padding:4px 6px;
-    border-radius:2px;
+.actions button{
+  font-size:6px;
+  padding:4px 6px;
+  border-radius:2px;
   }
 
-  table{
-    font-size:10px;
+table{
+  font-size:10px;
   }
 
-  thead th,
+thead th,
   tbody td{
-    padding:8px;
+  padding:8px;
   }
 
 .card h2{
-
   text-align:center;
-
   padding:12px;
-
   font-size:12px;
-   }
+  }
 
-  .dual-cards{
+.dual-cards{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:14px;
 }
 
-  .card-resumo{
+.card-resumo{
   max-height:260px;
   overflow-y:auto;
 }
-  
 }
 
 </style>
