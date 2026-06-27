@@ -498,7 +498,6 @@ const TABS = [
       "Status"
     ]
   }
-
 ];
   
 /* ================= STATUS CONFIG ================= */
@@ -534,7 +533,6 @@ const STATUS = {
     icon:'<span style="color:#ff9800">✈️</span>',
     class:"status-viagem"
   }
-
 };
 
 /* ================= HELPERS ================= */
@@ -552,8 +550,6 @@ const parseGviz = txt =>
 /* 🔹 extrai valor da célula */
 const getCell = c =>
   c?.f ?? c?.v ?? "";
-
-
   
 function formatarData(valor){
 
@@ -574,9 +570,7 @@ function formatarData(valor){
 
   return texto;
 }
-  
-  
-
+ 
 /* 🔹 identifica chave do status */
 function getStatusKey(status=""){
 
@@ -624,13 +618,11 @@ function getStatusIcon(status){
   return STATUS[key]?.icon || "";
 }
 
-
 /* ================= FETCH ================= */
 
 async function fetchSheet(sheet){
 
   try{
-
      let query = "";
 
     // Somente para a aba PAINEL
@@ -645,7 +637,6 @@ if(sheet === "AGENDA DO DIA"){
   query =
     "select B,C,D,E,F,G,H";
 }
-
 
     if(sheet === "AGENDA SERVIÇO SOCIAL"){
 
@@ -664,7 +655,6 @@ if(sheet === "AGENDA DO DIA"){
   query =
     "select B,C,D";
 }
-    
 
     const url =
   `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
@@ -710,11 +700,9 @@ function renderTable(headers, rows){
       <thead>
 
         <tr>
-
           ${headers.map(h => `
             <th>${h}</th>
           `).join("")}
-
         </tr>
 
       </thead>
@@ -879,7 +867,6 @@ function renderVeiculos(rows, painelRows){
     </table>
 
   `;
-
 }
 
 /* ================= MOTORISTAS ================= */
@@ -889,13 +876,11 @@ function renderMotoristas(rows, painelRows, linhaFlutuante){
   return `
 
     <table>
-
       <thead>
         <tr>
           <th>Motorista</th>
           <th>Status</th>
           <th>Condição</th>
-          
         </tr>
       </thead>
 
@@ -909,11 +894,9 @@ function renderMotoristas(rows, painelRows, linhaFlutuante){
           return `
 
             <tr>
-
               <td>
                 <strong>${v[0] || ""}</strong>
               </td>
-
               <td>
                 ${getDisponibilidade(
     v[0],
@@ -921,13 +904,10 @@ function renderMotoristas(rows, painelRows, linhaFlutuante){
     "motorista"
 )}
               </td>
-
               <td>
                 ${v[2] || ""}
               </td>
-
             </tr>
-
           `;
 
         }).join("")}
@@ -940,7 +920,6 @@ function renderMotoristas(rows, painelRows, linhaFlutuante){
 
   `;
 }
-  
 
 /* ================= LOAD ================= */
 
@@ -979,21 +958,11 @@ app.innerHTML = "";
 
 /* VEÍCULOS + MOTORISTAS */
 
-    
-   
-
 const painelIndex =
   TABS.findIndex(t => t.id === "painel");
-    
 
 const hojeStr = new Date().toLocaleDateString("pt-BR");
     
-/*painelRows = painelRows.filter(r => {
-  const v = (r.c || []).map(getCell);
-  return String(v[0]).trim() === hojeStr;
-});
-*/
-
 let painelRows =
   (results[painelIndex].table.rows || [])
     .filter(row => {
@@ -1014,7 +983,6 @@ let painelRows =
         status.includes("MANUTENCAO")
       );
     });
-
 
 painelRows.sort((a, b) => {
 
@@ -1047,8 +1015,6 @@ painelRows.sort((a, b) => {
   return parse(va[0], va[1]) - parse(vb[0], vb[1]);
 });
 
- 
-
 const agendaIndex =
   TABS.findIndex(t => t.id === "agenda");
 
@@ -1068,44 +1034,12 @@ const agendaRows =
       return String(v[0] || "").trim() === hoje;
     });
 
-
-
-/*
-agendaRows.sort((a, b) => {
-
-  const va = (a.c || []).map(getCell);
-  const vb = (b.c || []).map(getCell);
-
-  const parse = (dataStr, horaStr) => {
-
-    if (!dataStr) return new Date(0);
-
-    const [dia, mes, ano] = String(dataStr).split("/");
-
-    const [h, m] = String(horaStr || "00:00").split(":");
-
-    return new Date(
-      Number(ano),
-      Number(mes) - 1,
-      Number(dia),
-      Number(h || 0),
-      Number(m || 0)
-    );
-  };
-
-  return parse(va[0], va[1]) - parse(vb[0], vb[1]);
-});
-*/
-
     agendaRows.sort((a,b)=> {
   const va = (a.c||[]).map(getCell);
   const vb = (b.c||[]).map(getCell);
 
   return new Date(`${va[0]} ${va[1]}`) - new Date(`${vb[0]} ${vb[1]}`);
 });
-    
-
-    
 
 const socialIndex =
   TABS.findIndex(t => t.id === "social");
@@ -1122,9 +1056,6 @@ const socialRows =
 
       return data === hoje;
     });
-
-    
-    
 
 const veiculosIndex =
   TABS.findIndex(t => t.id === "veiculos");
@@ -1192,8 +1123,6 @@ if(motoristaFlutuante){
     </tr>
   `;
 }
-    
-
 
   const dual = document.createElement("div");
 dual.className = "dual-cards";
@@ -1226,9 +1155,7 @@ dual.className = "dual-cards";
   )
   }
 `;
-
   dual.appendChild(section);
-
 });
 
 app.appendChild(dual);
@@ -1244,7 +1171,6 @@ results.forEach((data,index)=>{
     tab.id === "motoristas"
   ) return;
   
-
 let rows;
 
 if(tab.id === "painel"){
@@ -1260,15 +1186,10 @@ else{
   rows = data.table.rows || [];
 }
 
-  
-
   const section =
   document.createElement("section");
 
 section.className = `card ${tab.id}`;
-
-  
-
 section.innerHTML = `
 
 <h2 style="
@@ -1302,21 +1223,15 @@ section.innerHTML = `
 
 </h2>
 
-
   ${renderTable(tab.headers, rows)}
 
 `;
 
   app.appendChild(section);
-
-
- 
-    });
+});
 
   }catch(err){
-
     console.error(err);
-
     app.innerHTML =
       "<div>Erro ao carregar dados.</div>";
   }
@@ -1330,15 +1245,9 @@ function updateClock(){
 
   document.getElementById(
     "clock"
-  ).innerText =
-
-    now.toLocaleDateString("pt-BR") +
-
+  ).innerText = now.toLocaleDateString("pt-BR") +
     " — " +
-
-    now.toLocaleTimeString(
-      "pt-BR",
-      {
+    now.toLocaleTimeString("pt-BR", {
         hour:"2-digit",
         minute:"2-digit"
       }
@@ -1411,7 +1320,6 @@ document.getElementById(
   }
 };
 
-
 /* ================= DETECÇÃO PROFISSIONAL MODO TV ================= */
 
 function detectarModoTV(){
@@ -1433,7 +1341,6 @@ function detectarModoTV(){
   }else{
     document.body.classList.remove("tv-mode");
   }
-
 }
 
 /* Executa ao iniciar */
@@ -1441,11 +1348,6 @@ detectarModoTV();
 
 /* Recalcula em resize */
 window.addEventListener("resize", detectarModoTV);
-
-
-
-
-  
 
 /* ================= INIT ================= */
 
