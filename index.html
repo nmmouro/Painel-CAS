@@ -111,6 +111,7 @@ body.tv-mode{
 .livre{
   color:#00ff9c;
   font-weight:700;
+  background:rgba(255,77,77,.15);
 }
 
 .ocupado{
@@ -310,10 +311,6 @@ tbody tr:nth-child(even) td{
    align-items:center;
   }
 
-.right{
-   align-items:center;
-  }
-
 .title{
   font-size:12px;
   }
@@ -492,34 +489,22 @@ const TABS = [
 const STATUS = {
 
   atendido:{
-    icon:'<span style="color:#00ff9c">✔</span>',
-    class:"status-atendido"
-  },
+    icon:'<span style="color:#00ff9c">✔</span>', class:"status-atendido"},
 
   concluido:{
-    icon:'<span style="color:#7CFC00">✔</span>',
-    class:"status-concluido"
-  },
+    icon:'<span style="color:#7CFC00">✔</span>', class:"status-concluido"},
 
   andamento:{
-    icon:'<span style="color:#ffcc00">⏳</span>',
-    class:"status-andamento"
-  },
+    icon:'<span style="color:#ffcc00">⏳</span>', class:"status-andamento"},
 
   cancelado:{
-    icon:'<span style="color:#ff4d4d">✖</span>',
-    class:"status-cancelado"
-  },
+    icon:'<span style="color:#ff4d4d">✖</span>', class:"status-cancelado"},
 
   manutenção:{
-    icon:'<span style="color:#ff0000">🔧</span>',
-    class:"status-manutencao"
-  },
+    icon:'<span style="color:#ff0000">🔧</span>', class:"status-manutencao"},
 
    viagem:{
-    icon:'<span style="color:#ff9800">✈️</span>',
-    class:"status-viagem"
-  }
+    icon:'<span style="color:#ff9800">✈️</span>', class:"status-viagem"}
 };
 
 /* ================= HELPERS ================= */
@@ -684,57 +669,50 @@ function renderTable(headers, rows){
 
     <table>
 
-      <thead>
+         <thead>
+           <tr>
+             ${headers.map(h => ` <th>${h}</th>  `).join("")}
+           </tr>
+         </thead>
 
-        <tr>
-          ${headers.map(h => `
-            <th>${h}</th>
-          `).join("")}
-        </tr>
+    <tbody>
 
-      </thead>
+         ${rows.map(row => {
 
-      <tbody>
+            const values =
+              (row.c || []).map(getCell);
+            const status =
+              values.at(-1)?.toLowerCase() || "";
+            const rowClass =
+              getStatusClass(status);
+            const icon =
+              getStatusIcon(status);
 
-        ${rows.map(row => {
+            return `
 
-          const values =
-            (row.c || []).map(getCell);
+    <tr class="${rowClass}">
 
+         ${values.map((v,i)=>{
+
+            const isLast =
+              i === values.length - 1;
+
+            return `
           
-const status =
-  values.at(-1)?.toLowerCase() || "";
+    <td class="${isLast ? 'status-icon' : ''}">
 
-const rowClass =
-  getStatusClass(status);
+         ${isLast ? icon : v}
 
-const icon =
-  getStatusIcon(status);
+    </td>
+`;
+}).join("")}
 
-return `
-
-  <tr class="${rowClass}">
-
-    ${values.map((v,i)=>{
-
-      const isLast =
-        i === values.length - 1;
-
-      return `
-        <td class="${isLast ? 'status-icon' : ''}">
-
-          ${isLast ? icon : v}
-
-        </td>
-      `;
-    }).join("")}
-
-  </tr>
+    </tr>
 `;
 
-    }).join("")}
+}).join("")}
           
-      </tbody>
+    </tbody>
 
     </table>
   `;
