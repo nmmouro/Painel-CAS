@@ -46,8 +46,6 @@ tr:nth-child(odd){
   background:#0e224d;
 }
 
-
-
 .formulario{
 
 display:grid;
@@ -56,47 +54,33 @@ repeat(4,1fr);
 font-size:12px;
 gap:10px;
 margin-bottom:20px;
-
 }
 
 .formulario input,
 .formulario select{
-
   width:100%;
   height:55px;
-
   padding:10px;
-
   font-size:20px;
-
   border:none;
   border-radius:10px;
-
   box-sizing:border-box;
 }
 
 .formulario button{
-
   background:#00c853;
   color:white;
-
   height:55px;
   font-size:20px;
   font-weight:bold;
-
   border:none;
   border-radius:10px;
-
   cursor:pointer;
-
   transition:0.2s;
-
 }
 
 .formulario button:hover{
-
   transform:scale(1.03);
-
 }
 
   #campoHora,
@@ -110,11 +94,6 @@ margin-bottom:20px;
   height:55px;
   box-sizing:border-box;
 }
-
-
-
-
-  
 
 </style>
 
@@ -152,9 +131,6 @@ margin-bottom:20px;
 
 </div>
 
-
-
-
 <div class="formulario">
 
 <select id="tipoAgenda" onchange="atualizarFormulario()">
@@ -162,8 +138,6 @@ margin-bottom:20px;
   <option value="AGENDA DO DIA">📅 Agenda do Dia</option>
   <option value="AGENDA SERVIÇO SOCIAL">🏥 Agenda Serviço Social</option>
 </select>
-
-  
 
 <input type="date" id="novaData">
 
@@ -207,26 +181,15 @@ placeholder="Itinerário"
 
 >
 
-
-
-
-
-  
-
 <button onclick="salvarAgenda()">
 ➕ Salvar
 </button>
 
 </div>
 
-
-
-
      <h2 style="margin-top:40px;text-align:center;">
 🏥 AGENDA DO DIA
 </h2>
-
- 
 
 <div id="tabela"></div>
 
@@ -235,15 +198,11 @@ placeholder="Itinerário"
 </h3>
 
 <div id="tabelaServicoSocial"></div>
-  
 
 <script>
 
-  
-
   const SHEET_ID =
 "14T7zF0likp8YGeycOYBcOs9INY9gvMzpt7SMfghE8P4";
-
 
   const parseGviz = txt =>
 
@@ -256,8 +215,6 @@ JSON.parse(
 
 const getCell = c =>
   c?.f ?? c?.v ?? "";
-
-
 
 function atualizarFormulario(){
 
@@ -280,9 +237,6 @@ function atualizarFormulario(){
        : "block";
 
 }
-
-  
-
 
   async function carregarAgenda(){
 
@@ -318,8 +272,6 @@ if(dataSelecionada){
 
   const dataBR =
     dateToBR(dataSelecionada);
-
-  
 
   agendaFiltrada =
     rows.filter(row=>{
@@ -360,7 +312,6 @@ if(dataSelecionada){
             partes[1]-1,
             partes[0]
           );
-
       }
 
       // formato YYYY-MM-DD
@@ -368,16 +319,12 @@ if(dataSelecionada){
 
         dataAgenda =
           new Date(dataTexto);
-
       }
 
       return dataAgenda >= hoje;
-
     });
 
-
 }
-
 
 function dateToBR(dataISO){
 
@@ -388,8 +335,6 @@ function dateToBR(dataISO){
 
   return `${dia}/${mes}/${ano}`;
 }
-    
-
 
   agendaFiltrada.sort((a,b)=>{
 
@@ -417,7 +362,6 @@ function dateToBR(dataISO){
     }else{
 
       d = new Date(data);
-
     }
 
     const h =
@@ -432,7 +376,6 @@ function dateToBR(dataISO){
     );
 
     return d;
-
   }
 
   return (
@@ -442,10 +385,7 @@ function dateToBR(dataISO){
 
 });
 
-
-
   let html =
-
 `
 <table>
 
@@ -467,7 +407,6 @@ function dateToBR(dataISO){
 
 <tbody>
 `;
-
 
   agendaFiltrada.forEach(row=>{
 
@@ -492,7 +431,6 @@ html += `
 
 });
 
-
   html += `
 </tbody>
 </table>
@@ -503,8 +441,6 @@ document.getElementById(
 ).innerHTML = html;
 
 }
-
-
 
 async function carregarServicoSocial(){
 
@@ -552,7 +488,6 @@ async function carregarServicoSocial(){
   }else{
 
     agendaFiltrada = rows;
-
   }
 
   // Ordenar pelo período
@@ -615,21 +550,15 @@ async function carregarServicoSocial(){
 
 }
 
-  
-
-
   const hoje = new Date();
 
 document.getElementById("filtroData").value =
   hoje.toISOString().split("T")[0];
 
-
-
 const WEBAPP =
 "https://script.google.com/macros/s/AKfycbwiaVBLh1B4ZpMbyDNX5RIhFhhUxX9jni8M6vmtFoYRaU2-7eazccWwngHzjajXp44t8w/exec";
 
 async function salvarAgenda(){
-
 
 const tipoAgenda =
 document.getElementById("tipoAgenda").value;
@@ -638,10 +567,6 @@ const horaOuPeriodo =
 tipoAgenda === "AGENDA SERVIÇO SOCIAL"
   ? document.getElementById("novoPeriodo").value
   : document.getElementById("novaHora").value;
-
-
-
-  
 
   const payload = {
 
@@ -677,7 +602,6 @@ const res = await fetch(WEBAPP,{
   body:formData
 });
 
-
   const json = await res.json();
 
   if(json.success){
@@ -696,12 +620,10 @@ const res = await fetch(WEBAPP,{
   }else{
 
     alert("Erro ao gravar.");
-   
-  }
+ }
 
 }
-  
-
+ 
 carregarAgenda();
 carregarServicoSocial();
 atualizarFormulario();
