@@ -29,212 +29,67 @@
 
 
 body{
-
-  background:var(--bg);
-  color:var(--text);
-  font-family:Inter,Arial,sans-serif;
-  height:100vh;
-  overflow:hidden;
-  zoom: 1; /* aumenta para TV */
+  margin:0;
+  background:#071029;
+  color:#fff;
+  font-family:Arial;
 }
 
-
-  /* ================= MODO TV AUTOMÁTICO ================= */
-
-body.tv-mode{
-  transform-origin: top left;
-}
-/* TV FULL HD (1920x1080 ou superior) */
-@media (min-width: 1600px){
-
-  body.tv-mode{
-    transform: scale(1);
-    width: calc(100% / 1);
-    height: calc(100% / 1);
-  }
-}
-/* TV HD / notebooks grandes */
-@media (min-width: 1200px) and (max-width:1599px){
-
-  body.tv-mode{
-    transform: scale(1);
-    width: calc(100% / 1);
-    height: calc(100% / 1);
-  }
-}
-
-/* ================= HEADER ================= */
-
-.topbar{
-  display:grid;
-  grid-template-columns:
-  180px 1fr 260px;
-  gap:16px;
-  align-items:center;
-  padding:14px 20px;
+header{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 20px;
   background:#020617;
-  border-bottom:
-  1px solid rgba(255,255,255,.1);
-}
-
-/* LEFT */
-.left{
-  display:flex;
   align-items:center;
 }
 
-.logo{
-  height:60px;
-  object-fit:contain;
-}
-
-/* CENTER */
-.center{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-}
-
-.title{
-  font-size:28px;
-  font-weight:700;
-  letter-spacing:1px;
-}
-
-/* STATUS */
-.ocupado{
-  background:rgba(255,77,77,.15);
-  color:var(--red);
-}
-
-.livre{
-  color:#00ff9c;
-  font-weight:700;
-  background:rgba(77, 255, 77, 0.25);
-  border-radius:10px;
-  padding:8px 14px;
-}
-
-.ocupado{
-  color:#ff4d4d;
-  font-weight:700;
-}
-
-.manutencao{
-  color:#4da6ff;
-  font-weight:700;
-}
-
-.viagem{
-  color:#d66bff;
-  font-weight:700;
-}
-  
-.andamento{
-  background:rgba(255,77,77,.15);
-  color:var(--red);
-}
-
-/* RIGHT */
-
-.right{
-  display:flex;
-  flex-direction:column;
-  align-items:flex-end;
-  gap:10px;
-}
-
-#clock{
-  font-size:24px;
-  font-weight:700;
-  color:var(--muted);
-}
-
-.actions{
-  display:flex;
-  gap:10px;
-}
+h1{margin:0;}
 
 button{
+  padding:6px 10px;
   border:none;
-  border-radius:10px;
-  padding:8px 14px;
+  border-radius:6px;
   cursor:pointer;
   font-weight:700;
   transition:.2s;
 }
 
-button:hover{
-  transform:scale(1.03);
-}
-
-/* ================= BUTTON STATES ================= */
-
-button.off{
-  background:#ff4d4d;
-  color:#ffffff;
-  box-shadow:
-  0 0 10px rgba(255,77,77,.5);
-}
-
-
-/* ================= MAIN ================= */
-
 main{
+  padding:10px;
   display:grid;
-  gap:12px;
-  padding:6px;
+  gap:10px;
   height:calc(100vh - 100px);
   overflow:auto;
 }
 
-/* CARD */
-
 .card{
   background:var(--card);
-  border-radius:16px;
+  border-radius:10px;
+  padding:10px;
   overflow:auto;
   border: 1px solid rgba(255,255,255,.08);
   box-shadow: 0 4px 20px rgba(0,0,0,.35);
 }
 
-.card h2{
-  text-align:left;
-  margin:0;
-  padding:4px 10px;
-  font-size:20px;
-}
-  
-  .dual-cards{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  max-height:260px;
-  overflow-y:auto;
-}
-
-/* ================= TABLE ================= */
-
-table{
+  table{
   width:100%;
   table-layout:auto;
   border-collapse:separate;
   border-spacing:0;
 }
 
-thead th{
-  position:sticky;
-  top:0;
-  background:var(--header);
-  padding:10px;
-  border:
-  1px solid var(--border);
-  font-size:16px;
+th,
+td{
+  padding:8px;
   text-align:left;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  word-wrap:break-word;
+  color:#fff;
+  padding:8px;
 }
 
-tbody td{
+  tbody td{
   padding:10px;
   border:
   1px solid var(--border);
@@ -243,8 +98,137 @@ tbody td{
   font-size:16px;
 }
 
-tbody tr:nth-child(even) td{
-  background:var(--table-alt);
+  tbody tr:nth-child(odd) td{
+  background:#0f2147;
+}
+
+  tbody tr:nth-child(even) td{
+  background:#152a57;
+}
+
+thead th{
+  background:#198754;
+  color:#fff;
+  text-transform:uppercase;
+  letter-spacing:0.5px;
+  font-size:0.9rem;
+  font-weight:700;
+  text-align:left;
+  font-weight:700;
+  vertical-align:middle;
+  position:sticky;
+  top:0;
+  padding:10px;
+  border: 1px solid var(--border);
+  
+}
+
+.header-left{
+justify-self:start;
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.header-right{
+justify-self:center;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.logo{
+height:60px;
+width:auto;
+}
+
+#toggle-audio.off{
+background:#dc2626;
+color:white;
+}
+
+#clock{
+font-size:1.4rem;
+font-weight:bold;
+color:#ffffff;
+margin-right:15px;
+letter-spacing:1px;
+}
+
+.resumo-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.resumo-card{
+background:#0b1a3a;
+border-radius:10px;
+padding:10px;
+}
+
+.resumo-card h2,
+.card h2,
+.card-resumo h2{
+  margin: -10px -10px 12px -10px;
+  padding: 12px;
+  text-align: center;
+  background:#2c4078;
+  color: #fff;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 10px 10px 0 0;
+  letter-spacing: 1px;
+  margin:0;
+}
+
+.dual-cards{
+display:flex;
+gap:15px;
+margin-bottom:15px;
+grid-template-columns:1fr 1fr;
+max-height:260px;
+overflow-y:auto;
+}
+
+.card-resumo{flex:1;}
+
+table{
+width:100%;
+table-layout:auto;
+border-collapse:separate;
+border-spacing:0;
+}
+
+/* STATUS */
+  
+.livre{color:#00ff9c; font-weight:700;}
+.ocupado{color:#ff4d4d; font-weight:700;}
+.viagem{color:#d66bff; font-weight:700;}
+.manutencao{color:#4da6ff; font-weight:700;}
+
+.manutencao{color:#4da6ff; font-weight:700;}
+
+.viagem{color:#d66bff; font-weight:700;}
+  
+.andamento{ background:rgba(255,77,77,.15); color:var(--red);}
+
+.actions{
+  display:flex;
+  gap:10px;
+}
+
+  .status-icon{
+  font-size:24px;
+  font-weight:700;
+  text-align:center;
+}
+  
+  button.off{
+  background:#ff4d4d;
+  color:#ffffff;
+  box-shadow:
+  0 0 10px rgba(255,77,77,.5);
 }
 
 /* PAINEL, AGENDA E SERVIÇO SOCIAL */
@@ -290,15 +274,6 @@ tbody tr:nth-child(even) td{
   background:rgba(210, 140, 255); /*#8E24AA */
   color:#FFF;
 }
-
-  /* ================= STATUS ICON ================= */
-
-.status-icon{
-  font-size:24px;
-  font-weight:700;
-  text-align:center;
-}
-
 
 /* ================= MOBILE ================= */
 
