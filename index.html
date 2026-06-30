@@ -371,36 +371,19 @@ thead th,
 
 <audio id="beep" preload="auto"><source src="./alerta.mp3" type="audio/mpeg"></audio>
 
-<!-- ================= HEADER ================= -->
+<header>
 
-<header class="topbar">
+  <img src="logo.png" class="logo" onerror="this.style.display='none'">
 
-  <div class="left">
+  </div>
+  
+  <h1>Painel Frota</h1>
 
-    <img src="logo.png" class="logo" onerror="this.style.display='none'">
-
-</div>
-
- <div class="center">
- 
-    <div class="title"> MOVIMENTAÇÃO DIÁRIA </div>
-
-</div>
-
-<div class="right">
-
-    <div id="clock"></div>
-
-<div class="actions">
-
-    <button id="toggle-audio"> 🔊 SOM ON </button>
-
-    <button id="toggle-fullscreen"> ⛶ TELA CHEIA </button>
-
-</div>
-
-</div>
-
+  <div>
+    <span id="clock"></span>
+    <button id="toggle-audio">🔊 SOM ON</button>
+    <button onclick="toggleFull()">⛶TELA CHEIA</button>
+  </div>
 </header>
 
 <!-- ================= MAIN ================= -->
