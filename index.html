@@ -152,12 +152,6 @@ thead th{
   overflow: visible;
 }
 
-/* limita os cards de resumo (veículos e motoristas) a 4 linhas visíveis */
-.resumo-grid .card{
-  max-height: calc(var(--row-height) * 4 + 64px); /* 4 linhas + cabeçalho/title/espacamento */
-  overflow:auto;
-}
-
 .resumo-card{
   background:#0b1a3a;
   border-radius:10px;
@@ -274,6 +268,30 @@ button.off{
   color:#FFF;
 }
 
+/* ================= Adjust resumo cards: keep fixed space for 4 rows without scrollbar ================= */
+/* The rules below override .card where necessary to keep vehicles and drivers cards fixed-height */
+.resumo-grid .card{
+  height: calc(var(--row-height) * 4 + 64px); /* fixed height: 4 rows + header/title/spacing */
+  overflow: hidden !important; /* hide extra rows without scrollbar */
+  display:flex !important;
+  flex-direction:column !important;
+}
+
+/* make the table fill remaining space inside the card */
+.resumo-grid .card table{
+  flex: 1 1 auto;
+  display:table;
+  width:100%;
+  table-layout:fixed;
+  border-collapse:separate;
+}
+
+/* force line height to match the row-height variable */
+.resumo-grid .card tbody tr{
+  height: var(--row-height);
+  box-sizing: border-box;
+}
+
 </style>
 
 </head>
@@ -331,8 +349,8 @@ const STATUS = {
 /* ================= HELPERS ================= */
 const parseGviz = txt => JSON.parse(txt.substring(txt.indexOf("{"), txt.lastIndexOf("}") + 1));
 const getCell = c => c?.f ?? c?.v ?? "";
-function formatarData(valor){ if(!valor) return ""; if(valor instanceof Date) return valor.toLocaleDateString("pt-BR"); const texto = String(valor); const match = texto.match(/\d{1,2}\/\d{1,2}\/\d{4}/); return match ? match[0] : texto; }
-function getStatusKey(status=""){ status = status.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); if(status.includes("manutencao")) return "manutenção"; if(status.includes("viagem")) return "viagem"; if(status.includes("andamento")) return "andamento"; if(status.includes("atendido")) return "atendido"; if(status.includes("concluido")) return "concluido"; if(status.includes("cancelado")) return "cancelado"; return null; }
+function formatarData(valor){ if(!valor) return ""; if(valor instanceof Date) return valor.toLocaleDateString("pt-BR"); const texto = String(valor); const match = texto.match(/\d{1,2}\/\d{1,2}\/\d{4}/); if(match) return match[0]; return texto; }
+function getStatusKey(status=""){ status = status.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); if(status.includes("manutencao") || status.includes("manutenção")) return "manutenção"; if(status.includes("viagem")) return "viagem"; if(status.includes("andamento") || status.includes("em andamento")) return "andamento"; if(status.includes("cancel")) return "cancelado"; if(status.includes("atendi")) return "atendido"; if(status.includes("conclu")) return "concluido"; return ""; }
 function getStatusClass(status){ const key = getStatusKey(status); return STATUS[key]?.class || ""; }
 function getStatusIcon(status){ const key = getStatusKey(status); return STATUS[key]?.icon || ""; }
 
@@ -354,7 +372,7 @@ async function fetchSheet(sheet){
 
 /* ================= TABLE RENDERS ================= */
 function renderTable(headers, rows){
-  return `\n<table>\n<thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead>\n<tbody>${rows.map(row=>{ const values=(row.c||[]).map(getCell); const status=values.at(-1)?.toLowerCase()||""; const rowClass=getStatusClass(status); const icon=getStatusIcon(status); return `<tr class="${rowClass}">${values.map((v,i)=>`<td class="${i===values.length-1?'status-icon':''}">${i===values.length-1?icon:v}</td>`).join("")}</tr>`; }).join("")}</tbody>\n</table>`;
+  return `\n<table>\n<thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead>\n<tbody>${rows.map(row=>{ const values=(row.c||[]).map(getCell); const status=values.at(-1)?.toLowerCase()||""; return `<tr class="${getStatusClass(status)}">${values.map(v=>`<td>${v||""}</td>`).join("")}</tr>` }).join("")}</tbody>\n</table>`;
 }
 
 function getDisponibilidade(nome, painelRows, tipo){
@@ -408,7 +426,7 @@ function renderVeiculos(rows, painelRows){
 }
 
 function renderMotoristas(rows, painelRows, linhaFlutuante){
-  return `\n<table>\n<thead><tr><th>Motorista</th><th>Status</th><th>Condição</th></tr></thead>\n<tbody>${rows.map(row=>{ const v=(row.c||[]).map(getCell); return `<tr><td><strong>${v[0]||""}</strong></td><td>${getDisponibilidade(v[0], painelRows, "motorista")}</td><td>${v[2]||""}</td></tr>`; }).join("")}${linhaFlutuante}</tbody>\n</table>`;
+  return `\n<table>\n<thead><tr><th>Motorista</th><th>Status</th><th>Condição</th></tr></thead>\n<tbody>${rows.map(row=>{ const v=(row.c||[]).map(getCell); return `<tr><td><strong>${v[0]||""}</strong></td><td>${getDisponibilidade(v[0], painelRows, "motorista")}</td><td>${v[2]||""}</td></tr>` }).join("")}${linhaFlutuante||""}</tbody>\n</table>`;
 }
 
 /* ================= UI HELPERS ================= */
