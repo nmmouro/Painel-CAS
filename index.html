@@ -11,7 +11,6 @@
 <style>
 
 :root{
-
   --bg:#071029;
   --card:#0b1a3a;
   --table:#0e224d;
@@ -27,14 +26,12 @@
   --blue:#6284fc;
 }
 
-
 body{
   background:var(--bg);
   color:var(--text);
   font-family:Inter,Arial,sans-serif;
   height:100vh;
   overflow:hidden;
-
 }
 
 header{
@@ -62,13 +59,12 @@ button{
 main{
   display:grid;
   padding:10px;
-  display:grid;
   gap:10px;
   height:calc(100vh - 100px);
   overflow:auto;
 }
 
-  table{
+table{
   width:100%;
   table-layout:auto;
   border-collapse:separate;
@@ -83,23 +79,21 @@ td{
   text-overflow:ellipsis;
   word-wrap:break-word;
   color:#fff;
-  padding:8px;
 }
 
-  tbody td{
+tbody td{
   padding:10px;
-  border:
-  1px solid var(--border);
+  border: 1px solid var(--border);
   background:var(--table);
   text-align:center;
   font-size:16px;
 }
 
-  tbody tr:nth-child(odd) td{
+tbody tr:nth-child(odd) td{
   background:#0f2147;
 }
 
-  tbody tr:nth-child(even) td{
+tbody tr:nth-child(even) td{
   background:#152a57;
 }
 
@@ -111,57 +105,55 @@ thead th{
   font-size:0.9rem;
   font-weight:700;
   text-align:left;
-  font-weight:700;
   vertical-align:middle;
   position:sticky;
   top:0;
   padding:10px;
   border: 1px solid var(--border);
-  
 }
 
 .header-left{
-justify-self:start;
-display:flex;
-align-items:center;
-gap:15px;
+  justify-self:start;
+  display:flex;
+  align-items:center;
+  gap:15px;
 }
 
 .header-right{
-justify-self:center;
-display:flex;
-align-items:center;
-gap:10px;
+  justify-self:center;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
 .logo{
-height:60px;
-width:auto;
+  height:60px;
+  width:auto;
 }
 
 #toggle-audio.off{
-background:#dc2626;
-color:white;
+  background:#dc2626;
+  color:white;
 }
 
 #clock{
-font-size:1.4rem;
-font-weight:bold;
-color:#ffffff;
-margin-right:15px;
-letter-spacing:1px;
+  font-size:1.4rem;
+  font-weight:bold;
+  color:#ffffff;
+  margin-right:15px;
+  letter-spacing:1px;
 }
 
 .resumo-grid{
-display:grid;
-grid-template-columns:1fr 1fr;
-gap:10px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
 .resumo-card{
-background:#0b1a3a;
-border-radius:10px;
-padding:10px;
+  background:#0b1a3a;
+  border-radius:10px;
+  padding:10px;
 }
 
 .resumo-card h2,
@@ -179,7 +171,7 @@ padding:10px;
   margin:0;
 }
 
-  .card{
+.card{
   background:var(--card);
   border-radius:10px;
   padding:10px;
@@ -188,7 +180,7 @@ padding:10px;
   box-shadow: 0 4px 20px rgba(0,0,0,.35);
 }
 
-  .card h2{
+.card h2{
   text-align:left;
   margin:0;
   padding:4px 10px;
@@ -196,24 +188,21 @@ padding:10px;
 }
 
 .dual-cards{
-display:flex;
-gap:15px;
-margin-bottom:15px;
-grid-template-columns:1fr 1fr;
-max-height:260px;
-overflow-y:auto;
+  display:flex;
+  gap:15px;
+  margin-bottom:15px;
+  grid-template-columns:1fr 1fr;
+  max-height:260px;
+  overflow-y:auto;
 }
 
 .card-resumo{flex:1;}
 
 /* STATUS */
-  
 .livre{color:#00ff9c; font-weight:700;}
 .ocupado{color:#ff4d4d; font-weight:700;}
 .viagem{color:#d66bff; font-weight:700;}
 .manutencao{color:#4da6ff; font-weight:700;}
-.manutencao{color:#4da6ff; font-weight:700;}
-.viagem{color:#d66bff; font-weight:700;}
 .andamento{ background:rgba(255,77,77,.15); color:var(--red);}
 
 .actions{
@@ -221,17 +210,16 @@ overflow-y:auto;
   gap:10px;
 }
 
-  .status-icon{
+.status-icon{
   font-size:24px;
   font-weight:700;
   text-align:center;
 }
-  
-  button.off{
+
+button.off{
   background:#ff4d4d;
   color:#ffffff;
-  box-shadow:
-  0 0 10px rgba(255,77,77,.5);
+  box-shadow: 0 0 10px rgba(255,77,77,.5);
 }
 
 /* PAINEL, AGENDA E SERVIÇO SOCIAL */
@@ -239,14 +227,14 @@ overflow-y:auto;
 .painel .status-andamento td,
 .agenda .status-andamento td,
 .social .status-andamento td{
-  background:rgba(210, 150, 80); /*#FFD700 */
+  background:rgba(210, 150, 80);
   color:#FFF;
 }
 
 .painel .status-cancelado td,
 .agenda .status-cancelado td,
 .social .status-cancelado td{
-  background:rgba(255,77,77,.10); /* #DC143C;*/
+  background:rgba(255,77,77,.10);
   color:#FFF;
 }
 
@@ -260,21 +248,21 @@ overflow-y:auto;
 .painel .status-atendido td,
 .agenda .status-atendido td,
 .social .status-atendido td{
-  background:rgba(0,255,156,.10);  /* #00C853;*/
+  background:rgba(0,255,156,.10);
   color:#FFF;
 }
 
 .painel .status-manutencao td,
 .agenda .status-manutencao td,
 .social .status-manutencao td{
-  background:rgba(110, 180, 255); /*#1E88E5 */
+  background:rgba(110, 180, 255);
   color:#FFF;
 }
 
 .painel .status-viagem td,
 .agenda .status-viagem td,
 .social .status-viagem td{
-  background:rgba(210, 140, 255); /*#8E24AA */
+  background:rgba(210, 140, 255);
   color:#FFF;
 }
 
@@ -284,14 +272,14 @@ overflow-y:auto;
 
 <body>
 
-<audio id="beep" preload="auto"><source src="./alerta.mp3" type="audio/mpeg"></audio>
+<audio id="beep" preload="auto">
+  <source src="./alerta.mp3" type="audio/mpeg">
+</audio>
 
 <header>
 
   <img src="logo.png" class="logo" onerror="this.style.display='none'">
 
-  </div>
-  
   <h1>Painel Frota</h1>
 
   <div>
