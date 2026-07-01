@@ -501,10 +501,13 @@ async function loadAll(){
     resumo.appendChild(motoristasCard);
 
     const mainContainer = document.getElementById('app');
-    mainContainer.appendChild(painelCard);
+    // first show vehicles + drivers side-by-side
     mainContainer.appendChild(resumo);
+    // then painel full-width below
+    mainContainer.appendChild(painelCard);
 
     const dual = document.createElement('div'); dual.className = 'dual-cards'; dual.appendChild(agendaCard); dual.appendChild(socialCard);
+    // append agenda and social under painel
     mainContainer.appendChild(dual);
 
   }catch(err){ console.error('Erro ao carregar dados:', err); }
