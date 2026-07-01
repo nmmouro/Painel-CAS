@@ -301,919 +301,215 @@ const SHEET_ID =
   "14T7zF0likp8YGeycOYBcOs9INY9gvMzpt7SMfghE8P4";
 
 const TABS = [
-
-  {
-    id:"veiculos",
-    title:"VEÍCULOS",
-    sheet:"VEÍCULOS",
-
-    headers:[
-      "TRAIL TXN1I89",
-      "CRETA TXJ6F18",
-      "CRETA TXJ6F19",
-      "CRETA TXJ6F20"
-    ]
-  },
-
-  {
-  id:"motoristas",
-  title:"MOTORISTAS",
-  sheet:"MOTORISTAS",
-
-  headers:[
-    "CACIO / 5000366",
-    "CELSO DALDEGAN / 5000205",
-    "NEIDIVAL / 5000199"
-    
-  ]
-},
-
-  {
-    id:"painel",
-    title:"PAINEL",
-    sheet:"LANÇAMENTOS",
-
-    headers:[
-      "Data",
-      "Hora",
-      "Empregado",
-      "Veículo",      
-      "Passageiro/ Setor/ Motivo",
-      "Itinerário",
-      "Status"
-    ]
-  },
-
-  {
-    id:"agenda",
-    title:"AGENDA DO DIA",
-    sheet:"AGENDA DO DIA",
-
-    headers:[
-      "Data",
-      "Hora",
-      "Passageiro",
-      "Setor",
-      "Motivo",
-      "Itinerário",
-      "Status"
-    ]
-  },
-
-  {
-    id:"social",
-    title:"AGENDA SERVIÇO SOCIAL",
-    sheet:"AGENDA SERVIÇO SOCIAL",
-
-    headers:[
-      "Data",
-      "Período",
-      "Passageiro",
-      "Motivo",
-      "Itinerário",
-      "Status"
-    ]
-  }
+  { id:"veiculos", title:"VEÍCULOS", sheet:"VEÍCULOS", headers:["TRAIL TXN1I89","CRETA TXJ6F18","CRETA TXJ6F19","CRETA TXJ6F20"] },
+  { id:"motoristas", title:"MOTORISTAS", sheet:"MOTORISTAS", headers:["CACIO / 5000366","CELSO DALDEGAN / 5000205","NEIDIVAL / 5000199"] },
+  { id:"painel", title:"PAINEL", sheet:"LANÇAMENTOS", headers:["Data","Hora","Empregado","Veículo","Passageiro/ Setor/ Motivo","Itinerário","Status"] },
+  { id:"agenda", title:"AGENDA DO DIA", sheet:"AGENDA DO DIA", headers:["Data","Hora","Passageiro","Setor","Motivo","Itinerário","Status"] },
+  { id:"social", title:"AGENDA SERVIÇO SOCIAL", sheet:"AGENDA SERVIÇO SOCIAL", headers:["Data","Período","Passageiro","Motivo","Itinerário","Status"] }
 ];
-  
+
 /* ================= STATUS CONFIG ================= */
-
 const STATUS = {
-
-  atendido:{
-    icon:'<span style="color:#00ff9c">✔</span>', class:"status-atendido"},
-
-  concluido:{
-    icon:'<span style="color:#7CFC00">✔</span>', class:"status-concluido"},
-
-  andamento:{
-    icon:'<span style="color:#ffcc00">⏳</span>', class:"status-andamento"},
-
-  cancelado:{
-    icon:'<span style="color:#ff4d4d">✖</span>', class:"status-cancelado"},
-
-  manutenção:{
-    icon:'<span style="color:#ff0000">🔧</span>', class:"status-manutencao"},
-
-   viagem:{
-    icon:'<span style="color:#ff9800">✈️</span>', class:"status-viagem"}
+  atendido:{ icon:'<span style="color:#00ff9c">✔</span>', class:"status-atendido"},
+  concluido:{ icon:'<span style="color:#7CFC00">✔</span>', class:"status-concluido"},
+  andamento:{ icon:'<span style="color:#ffcc00">⏳</span>', class:"status-andamento"},
+  cancelado:{ icon:'<span style="color:#ff4d4d">✖</span>', class:"status-cancelado"},
+  manutenção:{ icon:'<span style="color:#ff0000">🔧</span>', class:"status-manutencao"},
+  viagem:{ icon:'<span style="color:#ff9800">✈️</span>', class:"status-viagem"}
 };
 
 /* ================= HELPERS ================= */
-
-/* 🔹 converte resposta GViz em JSON */
-const parseGviz = txt =>
-
-  JSON.parse(
-    txt.substring(
-      txt.indexOf("{"),
-      txt.lastIndexOf("}") + 1
-    )
-  );
-
-/* 🔹 extrai valor da célula */
-const getCell = c =>
-  c?.f ?? c?.v ?? "";
-  
-function formatarData(valor){
-
-  if(!valor) return "";
-
-  if(valor instanceof Date){
-    return valor.toLocaleDateString("pt-BR");
-  }
-
-  const texto = String(valor);
-
-  const match =
-    texto.match(/\d{1,2}\/\d{1,2}\/\d{4}/);
-
-  if(match){
-    return match[0];
-  }
-
-  return texto;
-}
- 
-/* 🔹 identifica chave do status */
-function getStatusKey(status=""){
-
-  status = status
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"");
-
-  if(status.includes("manutencao"))
-    return "manutenção";
-
-  if(status.includes("viagem"))
-    return "viagem";
-
-  if(status.includes("andamento"))
-    return "andamento";
-
-  if(status.includes("atendido"))
-    return "atendido";
-
-  if(status.includes("concluido"))
-    return "concluido";
-
-  if(status.includes("cancelado"))
-    return "cancelado";
-
-  return null;
-}
-  
-/* 🔹 retorna classe CSS */
-function getStatusClass(status){
-
-  const key =
-    getStatusKey(status);
-
-  return STATUS[key]?.class || "";
-}
-
-/* 🔹 retorna ícone */
-function getStatusIcon(status){
-
-  const key =
-    getStatusKey(status);
-
-  return STATUS[key]?.icon || "";
-}
+const parseGviz = txt => JSON.parse(txt.substring(txt.indexOf("{"), txt.lastIndexOf("}") + 1));
+const getCell = c => c?.f ?? c?.v ?? "";
+function formatarData(valor){ if(!valor) return ""; if(valor instanceof Date) return valor.toLocaleDateString("pt-BR"); const texto = String(valor); const match = texto.match(/\d{1,2}\/\d{1,2}\/\d{4}/); return match ? match[0] : texto; }
+function getStatusKey(status=""){ status = status.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,""); if(status.includes("manutencao")) return "manutenção"; if(status.includes("viagem")) return "viagem"; if(status.includes("andamento")) return "andamento"; if(status.includes("atendido")) return "atendido"; if(status.includes("concluido")) return "concluido"; if(status.includes("cancelado")) return "cancelado"; return null; }
+function getStatusClass(status){ const key = getStatusKey(status); return STATUS[key]?.class || ""; }
+function getStatusIcon(status){ const key = getStatusKey(status); return STATUS[key]?.icon || ""; }
 
 /* ================= FETCH ================= */
-
 async function fetchSheet(sheet){
-
   try{
-     let query = "";
-
-    // Somente para a aba PAINEL
-    if(sheet === "LANÇAMENTOS"){
-      
-  query =
-  `select B,C,D,E,F,G,X `;
-    }
-
-if(sheet === "AGENDA DO DIA"){
-
-  query =
-    "select B,C,D,E,F,G,H";
-}
-
-    if(sheet === "AGENDA SERVIÇO SOCIAL"){
-
-  query =
-    "select B,C,D,F,G,H";
-}
-
-    if(sheet === "VEÍCULOS"){
-
-  query =
-    "select B,V,M,N";
-}
-
-     if(sheet === "MOTORISTAS"){
-
-  query =
-    "select B,C,D";
-}
-
-    const url =
-  `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq` +
-  `?sheet=${encodeURIComponent(sheet)}` +
-      `&headers=1` +
-  `&tq=${encodeURIComponent(query)}` +
-  `&tqx=out:json`;
-
+    let query = "";
+    if(sheet === "LANÇAMENTOS") query = `select B,C,D,E,F,G,X`;
+    if(sheet === "AGENDA DO DIA") query = "select B,C,D,E,F,G,H";
+    if(sheet === "AGENDA SERVIÇO SOCIAL") query = "select B,C,D,F,G,H";
+    if(sheet === "VEÍCULOS") query = "select B,V,M,N";
+    if(sheet === "MOTORISTAS") query = "select B,C,D";
+    const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?sheet=${encodeURIComponent(sheet)}&headers=1&tq=${encodeURIComponent(query)}&tqx=out:json`;
     const res = await fetch(url);
-
-    if(!res.ok){
-      throw new Error(
-        `HTTP ${res.status}`
-      );
-    }
-
-    return parseGviz(
-      await res.text()
-    );
-
-  }catch(err){
-
-    console.error(
-      `Erro na aba ${sheet}:`,
-      err
-    );
-
-    return {
-      table:{
-        rows:[]
-      }
-    };
-  }
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    return parseGviz(await res.text());
+  }catch(err){ console.error(`Erro na aba ${sheet}:`, err); return { table:{ rows:[] } }; }
 }
-/* ================= TABLE ================= */
 
+/* ================= TABLE RENDERS ================= */
 function renderTable(headers, rows){
-
-  return `
-
-    <table>
-
-         <thead>
-           <tr>
-             ${headers.map(h => ` <th>${h}</th>  `).join("")}
-           </tr>
-         </thead>
-
-    <tbody>
-
-         ${rows.map(row => {
-
-            const values =
-              (row.c || []).map(getCell);
-            const status =
-              values.at(-1)?.toLowerCase() || "";
-            const rowClass =
-              getStatusClass(status);
-            const icon =
-              getStatusIcon(status);
-
-            return `
-
-    <tr class="${rowClass}">
-
-         ${values.map((v,i)=>{
-
-            const isLast =
-              i === values.length - 1;
-
-            return `
-          
-    <td class="${isLast ? 'status-icon' : ''}">
-
-         ${isLast ? icon : v}
-
-    </td>
-`;
-}).join("")}
-
-    </tr>
-`;
-
-}).join("")}
-          
-    </tbody>
-
-    </table>
-  `;
+  return `\n<table>\n<thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead>\n<tbody>${rows.map(row=>{ const values=(row.c||[]).map(getCell); const status=values.at(-1)?.toLowerCase()||""; const rowClass=getStatusClass(status); const icon=getStatusIcon(status); return `<tr class="${rowClass}">${values.map((v,i)=>`<td class="${i===values.length-1?'status-icon':''}">${i===values.length-1?icon:v}</td>`).join("")}</tr>`; }).join("")}</tbody>\n</table>`;
 }
-
-/* ================= GESTÃO DA TABLE ================= */
 
 function getDisponibilidade(nome, painelRows, tipo){
-
-  const procurado =
-    String(nome || "").trim().toUpperCase();
-
+  const procurado = String(nome||"").trim().toUpperCase();
   for(const row of painelRows){
-
-    const valores =
-      (row.c || []).map(getCell);
-
-    const veiculo =
-      String(valores[3] || "").trim().toUpperCase();
-
-    const motorista =
-      String(valores[2] || "").trim().toUpperCase();
-
-    const status =
-      String(valores[6] || "").trim().toUpperCase();
-
-    const encontrado =
-      tipo === "veiculo"
-        ? veiculo === procurado
-        : motorista === procurado;
-
-    if(!encontrado){
-      continue;
+    const valores=(row.c||[]).map(getCell);
+    const veiculo=String(valores[3]||"").trim().toUpperCase();
+    const motorista=String(valores[2]||"").trim().toUpperCase();
+    const status=String(valores[6]||"").trim().toUpperCase();
+    const encontrado = tipo === "veiculo" ? veiculo === procurado : motorista === procurado;
+    if(!encontrado) continue;
+    if(status.includes("MANUTENÇÃO") || status.includes("MANUTENCAO")){
+      return tipo === "veiculo" ? '<span class="manutencao">🔵 MANUTENÇÃO</span>' : '<span class="livre">🟢 LIVRE</span>';
     }
-
-    // MANUTENÇÃO
-    if(
-      status.includes("MANUTENÇÃO") ||
-      status.includes("MANUTENCAO")
-    ){
-
-      if(tipo === "veiculo"){
-        return '<span class="manutencao">🔵 MANUTENÇÃO</span>';
-      }
-
-      return '<span class="livre">🟢 LIVRE</span>';
-    }
-
-    // VIAGEM
-    if(status.includes("VIAGEM")){
-      return '<span class="viagem">🟣 VIAGEM</span>';
-    }
-
-    // OCUPADO
+    if(status.includes("VIAGEM")) return '<span class="viagem">🟣 VIAGEM</span>';
     return '<span class="ocupado">🔴 OCUPADO</span>';
   }
-
   return '<span class="livre">🟢 LIVRE</span>';
-}  
-
-/* ================= VEÍCULOS ================= */
-  
-function renderVeiculos(rows, painelRows){
-
-  return `
-
-    <table>
-
-      <thead>
-        <tr>
-          <th>Placa</th>
-          <th>Status</th>
-          <th>Odômetro</th>
-          <th>Combustível</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        ${rows.map(row => {
-
-          const v =
-            (row.c || []).map(getCell);
-
-          return `
-
-            <tr>
-
-              <td>
-                <strong>${v[0] || ""}</strong>
-              </td>
-
-              <td>
-                ${getDisponibilidade(
-    v[0],
-    painelRows,
-    "veiculo"
-)}
-              </td>
-
-              <td>
-                ${v[2] || ""} km
-              </td>
-
-              <td>
-                ⛽ ${v[3] || ""}
-              </td>
-
-            </tr>
-
-          `;
-
-        }).join("")}
-
-      </tbody>
-
-    </table>
-
-  `;
 }
 
-/* ================= MOTORISTAS ================= */
+function renderVeiculos(rows, painelRows){
+  return `\n<table>\n<thead><tr><th>Placa</th><th>Status</th><th>Odômetro</th><th>Combustível</th></tr></thead>\n<tbody>${rows.map(row=>{ const v=(row.c||[]).map(getCell); return `<tr><td><strong>${v[0]||""}</strong></td><td>${getDisponibilidade(v[0], painelRows, "veiculo")}</td><td>${v[2]||""} km</td><td>⛽ ${v[3]||""}</td></tr>`; }).join("")}</tbody>\n</table>`;
+}
 
 function renderMotoristas(rows, painelRows, linhaFlutuante){
-
-  return `
-
-    <table>
-      <thead>
-        <tr>
-          <th>Motorista</th>
-          <th>Status</th>
-          <th>Condição</th>
-        </tr>
-      </thead>
-
-      <tbody>
-
-        ${rows.map(row => {
-
-          const v =
-            (row.c || []).map(getCell);
-
-          return `
-
-            <tr>
-              <td>
-                <strong>${v[0] || ""}</strong>
-              </td>
-              <td>
-                ${getDisponibilidade(
-    v[0],
-    painelRows,
-    "motorista"
-)}
-              </td>
-              <td>
-                ${v[2] || ""}
-              </td>
-            </tr>
-          `;
-
-        }).join("")}
-
-        ${linhaFlutuante}
-
-      </tbody>
-
-    </table>
-
-  `;
+  return `\n<table>\n<thead><tr><th>Motorista</th><th>Status</th><th>Condição</th></tr></thead>\n<tbody>${rows.map(row=>{ const v=(row.c||[]).map(getCell); return `<tr><td><strong>${v[0]||""}</strong></td><td>${getDisponibilidade(v[0], painelRows, "motorista")}</td><td>${v[2]||""}</td></tr>`; }).join("")}${linhaFlutuante}</tbody>\n</table>`;
 }
 
-/* ================= LOAD ================= */
+/* ================= UI HELPERS ================= */
+function playBeep(){
+  const audio = document.getElementById('beep');
+  const btn = document.getElementById('toggle-audio');
+  if(!audio) return;
+  if(btn && btn.classList.contains('off')) return; // muted
+  audio.currentTime = 0;
+  audio.play().catch(()=>{});
+}
 
+function toggleFull(){
+  const el = document.documentElement;
+  if(!document.fullscreenElement){
+    el.requestFullscreen?.();
+  }else{
+    document.exitFullscreen?.();
+  }
+}
+
+function updateClock(){
+  const el = document.getElementById('clock');
+  if(!el) return;
+  const now = new Date();
+  el.textContent = now.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+
+/* Toggle audio button */
+document.addEventListener('click', e=>{
+  if(e.target && e.target.id === 'toggle-audio'){
+    e.target.classList.toggle('off');
+    e.target.textContent = e.target.classList.contains('off') ? '🔈 SOM OFF' : '🔊 SOM ON';
+  }
+});
+
+/* ================= LOAD ================= */
 let lastHash = "";
 let firstLoad = true;
 
 async function loadAll(){
-
-  const app =
-    document.getElementById("app");
-
+  const app = document.getElementById('app');
   try{
+    const results = await Promise.all(TABS.map(t=>fetchSheet(t.sheet)));
+    const hash = JSON.stringify(results);
+    if(!firstLoad && hash !== lastHash){ playBeep(); }
+    firstLoad = false; lastHash = hash;
+    app.innerHTML = '';
 
-    const results =
-      await Promise.all(
+    const painelIndex = TABS.findIndex(t => t.id === 'painel');
+    const agendaIndex = TABS.findIndex(t => t.id === 'agenda');
+    const socialIndex = TABS.findIndex(t => t.id === 'social');
+    const veiculosIndex = TABS.findIndex(t => t.id === 'veiculos');
+    const motoristasIndex = TABS.findIndex(t => t.id === 'motoristas');
 
-        TABS.map(
-          t => fetchSheet(t.sheet)
-        )
-      );
+    const hoje = (new Date()).toLocaleDateString('pt-BR');
 
-    const hash =
-      JSON.stringify(results);
+    // painel rows (filter relevant statuses)
+    const painelRows = (results[painelIndex].table.rows || []).filter(row=>{
+      const v=(row.c||[]).map(getCell);
+      const status=String(v[6]||"").toUpperCase().trim();
+      return status.includes('AGENDADO') || status.includes('EM ANDAMENTO') || status.includes('VIAGEM') || status.includes('MANUTENÇÃO') || status.includes('MANUTENCAO');
+    });
 
-    if(
-      !firstLoad &&
-      hash !== lastHash
-    ){
-      playBeep();
+    // sort painel rows by date/time
+    painelRows.sort((a,b)=>{
+      const va=(a.c||[]).map(getCell); const vb=(b.c||[]).map(getCell);
+      const parse = (dataStr, horaStr)=>{
+        if(!dataStr) return new Date(0);
+        const d = dataStr.includes('/') ? dataStr.split('/') : new Date(dataStr);
+        const dia = Array.isArray(d)?d[0]:d.getDate();
+        const mes = Array.isArray(d)?d[1]:d.getMonth()+1;
+        const ano = Array.isArray(d)?d[2]:d.getFullYear();
+        const h = (horaStr||'00:00').split(':');
+        return new Date(Number(ano), Number(mes)-1, Number(dia), Number(h[0]||0), Number(h[1]||0));
+      };
+      return parse(va[0],va[1]) - parse(vb[0],vb[1]);
+    });
+
+    // agenda rows for today
+    const agendaRows = (results[agendaIndex].table.rows || []).filter(row=>{ const v=(row.c||[]).map(getCell); return String(v[0]||"").trim() === hoje; });
+    agendaRows.sort((a,b)=>{ const va=(a.c||[]).map(getCell); const vb=(b.c||[]).map(getCell); return new Date(`${va[0]} ${va[1]}`) - new Date(`${vb[0]} ${vb[1]}`); });
+
+    // social rows for today
+    const socialRows = (results[socialIndex].table.rows || []).filter(row=>{ const v=(row.c||[]).map(getCell); return String(v[0]||"").trim() === hoje; });
+
+    const veiculosRows = results[veiculosIndex].table.rows || [];
+    const motoristasRows = results[motoristasIndex].table.rows || [];
+
+    // find floating motorista not present in motoristas list
+    const motoristaFlutuante = painelRows.find(row=>{ const v=(row.c||[]).map(getCell); const nome=String(v[2]||"").trim(); return !motoristasRows.some(r=>String(((r.c||[])[0]?.f ?? (r.c||[])[0]?.v) || "").trim() === nome); });
+
+    let linhaFlutuante = '';
+    if(motoristaFlutuante){
+      const v=(motoristaFlutuante.c||[]).map(getCell);
+      const nome=String(v[2]||"").trim();
+      const status=String(v[6]||"").toUpperCase();
+      let textoStatus = '🔴 OCUPADO';
+      if(status.includes('VIAGEM')) textoStatus = '✈️ VIAGEM';
+      if(status.includes('MANUTENÇÃO') || status.includes('MANUTENCAO')) textoStatus = '🔧 MANUTENÇÃO';
+      linhaFlutuante = `<tr><td><strong>${nome}</strong></td><td>${textoStatus}</td><td>USUÁRIO CADASTRADO</td></tr>`;
     }
 
-    firstLoad = false;
-    lastHash = hash;
+    // build DOM
+    const painelCard = document.createElement('div'); painelCard.className = 'card';
+    painelCard.innerHTML = `<h2>${TABS[painelIndex].title}</h2>${renderTable(TABS[painelIndex].headers, painelRows)}`;
 
-app.innerHTML = "";
+    const veiculosCard = document.createElement('div'); veiculosCard.className = 'card';
+    veiculosCard.innerHTML = `<h2>${TABS[veiculosIndex].title}</h2>${renderVeiculos(veiculosRows, painelRows)}`;
 
-/* VEÍCULOS + MOTORISTAS */
+    const motoristasCard = document.createElement('div'); motoristasCard.className = 'card';
+    motoristasCard.innerHTML = `<h2>${TABS[motoristasIndex].title}</h2>${renderMotoristas(motoristasRows, painelRows, linhaFlutuante)}`;
 
-const painelIndex =
-  TABS.findIndex(t => t.id === "painel");
+    const agendaCard = document.createElement('div'); agendaCard.className = 'card';
+    agendaCard.innerHTML = `<h2>${TABS[agendaIndex].title}</h2>${renderTable(TABS[agendaIndex].headers, agendaRows)}`;
 
-const hojeStr = new Date().toLocaleDateString("pt-BR");
-    
-let painelRows =
-  (results[painelIndex].table.rows || [])
-    .filter(row => {
-   
-      const v =
-        (row.c || []).map(getCell);
+    const socialCard = document.createElement('div'); socialCard.className = 'card';
+    socialCard.innerHTML = `<h2>${TABS[socialIndex].title}</h2>${renderTable(TABS[socialIndex].headers, socialRows)}`;
 
-      const status =
-        String(v[6] || "")
-          .toUpperCase()
-          .trim();
+    // layout
+    const resumo = document.createElement('div'); resumo.className = 'resumo-grid';
+    resumo.appendChild(veiculosCard);
+    resumo.appendChild(motoristasCard);
 
-      return (
-        status.includes("AGENDADO") ||
-        status.includes("EM ANDAMENTO") ||
-        status.includes("VIAGEM") ||
-        status.includes("MANUTENÇÃO") ||
-        status.includes("MANUTENCAO")
-      );
-    });
+    const mainContainer = document.getElementById('app');
+    mainContainer.appendChild(painelCard);
+    mainContainer.appendChild(resumo);
 
-painelRows.sort((a, b) => {
+    const dual = document.createElement('div'); dual.className = 'dual-cards'; dual.appendChild(agendaCard); dual.appendChild(socialCard);
+    mainContainer.appendChild(dual);
 
-  const va = (a.c || []).map(getCell);
-  const vb = (b.c || []).map(getCell);
-
-  const parse = (dataStr, horaStr) => {
-
-    if (!dataStr) return new Date(0);
-
-    const d = dataStr.includes("/")
-      ? dataStr.split("/")
-      : new Date(dataStr);
-
-    const dia = Array.isArray(d) ? d[0] : d.getDate();
-    const mes = Array.isArray(d) ? d[1] : d.getMonth() + 1;
-    const ano = Array.isArray(d) ? d[2] : d.getFullYear();
-
-    const h = (horaStr || "00:00").split(":");
-
-    return new Date(
-      Number(ano),
-      Number(mes) - 1,
-      Number(dia),
-      Number(h[0] || 0),
-      Number(h[1] || 0)
-    );
-  };
-
-  return parse(va[0], va[1]) - parse(vb[0], vb[1]);
-});
-
-const agendaIndex =
-  TABS.findIndex(t => t.id === "agenda");
-
-const d = new Date();
-
-const hoje =
-  `${String(d.getDate()).padStart(2,"0")}/` +
-  `${String(d.getMonth()+1).padStart(2,"0")}/` +
-  `${d.getFullYear()}`;
-
-const agendaRows =
-  (results[agendaIndex].table.rows || [])
-    .filter(row => {
-
-      const v = (row.c || []).map(getCell);
-
-      return String(v[0] || "").trim() === hoje;
-    });
-
-    agendaRows.sort((a,b)=> {
-  const va = (a.c||[]).map(getCell);
-  const vb = (b.c||[]).map(getCell);
-
-  return new Date(`${va[0]} ${va[1]}`) - new Date(`${vb[0]} ${vb[1]}`);
-});
-
-const socialIndex =
-  TABS.findIndex(t => t.id === "social");
-
-const socialRows =
-  (results[socialIndex].table.rows || [])
-    .filter(row => {
-
-      const v =
-        (row.c || []).map(getCell);
-
-      const data =
-        String(v[0] || "").trim();
-
-      return data === hoje;
-    });
-
-const veiculosIndex =
-  TABS.findIndex(t => t.id === "veiculos");
-
-const motoristasIndex =
-  TABS.findIndex(t => t.id === "motoristas");
-    
-
-const motoristasRows =
-  results[motoristasIndex].table.rows || [];
-
-const motoristaFlutuante =
-  painelRows.find(row => {
-
-    const v =
-      (row.c || []).map(getCell);
-
-    const nome =
-      String(v[2] || "").trim();
-
-    return !motoristasRows.some(r => {
-
-      const m =
-        (r.c || []).map(getCell);
-
-      return (
-        String(m[0] || "").trim() === nome
-      );
-    });
-
-  });
-
-let linhaFlutuante = "";
-
-if(motoristaFlutuante){
-
-  const v =
-    (motoristaFlutuante.c || []).map(getCell);
-
-  const nome =
-    String(v[2] || "").trim();
-
-  const status =
-    String(v[6] || "").toUpperCase();
-
-  let textoStatus =
-    "🔴 OCUPADO";
-
-  if(status.includes("VIAGEM")){
-    textoStatus = "✈️ VIAGEM";
-  }
-
-  if(
-    status.includes("MANUTENÇÃO") ||
-    status.includes("MANUTENCAO")
-  ){
-    textoStatus = "🔧 MANUTENÇÃO";
-  }
-
-  linhaFlutuante = `
-    <tr>
-      <td><strong>${nome}</strong></td>
-      <td>${textoStatus}</td>
-      <td>USUÁRIO CADASTRADO</td>
-    </tr>
-  `;
+  }catch(err){ console.error('Erro ao carregar dados:', err); }
 }
 
-  const dual = document.createElement("div");
-dual.className = "dual-cards";
-
-[veiculosIndex,motoristasIndex].forEach(index=>{
-
-  const tab = TABS[index];
-  
-  const rows = results[index].table.rows || [];
-
-  const section =
-    document.createElement("section");
-
-  section.className =
-    tab.id === "veiculos" ||
-    tab.id === "motoristas"
-    ? "card card-resumo"
-    : "card";
-
- section.innerHTML = `
-  <h2>${tab.title}</h2>
-
-  ${
-    tab.id === "veiculos"
-      ? renderVeiculos(rows, painelRows)
-      : renderMotoristas(
-    rows,
-    painelRows,
-    linhaFlutuante
-  )
-  }
-`;
-  dual.appendChild(section);
-});
-
-app.appendChild(dual);
-
-/* DEMAIS TABELAS */
-
-results.forEach((data,index)=>{
-
-  const tab = TABS[index];
-
-  if(
-    tab.id === "veiculos" ||
-    tab.id === "motoristas"
-  ) return;
-  
-let rows;
-
-if(tab.id === "painel"){
-  rows = painelRows;
-}
-else if(tab.id === "agenda"){
-  rows = agendaRows;
-}
-else if(tab.id === "social"){
-  rows = socialRows;
-}
-else{
-  rows = data.table.rows || [];
-}
-
-  const section =
-  document.createElement("section");
-
-section.className = `card ${tab.id}`;
-section.innerHTML = `
-
-<h2 style="
-  position:relative;
-  text-align:center;
-">
-
-  ${tab.title}
-
-  ${
-    tab.id === "agenda"
-    ? `
-      <span
-        onclick="window.open('agenda.html','_blank')"
-        title="Agenda Completa"
-        style="
-          position:absolute;
-          right:15px;
-          top:50%;
-          transform:translateY(-50%);
-          cursor:pointer;
-          font-size:22px;
-          user-select:none;
-        "
-      >
-        📅
-      </span>
-    `
-    : ""
-  }
-
-</h2>
-
-  ${renderTable(tab.headers, rows)}
-
-`;
-
-  app.appendChild(section);
-});
-
-  }catch(err){
-    console.error(err);
-    app.innerHTML =
-      "<div>Erro ao carregar dados.</div>";
-  }
-}
-
-/* ================= CLOCK ================= */
-
-function updateClock(){
-
-  const now = new Date();
-
-  document.getElementById(
-    "clock"
-  ).innerText = now.toLocaleDateString("pt-BR") +
-    " — " +
-    now.toLocaleTimeString("pt-BR", {
-        hour:"2-digit",
-        minute:"2-digit"
-      }
-    );
-}
-
-setInterval(updateClock,1000);
-
-updateClock();
-
-/* ================= AUDIO ================= */
-
-const audio =
-  document.getElementById("beep");
-
-const audioBtn =
-  document.getElementById("toggle-audio");
-
-let soundEnabled = true;
-
-function updateAudioButton(){
-
-  if(soundEnabled){
-
-    audioBtn.innerText = "🔊 SOM ON";
-
-    audioBtn.classList.remove("off");
-
-  }else{
-
-    audioBtn.innerText = "🔇 SOM OFF";
-
-    audioBtn.classList.add("off");
-  }
-}
-
-audioBtn.onclick = () => {
-
-  soundEnabled = !soundEnabled;
-
-  updateAudioButton();
-};
-
-function playBeep(){
-
-  if(!soundEnabled)
-    return;
-
-  audio.currentTime = 0;
-
-  audio.play().catch(()=>{});
-
-  updateAudioButton();
-}
-
-/* ================= FULLSCREEN ================= */
-
-document.getElementById(
-  "toggle-fullscreen"
-).onclick = async () => {
-
-  if(!document.fullscreenElement){
-
-    await document.documentElement
-      .requestFullscreen();
-
-  }else{
-
-    await document.exitFullscreen();
-  }
-};
-
-/* ================= DETECÇÃO PROFISSIONAL MODO TV ================= */
-
-function detectarModoTV(){
-
-  const largura = window.innerWidth;
-  const altura  = window.innerHeight;
-
-  const isMobile =
-    /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-
-  // ✅ Critério inteligente (base produção)
-  const isTV =
-    !isMobile &&
-    largura >= 1200 &&
-    altura  >= 700;
-
-  if(isTV){
-    document.body.classList.add("tv-mode");
-  }else{
-    document.body.classList.remove("tv-mode");
-  }
-}
-
-/* Executa ao iniciar */
-detectarModoTV();
-
-/* Recalcula em resize */
-window.addEventListener("resize", detectarModoTV);
-
-/* ================= INIT ================= */
-
-loadAll();
-
-setInterval(loadAll,30000);
+// initial actions
+updateClock(); setInterval(updateClock, 1000);
+loadAll(); setInterval(loadAll, 15000);
 
 </script>
 
 </body>
 </html>
-
