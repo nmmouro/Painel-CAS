@@ -60,20 +60,12 @@ button{
 }
 
 main{
+  display:grid;
   padding:10px;
   display:grid;
   gap:10px;
   height:calc(100vh - 100px);
   overflow:auto;
-}
-
-.card{
-  background:var(--card);
-  border-radius:10px;
-  padding:10px;
-  overflow:auto;
-  border: 1px solid rgba(255,255,255,.08);
-  box-shadow: 0 4px 20px rgba(0,0,0,.35);
 }
 
   table{
@@ -185,6 +177,22 @@ padding:10px;
   border-radius: 10px 10px 0 0;
   letter-spacing: 1px;
   margin:0;
+}
+
+  .card{
+  background:var(--card);
+  border-radius:10px;
+  padding:10px;
+  overflow:auto;
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 4px 20px rgba(0,0,0,.35);
+}
+
+  .card h2{
+  text-align:left;
+  margin:0;
+  padding:4px 10px;
+  font-size:20px;
 }
 
 .dual-cards{
