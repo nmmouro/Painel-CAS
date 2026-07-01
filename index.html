@@ -399,7 +399,7 @@ function updateClock(){
   const el = document.getElementById('clock');
   if(!el) return;
   const now = new Date();
-  el.textContent = now.toLocaleTimeString('pt-BR'), ("pt-BR", {hour:'2-digit',minute:'2-digit'});
+  el.textContent = now.toLocaleTimeString('pt-BR'), ("pt-BR"), {hour:'2-digit',minute:'2-digit'});
 }
 
 /* Toggle audio button */
