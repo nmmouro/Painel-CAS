@@ -42,7 +42,7 @@ header{
   justify-content:space-between;
   padding:10px 20px;
   background:#020617;
-  align-items:center;
+  align-items:left;
   border-bottom: 1px solid rgba(255,255,255,.1);
 }
 
@@ -392,12 +392,19 @@ function playBeep(){
   audio.play().catch(()=>{});
 }
 
-function updateClock(){
-  const el = document.getElementById('clock');
-  if(!el) return;
+function updateClock() {
+  const el = document.getElementById("clock");
+  if (!el) return;
+
   const now = new Date();
-  // mostra apenas horas e minutos
-  el.textContent = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+  const data = now.toLocaleDateString("pt-BR");
+  const hora = now.toLocaleTimeString("pt-BR", {
+    hour: "2-digit",
+    minute: "2-digit"
+  });
+
+  el.textContent = `${data} - ${hora}`;
 }
 
 function toggleFull(){
