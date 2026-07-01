@@ -119,11 +119,19 @@ thead th{
   gap:15px;
 }
 
+.header-center{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+
 .header-right{
   justify-self:center;
   display:flex;
   align-items:center;
   gap:10px;
+  justify-self:end;
 }
 
 .logo{
@@ -277,12 +285,15 @@ button.off{
 </audio>
 
 <header>
+  <div class="header-left">
+    <img src="logo.png" class="logo" onerror="this.style.display='none'">
+  </div>
 
-  <img src="logo.png" class="logo" onerror="this.style.display='none'">
+  <div class="header-center">
+    <h1>Painel Frota</h1>
+  </div>
 
-  <h1>Painel Frota</h1>
-
-  <div>
+  <div class="header-right">
     <span id="clock"></span>
     <button id="toggle-audio">🔊 SOM ON</button>
     <button onclick="toggleFull()">⛶TELA CHEIA</button>
@@ -478,8 +489,7 @@ async function loadAll(){
     const painelCard = document.createElement('div'); painelCard.className = 'card';
     painelCard.innerHTML = `<h2>${TABS[painelIndex].title}</h2>${renderTable(TABS[painelIndex].headers, painelRows)}`;
 
-    const veiculosCard = document.createElement('div'); veiculosCard.className = 'card';
-    veiculosCard.innerHTML = `<h2>${TABS[veiculosIndex].title}</h2>${renderVeiculos(veiculosRows, painelRows)}`;
+    const veiculosCard = document.createElement('div'); veiculosCard.className = 'card'; veiculosCard.innerHTML = `<h2>${TABS[veiculosIndex].title}</h2>${renderVeiculos(veiculosRows, painelRows)}`;
 
     const motoristasCard = document.createElement('div'); motoristasCard.className = 'card';
     motoristasCard.innerHTML = `<h2>${TABS[motoristasIndex].title}</h2>${renderMotoristas(motoristasRows, painelRows, linhaFlutuante)}`;
