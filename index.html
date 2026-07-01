@@ -24,6 +24,7 @@
   --red:#ff4d4d;
   --lime:#7CFC00;
   --blue:#6284fc;
+  --row-height:44px; /* altura estimada por linha nas tabelas */
 }
 
 body{
@@ -54,8 +55,6 @@ button{
   cursor:pointer;
   font-weight:700;
   transition:.2s;
-  min-width:120px;
-  height:40px;
 }
 
 main{
@@ -87,7 +86,7 @@ tbody td{
   padding:10px;
   border: 1px solid var(--border);
   background:var(--table);
-  text-align:left;
+  text-align:center;
   font-size:16px;
 }
 
@@ -121,20 +120,11 @@ thead th{
   gap:15px;
 }
 
-.header-center{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  text-align:center;
-}
-
 .header-right{
   justify-self:center;
   display:flex;
   align-items:center;
   gap:10px;
-  justify-self:end;
-  padding:6px 10px;
 }
 
 .logo{
@@ -159,6 +149,12 @@ thead th{
   display:grid;
   grid-template-columns:1fr 1fr;
   gap:10px;
+}
+
+/* limita os cards de resumo (veículos e motoristas) a 4 linhas visíveis */
+.resumo-grid .card{
+  max-height: calc(var(--row-height) * 4 + 64px); /* 4 linhas + cabeçalho/title/espacamento */
+  overflow:auto;
 }
 
 .resumo-card{
@@ -283,11 +279,10 @@ button.off{
 
 <body>
 
-<audio id="beep" preload="auto">
-  <source src="./alerta.mp3" type="audio/mpeg">
-</audio>
+<audio id="beep" preload="auto"><source src="./alerta.mp3" type="audio/mpeg"></audio>
 
 <header>
+
   <div class="header-left">
     <img src="logo.png" class="logo" onerror="this.style.display='none'">
   </div>
@@ -405,6 +400,15 @@ function updateClock(){
   el.textContent = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
 }
 
+function toggleFull(){
+  const el = document.documentElement;
+  if(!document.fullscreenElement){
+    el.requestFullscreen?.();
+  }else{
+    document.exitFullscreen?.();
+  }
+}
+
 /* Toggle audio button */
 document.addEventListener('click', e=>{
   if(e.target && e.target.id === 'toggle-audio'){
@@ -481,13 +485,14 @@ async function loadAll(){
     }
 
     // build DOM
-    const painelCard = document.createElement('div'); painelCard.className = 'card';
-    painelCard.innerHTML = `<h2>${TABS[painelIndex].title}</h2>${renderTable(TABS[painelIndex].headers, painelRows)}`;
-
-    const veiculosCard = document.createElement('div'); veiculosCard.className = 'card'; veiculosCard.innerHTML = `<h2>${TABS[veiculosIndex].title}</h2>${renderVeiculos(veiculosRows, painelRows)}`;
+    const veiculosCard = document.createElement('div'); veiculosCard.className = 'card';
+    veiculosCard.innerHTML = `<h2>${TABS[veiculosIndex].title}</h2>${renderVeiculos(veiculosRows, painelRows)}`;
 
     const motoristasCard = document.createElement('div'); motoristasCard.className = 'card';
     motoristasCard.innerHTML = `<h2>${TABS[motoristasIndex].title}</h2>${renderMotoristas(motoristasRows, painelRows, linhaFlutuante)}`;
+
+    const painelCard = document.createElement('div'); painelCard.className = 'card';
+    painelCard.innerHTML = `<h2>${TABS[painelIndex].title}</h2>${renderTable(TABS[painelIndex].headers, painelRows)}`;
 
     const agendaCard = document.createElement('div'); agendaCard.className = 'card';
     agendaCard.innerHTML = `<h2>${TABS[agendaIndex].title}</h2>${renderTable(TABS[agendaIndex].headers, agendaRows)}`;
@@ -495,20 +500,22 @@ async function loadAll(){
     const socialCard = document.createElement('div'); socialCard.className = 'card';
     socialCard.innerHTML = `<h2>${TABS[socialIndex].title}</h2>${renderTable(TABS[socialIndex].headers, socialRows)}`;
 
-    // layout
+    // Top: Veículos + Motoristas (lado a lado)
     const resumo = document.createElement('div'); resumo.className = 'resumo-grid';
     resumo.appendChild(veiculosCard);
     resumo.appendChild(motoristasCard);
 
     const mainContainer = document.getElementById('app');
-    // first show vehicles + drivers side-by-side
     mainContainer.appendChild(resumo);
-    // then painel full-width below
+
+    // Then Painel (full width)
     mainContainer.appendChild(painelCard);
 
-    const dual = document.createElement('div'); dual.className = 'dual-cards'; dual.appendChild(agendaCard); dual.appendChild(socialCard);
-    // append agenda and social under painel
-    mainContainer.appendChild(dual);
+    // Agenda do dia (own line)
+    mainContainer.appendChild(agendaCard);
+
+    // Agenda Serviço Social (own line)
+    mainContainer.appendChild(socialCard);
 
   }catch(err){ console.error('Erro ao carregar dados:', err); }
 }
