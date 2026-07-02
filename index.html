@@ -24,7 +24,7 @@
   --red:#ff4d4d;
   --lime:#7CFC00;
   --blue:#6284fc;
-  --row-height:36px; /* altura reduzida por linha nas tabelas */
+  --row-height:44px; /* altura reduzida por linha nas tabelas */
 }
 
 body{
@@ -535,7 +535,7 @@ async function loadAll(){
       let textoStatus = '🔴 OCUPADO';
       if(status.includes('VIAGEM')) textoStatus = '✈️ VIAGEM';
       if(status.includes('MANUTENÇÃO') || status.includes('MANUTENCAO')) textoStatus = '🔧 MANUTENÇÃO';
-      linhaFlutuante = `<tr><td><strong>${nome}</strong></td><td>${textoStatus}</td><td>USUÁRIO CADASTRADO</td></tr>`;
+      linhaFlutuante = `<tr><td><strong>${nome}</strong></td><td>${textoStatus}</td><td>🔴 USUÁRIO CADASTRADO</td></tr>`;
     }
 
     // build DOM
