@@ -418,9 +418,19 @@ function renderTable(headers, rows) {
     `;
 }
 
-function getDisponibilidade(nome, painelRows, tipo) {
+// ================= STATUS =================
 
-  function getDisponibilidade(nome, painelRows, tipo) {
+const STATUS = {
+    livre: '<span class="livre">🟢 LIVRE</span>',
+    ocupado: '<span class="ocupado">🔴 OCUPADO</span>',
+    viagem: '<span class="viagem">🟣 VIAGEM</span>',
+    manutencao: '<span class="manutencao">🔵 MANUTENÇÃO</span>'
+};
+
+
+// ================= DISPONIBILIDADE =================
+
+function getDisponibilidade(nome, painelRows, tipo) {
 
     const procurado = String(nome || "")
         .trim()
@@ -456,23 +466,22 @@ function getDisponibilidade(nome, painelRows, tipo) {
             status.includes("MANUTENÇÃO") ||
             status.includes("MANUTENCAO")
         ) {
-
             return tipo === "veiculo"
-                ? '<span class="manutencao">🔵 MANUTENÇÃO</span>'
-                : '<span class="livre">🟢 LIVRE</span>';
+                ? STATUS.manutencao
+                : STATUS.livre;
         }
 
         // Em viagem
         if (status.includes("VIAGEM")) {
-            return '<span class="viagem">🟣 VIAGEM</span>';
+            return STATUS.viagem;
         }
 
         // Encontrado e ocupado
-        return '<span class="ocupado">🔴 OCUPADO</span>';
+        return STATUS.ocupado;
     }
 
     // Não encontrado
-    return '<span class="livre">🟢 LIVRE</span>';
+    return STATUS.livre;
 }
 
 function renderVeiculos(rows, painelRows){
