@@ -385,7 +385,9 @@ function renderTable(headers, rows) {
 
             <thead>
                 <tr>
-                    ${headers.map(header => `<th>${header}</th>`).join("")}
+                    ${headers.map(header => `
+                        <th>${header}</th>
+                    `).join("")}
                 </tr>
             </thead>
 
@@ -393,16 +395,16 @@ function renderTable(headers, rows) {
 
                 ${rows.map(row => {
 
-                    const values = row.values || (row.c || []).map(getCell);
+                    const values = (row.c || []).map(getCell);
 
                     const status =
-                        String(values.at(-1) || "").toLowerCase();
+                        (values.at(-1) || "").toLowerCase();
 
                     return `
                         <tr class="${getStatusClass(status)}">
 
                             ${values.map(value => `
-                                <td>${value ?? ""}</td>
+                                <td>${value || ""}</td>
                             `).join("")}
 
                         </tr>
@@ -416,135 +418,142 @@ function renderTable(headers, rows) {
     `;
 }
 
-// ================= STATUS =================
-
-const STATUS = {
-    livre: '<span class="livre">🟢 LIVRE</span>',
-    ocupado: '<span class="ocupado">🔴 OCUPADO</span>',
-    viagem: '<span class="viagem">🟣 VIAGEM</span>',
-    manutencao: '<span class="manutencao">🔵 MANUTENÇÃO</span>'
-};
-
-
-// ================= DISPONIBILIDADE =================
-
 function getDisponibilidade(nome, painelRows, tipo) {
 
-    const procurado =
-        String(nome || "")
-            .trim()
-            .toUpperCase();
+    const procurado = String(nome || "")
+        .trim()
+        .toUpperCase();
 
     for (const row of painelRows) {
 
         const valores = (row.c || []).map(getCell);
 
-        const motorista =
-            String(valores[2] || "")
-                .trim()
-                .toUpperCase();
+        const motorista = String(valores[2] || "")
+            .trim()
+            .toUpperCase();
 
-        const veiculo =
-            String(valores[3] || "")
-                .trim()
-                .toUpperCase();
+        const veiculo = String(valores[3] || "")
+            .trim()
+            .toUpperCase();
 
-        const status =
-            String(valores[6] || "")
-                .trim()
-                .toUpperCase();
+        const status = String(valores[6] || "")
+            .trim()
+            .toUpperCase();
 
         const encontrado =
             tipo === "veiculo"
                 ? veiculo === procurado
                 : motorista === procurado;
 
-        if (!encontrado) continue;
+        if (!encontrado) {
+            continue;
+        }
 
+        // Veículo em manutenção
         if (
             status.includes("MANUTENÇÃO") ||
             status.includes("MANUTENCAO")
         ) {
+
             return tipo === "veiculo"
-                ? STATUS.manutencao
-                : STATUS.livre;
+                ? '<span class="manutencao">🔵 MANUTENÇÃO</span>'
+                : '<span class="livre">🟢 LIVRE</span>';
         }
 
+        // Em viagem
         if (status.includes("VIAGEM")) {
-            return STATUS.viagem;
+            return '<span class="viagem">🟣 VIAGEM</span>';
         }
 
-        return STATUS.ocupado;
+        // Encontrado e ocupado
+        return '<span class="ocupado">🔴 OCUPADO</span>';
     }
 
-    return STATUS.livre;
-}}
-
-function renderVeiculos(rows, painelRows) {
-
-    const displayRows = rows.slice(0, 4);
-
-    const tableRows = displayRows.map(row => {
-
-        const v = (row.c || []).map(getCell);
-
-        return {
-            values: [
-                `<strong>${v[0] || ""}</strong>`,
-                getDisponibilidade(v[0], painelRows, "veiculo"),
-                `${v[2] || ""} km`,
-                `⛽ ${v[3] || ""}`
-            ]
-        };
-
-    });
-
-    const html = renderTable(
-        ["Placa", "Status", "Odômetro", "Combustível"],
-        tableRows
-    );
-
-    const ocultos = rows.length - displayRows.length;
-
-    return html +
-        (ocultos > 0
-            ? `<div class="more-items">+${ocultos} oculto(s)</div>`
-            : "");
+    // Não encontrado
+    return '<span class="livre">🟢 LIVRE</span>';
 }
+
+function renderVeiculos(rows, painelRows){
+  const displayRows = (rows || []).slice(0, 4); // mostra só as primeiras 4 linhas
+  const more = (rows || []).length > 4 ? (rows.length - 4) : 0;
+
+  return `
+    <table>
+      <thead>
+        <tr>
+          <th>Placa</th>
+          <th>Status</th>
+          <th>Odômetro</th>
+          <th>Combustível</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${displayRows.map(row => {
+          const v = (row.c || []).map(getCell);
+          return `
+            <tr>
+              <td><strong>${v[0] || ""}</strong></td>
+              <td>${getDisponibilidade(v[0], painelRows, "veiculo")}</td>
+              <td>${v[2] || ""} km</td>
+              <td>⛽ ${v[3] || ""}</td>
+            </tr>
+          `;
+        }).join("")}
+      </tbody>
+    </table>
+    ${more ? `<div class="more-items">+${more} oculto(s)</div>` : ""}
+  `;
+}
+
 function renderMotoristas(rows, painelRows, linhaFlutuante) {
 
-    const tableRows = rows.map(row => {
+    return `
+        <table>
 
-        const v = (row.c || []).map(getCell);
+            <thead>
+                <tr>
+                    <th>Motorista</th>
+                    <th>Status</th>
+                    <th>Condição</th>
+                </tr>
+            </thead>
 
-        return {
+            <tbody>
 
-            values: [
+                ${rows.map(row => {
 
-                `<strong>${v[0] || ""}</strong>`,
+                    const values = (row.c || []).map(getCell);
 
-                getDisponibilidade(
-                    v[0],
-                    painelRows,
-                    "motorista"
-                ),
+                    return `
+                        <tr>
 
-                v[2] || ""
+                            <td>
+                                <strong>${values[0] || ""}</strong>
+                            </td>
 
-            ]
+                            <td>
+                                ${getDisponibilidade(
+                                    values[0],
+                                    painelRows,
+                                    "motorista"
+                                )}
+                            </td>
 
-        };
+                            <td>
+                                ${values[2] || ""}
+                            </td>
 
-    });
+                        </tr>
+                    `;
 
-    return (
-        renderTable(
-            ["Motorista", "Status", "Condição"],
-            tableRows
-        )
-        +
-        (linhaFlutuante || "")
-    );
+                }).join("")}
+
+                ${linhaFlutuante || ""}
+
+            </tbody>
+
+        </table>
+    `;
 }
 
 /* ================= UI HELPERS ================= */
