@@ -418,22 +418,59 @@ function renderTable(headers, rows) {
     `;
 }
 
-function getDisponibilidade(nome, painelRows, tipo){
-  const procurado = String(nome||"").trim().toUpperCase();
-  for(const row of painelRows){
-    const valores=(row.c||[]).map(getCell);
-    const veiculo=String(valores[3]||"").trim().toUpperCase();
-    const motorista=String(valores[2]||"").trim().toUpperCase();
-    const status=String(valores[6]||"").trim().toUpperCase();
-    const encontrado = tipo === "veiculo" ? veiculo === procurado : motorista === procurado;
-    if(!encontrado) continue;
-    if(status.includes("MANUTENÇÃO") || status.includes("MANUTENCAO")){
-      return tipo === "veiculo" ? '<span class="manutencao">🔵 MANUTENÇÃO</span>' : '<span class="livre">🟢 LIVRE</span>';
+function getDisponibilidade(nome, painelRows, tipo) {
+
+    const procurado = String(nome || "")
+        .trim()
+        .toUpperCase();
+
+    for (const row of painelRows) {
+
+        const valores = (row.c || []).map(getCell);
+
+        const motorista = String(valores[2] || "")
+            .trim()
+            .toUpperCase();
+
+        const veiculo = String(valores[3] || "")
+            .trim()
+            .toUpperCase();
+
+        const status = String(valores[6] || "")
+            .trim()
+            .toUpperCase();
+
+        const encontrado =
+            tipo === "veiculo"
+                ? veiculo === procurado
+                : motorista === procurado;
+
+        if (!encontrado) {
+            continue;
+        }
+
+        // Veículo em manutenção
+        if (
+            status.includes("MANUTENÇÃO") ||
+            status.includes("MANUTENCAO")
+        ) {
+
+            return tipo === "veiculo"
+                ? '<span class="manutencao">🔵 MANUTENÇÃO</span>'
+                : '<span class="livre">🟢 LIVRE</span>';
+        }
+
+        // Em viagem
+        if (status.includes("VIAGEM")) {
+            return '<span class="viagem">🟣 VIAGEM</span>';
+        }
+
+        // Encontrado e ocupado
+        return '<span class="ocupado">🔴 OCUPADO</span>';
     }
-    if(status.includes("VIAGEM")) return '<span class="viagem">🟣 VIAGEM</span>';
-    return '<span class="ocupado">🔴 OCUPADO</span>';
-  }
-  return '<span class="livre">🟢 LIVRE</span>';
+
+    // Não encontrado
+    return '<span class="livre">🟢 LIVRE</span>';
 }
 
 function renderVeiculos(rows, painelRows){
