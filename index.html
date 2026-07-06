@@ -378,8 +378,44 @@ async function fetchSheet(sheet){
 }
 
 /* ================= TABLE RENDERS ================= */
-function renderTable(headers, rows){
-  return `\n<table>\n<thead><tr>${headers.map(h=>`<th>${h}</th>`).join("")}</tr></thead>\n<tbody>${rows.map(row=>{ const values=(row.c||[]).map(getCell); const status=values.at(-1)?.toLowerCase()||""; return `<tr class="${getStatusClass(status)}">${values.map(v=>`<td>${v||""}</td>`).join("")}</tr>` }).join("")}</tbody>\n</table>`;
+function renderTable(headers, rows) {
+
+    return `
+        <table>
+
+            <thead>
+                <tr>
+                    ${headers.map(header => `
+                        <th>${header}</th>
+                    `).join("")}
+                </tr>
+            </thead>
+
+            <tbody>
+
+                ${rows.map(row => {
+
+                    const values = (row.c || []).map(getCell);
+
+                    const status =
+                        (values.at(-1) || "").toLowerCase();
+
+                    return `
+                        <tr class="${getStatusClass(status)}">
+
+                            ${values.map(value => `
+                                <td>${value || ""}</td>
+                            `).join("")}
+
+                        </tr>
+                    `;
+
+                }).join("")}
+
+            </tbody>
+
+        </table>
+    `;
 }
 
 function getDisponibilidade(nome, painelRows, tipo){
@@ -432,8 +468,55 @@ function renderVeiculos(rows, painelRows){
   `;
 }
 
-function renderMotoristas(rows, painelRows, linhaFlutuante){
-  return `\n<table>\n<thead><tr><th>Motorista</th><th>Status</th><th>Condição</th></tr></thead>\n<tbody>${rows.map(row=>{ const v=(row.c||[]).map(getCell); return `<tr><td><strong>${v[0]||""}</strong></td><td>${getDisponibilidade(v[0], painelRows, "motorista")}</td><td>${v[2]||""}</td></tr>` }).join("")}${linhaFlutuante||""}</tbody>\n</table>`;
+function renderMotoristas(rows, painelRows, linhaFlutuante) {
+
+    return `
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Motorista</th>
+                    <th>Status</th>
+                    <th>Condição</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                ${rows.map(row => {
+
+                    const values = (row.c || []).map(getCell);
+
+                    return `
+                        <tr>
+
+                            <td>
+                                <strong>${values[0] || ""}</strong>
+                            </td>
+
+                            <td>
+                                ${getDisponibilidade(
+                                    values[0],
+                                    painelRows,
+                                    "motorista"
+                                )}
+                            </td>
+
+                            <td>
+                                ${values[2] || ""}
+                            </td>
+
+                        </tr>
+                    `;
+
+                }).join("")}
+
+                ${linhaFlutuante || ""}
+
+            </tbody>
+
+        </table>
+    `;
 }
 
 /* ================= UI HELPERS ================= */
